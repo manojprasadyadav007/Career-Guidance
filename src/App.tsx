@@ -8,7 +8,7 @@ import PlacementTraining from './pages/PlacementTraining'
 
 function App() {
   return (
-    <Router>
+    <Router basename="/Carreer-Guidance">
       <Header />
       <Routes>
         <Route path="/" element={<Home />} />
