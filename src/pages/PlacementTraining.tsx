@@ -200,7 +200,7 @@ function PlacementTraining() {
     },
     {
       question: 'What is the average package offered?',
-      answer: 'Our students have received average packages ranging from 8-15 LPA, with the highest package being 45 LPA. The package depends on your skills, performance, and target companies.'
+      answer: 'Our students have received average packages ranging from 8-15 LPA, with the highest package being 20 LPA. The package depends on your skills, performance, and target companies.'
     },
     {
       question: 'Are the classes live or recorded?',

@@ -75,7 +75,7 @@ function Home() {
                 </div>
                 <div className="home-hero-stat">
                   <Typography variant="h4" className="home-hero-stat-number">
-                    15+ LPA
+                    10+ LPA
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
                     Average CTC
