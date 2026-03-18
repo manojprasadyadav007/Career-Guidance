@@ -139,50 +139,50 @@ function PlacementTraining() {
   ]
 
   // Pricing Tiers
-  const pricingTiers: PricingTier[] = [
-    {
-      name: 'Basic',
-      price: '₹15,999',
-      duration: '3 Months',
-      features: [
-        'Access to all course materials',
-        'Weekly doubt clearing sessions',
-        'Community support',
-        'Basic mock interviews',
-        'Resume review',
-        'Job portal access'
-      ]
-    },
-    {
-      name: 'Pro',
-      price: '₹29,999',
-      duration: '6 Months',
-      popular: true,
-      features: [
-        'Everything in Basic',
-        '1:1 mentorship sessions',
-        'Unlimited mock interviews',
-        'Priority job referrals',
-        'LinkedIn profile optimization',
-        'Placement assistance',
-        'Interview guarantee'
-      ]
-    },
-    {
-      name: 'Premium',
-      price: '₹49,999',
-      duration: '12 Months',
-      features: [
-        'Everything in Pro',
-        'Dedicated career coach',
-        'Company-specific preparation',
-        'Salary negotiation support',
-        'Lifetime community access',
-        'Advanced system design',
-        '100% placement guarantee'
-      ]
-    }
-  ]
+  // const pricingTiers: PricingTier[] = [
+  //   {
+  //     name: 'Basic',
+  //     price: '₹15,999',
+  //     duration: '3 Months',
+  //     features: [
+  //       'Access to all course materials',
+  //       'Weekly doubt clearing sessions',
+  //       'Community support',
+  //       'Basic mock interviews',
+  //       'Resume review',
+  //       'Job portal access'
+  //     ]
+  //   },
+  //   {
+  //     name: 'Pro',
+  //     price: '₹29,999',
+  //     duration: '6 Months',
+  //     popular: true,
+  //     features: [
+  //       'Everything in Basic',
+  //       '1:1 mentorship sessions',
+  //       'Unlimited mock interviews',
+  //       'Priority job referrals',
+  //       'LinkedIn profile optimization',
+  //       'Placement assistance',
+  //       'Interview guarantee'
+  //     ]
+  //   },
+  //   {
+  //     name: 'Premium',
+  //     price: '₹49,999',
+  //     duration: '12 Months',
+  //     features: [
+  //       'Everything in Pro',
+  //       'Dedicated career coach',
+  //       'Company-specific preparation',
+  //       'Salary negotiation support',
+  //       'Lifetime community access',
+  //       'Advanced system design',
+  //       '100% placement guarantee'
+  //     ]
+  //   }
+  // ]
 
   // FAQs
   const faqs: FAQ[] = [
