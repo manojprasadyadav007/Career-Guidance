@@ -1,4 +1,4 @@
-import { Email, Phone, Business, School, Code, LocationOn, Send } from '@mui/icons-material';
+import { Email, Phone, Business, School, Code, LocationOn } from '@mui/icons-material';
 import './Contact.css';
 
 interface ContactInfo {
