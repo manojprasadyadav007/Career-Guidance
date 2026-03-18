@@ -378,7 +378,7 @@ function PlacementTraining() {
       </section>
 
       {/* Pricing Section */}
-      <section className="pt-pricing">
+      {/* <section className="pt-pricing">
         <div className="pt-container">
           <h2 className="pt-section-title">Choose Your Plan</h2>
           <p className="pt-section-subtitle">
@@ -411,7 +411,7 @@ function PlacementTraining() {
             <p>💰 EMI options available | 🎓 Student discounts available | 🔄 Money-back guarantee</p>
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* FAQs Section */}
       <section className="pt-faqs">
@@ -444,7 +444,7 @@ function PlacementTraining() {
           <div className="pt-cta-content">
             <h2 className="pt-cta-title">Ready to Start Your Journey?</h2>
             <p className="pt-cta-subtitle">
-              Join 10,000+ students who landed their dream jobs with our placement training program
+              Join 1000+ students who landed their dream jobs with our placement training program
             </p>
             <div className="pt-cta-buttons">
               <button className="pt-btn pt-btn-primary pt-btn-large">
