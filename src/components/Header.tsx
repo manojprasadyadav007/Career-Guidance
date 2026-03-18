@@ -28,13 +28,24 @@ function Header() {
           <li>
             <Link to="/placement-training">Placement Training</Link>
           </li>
-           <li>
-            <Link to="/placement-training">Top Mate</Link>
+          <li>
+            <a
+              href="https://topmate.io/manoj_yadav14"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Top Mate
+            </a>
           </li>
+
+          <li>
+            <Link to="/contact">Contact</Link>
+          </li>
+
         </ul>
       </nav>
 
-      <div className="header-actions">
+      {/* <div className="header-actions">
         <button className="header-mock-interview-btn" type="button">
           💬 AI Mock Interview
         </button>
@@ -48,7 +59,7 @@ function Header() {
         <button className="header-login-btn" type="button">
           Login
         </button>
-      </div>
+      </div> */}
     </header>
   )
 }
