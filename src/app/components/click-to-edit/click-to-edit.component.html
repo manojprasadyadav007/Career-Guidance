@@ -1,5 +1,0 @@
-<span [hidden]="editmode" (click)="setEditable(true)" > {{value}} </span>
-<span [hidden]="!editmode">
-        <label>{{label}}</label>
-        <input  type="text" [(ngModel)]="value" [placeholder]="placeholder" (blur)="setEditable(false)" />
-</span>

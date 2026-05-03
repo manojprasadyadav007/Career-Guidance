@@ -28,7 +28,7 @@ function Footer() {
                 <a href="https://www.linkedin.com/in/manoj-yadav-22438a16a" target="_blank" rel="noopener noreferrer" className="footer-social-icon" aria-label="LinkedIn">
                   in
                 </a>
-                <a href="https://topmate.io" target="_blank" rel="noopener noreferrer" className="footer-social-icon" aria-label="Topmate">
+                <a href="https://topmate.io/manoj_yadav14" target="_blank" rel="noopener noreferrer" className="footer-social-icon" aria-label="Topmate">
                   TM
                 </a>
               </div>
@@ -40,10 +40,10 @@ function Footer() {
             <h3 className="footer-section-title">Quick Links</h3>
             <ul className="footer-links">
               <li><Link to="/placement-training">Placement Training</Link></li>
-              <li><a href="#blogs">Blogs</a></li>
-              <li><a href="#roadmaps">Roadmaps</a></li>
-              <li><a href="#books">Books</a></li>
-               <li><Link to="/contact">Contact Us</Link></li>
+              <li><a>Blogs</a></li>
+              <li><a>Roadmaps</a></li>
+              <li><a>Books</a></li>
+              <li><a>Contact Us</a></li>
             </ul>
           </div>
 
@@ -51,10 +51,10 @@ function Footer() {
           <div className="footer-section">
             <h3 className="footer-section-title">Policies</h3>
             <ul className="footer-links">
-              <li><a href="#privacy">Privacy Policy</a></li>
-              <li><a href="#terms">Terms & Conditions</a></li>
-              <li><a href="#shipping">Shipping Policy</a></li>
-              <li><a href="#refunds">Cancellations & Refunds</a></li>
+              <li><a>Privacy Policy</a></li>
+              <li><a>Terms & Conditions</a></li>
+              <li><a>Shipping Policy</a></li>
+              <li><a>Cancellations & Refunds</a></li>
             </ul>
           </div>
 
@@ -64,11 +64,11 @@ function Footer() {
             <ul className="footer-contact">
               <li className="footer-contact-item">
                 <Phone className="footer-contact-icon" />
-                <a href="tel:+919113363283">9113363283 ,8207615019</a>
+                <a>+91-9113363283</a>
               </li>
               <li className="footer-contact-item">
                 <Email className="footer-contact-icon" />
-                <a href="mailto:cb.careerboost@gmail.com">cb.careerboost@gmail.com</a>
+                <a>manojfor4u@gmail.com</a>
               </li>
               <li className="footer-contact-item">
                 <LocationOn className="footer-contact-icon" />
@@ -81,7 +81,7 @@ function Footer() {
         {/* Copyright */}
         <div className="footer-bottom">
           <p className="footer-copyright">
-            Copyright {new Date().getFullYear()} Career Boost. All rights reserved.
+            Copyright {new Date().getFullYear()} Career Guidance. All rights reserved.
           </p>
         </div>
       </div>

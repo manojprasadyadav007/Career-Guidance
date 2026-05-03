@@ -6,18 +6,16 @@ import Home from './pages/Home'
 import PlacedCandidate from './pages/PlacedCandidate'
 import PlacementTraining from './pages/PlacementTraining'
 import Contact from './pages/Contact'
-import Profile from './pages/Profile'
 
 function App() {
   return (
-    <Router basename="/Carreer-Guidance">
+    <Router>
       <Header />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/placed-candidates" element={<PlacedCandidate />} />
         <Route path="/placement-training" element={<PlacementTraining />} />
-        <Route path="/contact" element={<Contact />} />
-        <Route path="/profile" element={<Profile />} />
+         <Route path="/contact" element={<Contact />} />
       </Routes>
       <Footer />
     </Router>

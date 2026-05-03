@@ -32,13 +32,13 @@ interface Partner {
   logo: string
 }
 
-interface PricingTier {
-  name: string
-  price: string
-  duration: string
-  features: string[]
-  popular?: boolean
-}
+// interface PricingTier {
+//   name: string
+//   price: string
+//   duration: string
+//   features: string[]
+//   popular?: boolean
+// }
 
 interface FAQ {
   question: string
@@ -139,50 +139,50 @@ function PlacementTraining() {
   ]
 
   // Pricing Tiers
-  const pricingTiers: PricingTier[] = [
-    {
-      name: 'Basic',
-      price: '₹15,999',
-      duration: '3 Months',
-      features: [
-        'Access to all course materials',
-        'Weekly doubt clearing sessions',
-        'Community support',
-        'Basic mock interviews',
-        'Resume review',
-        'Job portal access'
-      ]
-    },
-    {
-      name: 'Pro',
-      price: '₹29,999',
-      duration: '6 Months',
-      popular: true,
-      features: [
-        'Everything in Basic',
-        '1:1 mentorship sessions',
-        'Unlimited mock interviews',
-        'Priority job referrals',
-        'LinkedIn profile optimization',
-        'Placement assistance',
-        'Interview guarantee'
-      ]
-    },
-    {
-      name: 'Premium',
-      price: '₹49,999',
-      duration: '12 Months',
-      features: [
-        'Everything in Pro',
-        'Dedicated career coach',
-        'Company-specific preparation',
-        'Salary negotiation support',
-        'Lifetime community access',
-        'Advanced system design',
-        '100% placement guarantee'
-      ]
-    }
-  ]
+  // const pricingTiers: PricingTier[] = [
+  //   {
+  //     name: 'Basic',
+  //     price: '₹15,999',
+  //     duration: '3 Months',
+  //     features: [
+  //       'Access to all course materials',
+  //       'Weekly doubt clearing sessions',
+  //       'Community support',
+  //       'Basic mock interviews',
+  //       'Resume review',
+  //       'Job portal access'
+  //     ]
+  //   },
+  //   {
+  //     name: 'Pro',
+  //     price: '₹29,999',
+  //     duration: '6 Months',
+  //     popular: true,
+  //     features: [
+  //       'Everything in Basic',
+  //       '1:1 mentorship sessions',
+  //       'Unlimited mock interviews',
+  //       'Priority job referrals',
+  //       'LinkedIn profile optimization',
+  //       'Placement assistance',
+  //       'Interview guarantee'
+  //     ]
+  //   },
+  //   {
+  //     name: 'Premium',
+  //     price: '₹49,999',
+  //     duration: '12 Months',
+  //     features: [
+  //       'Everything in Pro',
+  //       'Dedicated career coach',
+  //       'Company-specific preparation',
+  //       'Salary negotiation support',
+  //       'Lifetime community access',
+  //       'Advanced system design',
+  //       '100% placement guarantee'
+  //     ]
+  //   }
+  // ]
 
   // FAQs
   const faqs: FAQ[] = [
@@ -200,7 +200,7 @@ function PlacementTraining() {
     },
     {
       question: 'What is the average package offered?',
-      answer: 'Our students have received average packages ranging from 8-15 LPA, with the highest package being 45 LPA. The package depends on your skills, performance, and target companies.'
+      answer: 'Our students have received average packages ranging from 8-15 LPA, with the highest package being 20 LPA. The package depends on your skills, performance, and target companies.'
     },
     {
       question: 'Are the classes live or recorded?',
@@ -378,7 +378,7 @@ function PlacementTraining() {
       </section>
 
       {/* Pricing Section */}
-      <section className="pt-pricing">
+      {/* <section className="pt-pricing">
         <div className="pt-container">
           <h2 className="pt-section-title">Choose Your Plan</h2>
           <p className="pt-section-subtitle">
@@ -411,7 +411,7 @@ function PlacementTraining() {
             <p>💰 EMI options available | 🎓 Student discounts available | 🔄 Money-back guarantee</p>
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* FAQs Section */}
       <section className="pt-faqs">
@@ -444,7 +444,7 @@ function PlacementTraining() {
           <div className="pt-cta-content">
             <h2 className="pt-cta-title">Ready to Start Your Journey?</h2>
             <p className="pt-cta-subtitle">
-              Join 10,000+ students who landed their dream jobs with our placement training program
+              Join 1000+ students who landed their dream jobs with our placement training program
             </p>
             <div className="pt-cta-buttons">
               <button className="pt-btn pt-btn-primary pt-btn-large">

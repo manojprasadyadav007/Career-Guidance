@@ -28,15 +28,20 @@ function Header() {
           <li>
             <Link to="/placement-training">Placement Training</Link>
           </li>
-           {/* <li>
-            <Link to="/top-mate">Top Mate</Link>
-          </li> */}
-            <li>
+          <li>
+            <a
+              href="https://topmate.io/manoj_yadav14"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Top Mate
+            </a>
+          </li>
+
+          <li>
             <Link to="/contact">Contact</Link>
           </li>
-              {/* <li>
-            <Link to="/profile">Profile</Link>
-          </li> */}
+
         </ul>
       </nav>
 
