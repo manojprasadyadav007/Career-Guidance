@@ -28,7 +28,7 @@ function Header() {
           <li>
             <Link to="/placement-training">Placement Training</Link>
           </li>
-          <li>
+          {/* <li>
             <a
               href="https://topmate.io/manoj_yadav14"
               target="_blank"
@@ -36,7 +36,7 @@ function Header() {
             >
               Top Mate
             </a>
-          </li>
+          </li> */}
 
           <li>
             <Link to="/contact">Contact</Link>

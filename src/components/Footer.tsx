@@ -10,10 +10,10 @@ function Footer() {
           {/* Brand Section */}
           <div className="footer-section footer-brand">
             <div className="footer-logo">
-              <div className="footer-logo-mark">CG</div>
+              <div className="footer-logo-mark">CB</div>
               <div className="footer-logo-text">
                 <span className="footer-brand-name">
-                  Career<span className="footer-brand-highlight"> Guidance</span>
+                  Career<span className="footer-brand-highlight"> Boost</span>
                 </span>
                 <span className="footer-brand-tagline">Where learning never stops</span>
               </div>
@@ -43,7 +43,7 @@ function Footer() {
               <li><a>Blogs</a></li>
               <li><a>Roadmaps</a></li>
               <li><a>Books</a></li>
-              <li><a>Contact Us</a></li>
+              <li><Link to="/contact">Contact Us</Link></li>
             </ul>
           </div>
 
@@ -64,11 +64,11 @@ function Footer() {
             <ul className="footer-contact">
               <li className="footer-contact-item">
                 <Phone className="footer-contact-icon" />
-                <a>+91-9113363283</a>
+                <a>9113363283,8207615019</a>
               </li>
               <li className="footer-contact-item">
                 <Email className="footer-contact-icon" />
-                <a>manojfor4u@gmail.com</a>
+                <a>cb.careerboost@gmail.com</a>
               </li>
               <li className="footer-contact-item">
                 <LocationOn className="footer-contact-icon" />
@@ -81,7 +81,7 @@ function Footer() {
         {/* Copyright */}
         <div className="footer-bottom">
           <p className="footer-copyright">
-            Copyright {new Date().getFullYear()} Career Guidance. All rights reserved.
+            Copyright {new Date().getFullYear()} Career Boost. All rights reserved.
           </p>
         </div>
       </div>
