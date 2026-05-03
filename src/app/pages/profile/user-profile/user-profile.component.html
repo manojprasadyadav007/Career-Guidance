@@ -1,0 +1,315 @@
+<div class="main-content new-design">
+
+  <div class="card">
+    <div class="card-body">
+      <form #form="ngForm">
+
+        <div class="container-fluid">
+
+          <div class="row">
+
+            <div class="col-md-9 order-md-1 order-sm-2 order-2">
+
+              <div class="row">
+                <div class="col-md-12">
+                  <mat-form-field>
+                    <mat-label>Display Name</mat-label>
+                    <input matInput placeholder="Display Name" #DisplayName="ngModel"
+                      [pattern]="modelPattern.alphaNumericWithSpaceWithRang" [(ngModel)]="formdata.DisplayName"
+                      name="DisplayName" required>
+                    <mat-error *ngIf="DisplayName.hasError('pattern')">Enter valid Name between 3 to 100 characters
+                    </mat-error>
+                    <mat-error *ngIf="DisplayName.hasError('required')">Display Name is required</mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-md-12" *ngIf="currentUser.RoleId!=2">
+                  <mat-form-field>
+                    <mat-label>
+                      Email ID
+                    </mat-label>
+                    <input matInput placeholder="User Name" #UserName="ngModel" [(ngModel)]="formdata.UserName"
+                      name="UserName" required minlength="3" maxlength="50" [disabled]="true">
+                  </mat-form-field>
+                </div>
+
+
+                <div class="col-md-6">
+                  <mat-form-field>
+                    <mat-label>Mobile Number</mat-label>
+                    <input matInput placeholder="Mobile Number" type="tel" inputmode="tel" #MobileNo="ngModel"
+                      [(ngModel)]="formdata.MobileNo" name="MobileNo" [pattern]="modelPattern.mobileno">
+                    <mat-error *ngIf="MobileNo.hasError( 'pattern')">Enter valid mobile number</mat-error>
+                    <mat-hint> <span class="text-info"
+                        [matTooltip]="modelPattern.mobileNoHintTooltip">{{modelPattern.mobileNoHintLabel}}</span>
+                    </mat-hint>
+                  </mat-form-field>
+                </div>
+
+                <div class="col-md-6">
+                  <mat-form-field>
+                    <mat-label>Role</mat-label>
+                    <mat-select matInput placeholder="Select Role" #RoleId="ngModel" [(ngModel)]="formdata.RoleId"
+                      name="RoleId" pattern="^[1-9]\d*$" [disabled]="true">
+                      <mat-option>
+                        <ngx-mat-select-search [(ngModel)]="roleFilter" [placeholderLabel]="'Search...'"
+                          [noEntriesFoundLabel]="'Not found'" name="roleFilter"></ngx-mat-select-search>
+                      </mat-option>
+                      <mat-option
+                        *ngFor="let role of roleList | stringFilterBy:roleFilter:'RoleName';  trackByProperty: 'RoleId'"
+                        [value]="role.RoleId" [disabled]="!(role.RoleId===1 || role.RoleId>99)"
+                        [hidden]="(roleSelectAllowed && role.RoleId>1 && role.RoleId<100) || ( role.RoleId===100 && formdata.UserId>0 && formdata.RoleId!=100)">
+                        {{role.RoleName}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+
+
+                <!-- for agent -->
+                <div class="col-md-12" *ngIf="currentUser.RoleId===2">
+                  <mat-form-field>
+                    <mat-label>
+                      Email
+                    </mat-label>
+                    <input matInput placeholder="email@email.com" #UserName="ngModel" [(ngModel)]="formdata.UserName"
+                      name="UserName" [disabled]="true">
+                  </mat-form-field>
+                </div>
+                <!-- <div class="col-md-12" *ngIf="currentUser.RoleId!=2">
+                    <mat-form-field>
+                      <mat-label>Email</mat-label>
+                      <input matInput type="email" placeholder="Email" #EmailId="ngModel"
+                        [(ngModel)]="formdata.EmailId" name="EmailId" required
+                        [pattern]="modelPattern.email"
+                        [disabled]="true">
+                      <mat-error *ngIf="EmailId.hasError('pattern')">enter valid emailid</mat-error>
+                    </mat-form-field>
+                  </div> -->
+              </div>
+            </div>
+
+            <div class="col-md-3   order-sm-1 order-1 order-md-2">
+              <app-file-upload-withpreview [(file)]="userImage" (path)="removePicture()"
+                (fileChange)="onFileChange($event)"
+                defaultImage="{{ formdata.ProfileImage ? filepath+formdata.ProfileImage : ''}}">
+              </app-file-upload-withpreview>
+            </div>
+
+          </div>
+          <div class="row">
+
+
+            <div class="col-md-6" *ngIf="currentUser.RoleType === 2">
+              <mat-form-field>
+                <mat-label>Campus</mat-label>
+                <mat-select matInput placeholder="Campus" #Campus="ngModel" [(ngModel)]="formdata.CampusId"
+                  name="Campus" [disabled]="true">
+                  <mat-option>
+                    <ngx-mat-select-search [(ngModel)]="campusFilter" [placeholderLabel]="'Search...'"
+                      [noEntriesFoundLabel]="'Not found'" name="campusFilter"></ngx-mat-select-search>
+                  </mat-option>
+                  <mat-option>None</mat-option>
+
+                  <mat-option
+                    *ngFor="let item of campusList  | stringFilterBy:campusFilter:'CampusName';  trackByProperty: 'InstCampusId'"
+                    [value]="item.InstCampusId">
+                    {{item.CampusName}} </mat-option>
+
+                </mat-select>
+                <!-- <mat-error *ngIf="Campus.hasError( 'required') || Campus.hasError( 'pattern')">Campus is
+                  required
+              </mat-error> -->
+              </mat-form-field>
+            </div>
+
+            <div class="col-md-6">
+              <mat-form-field>
+                <mat-label>Skype ID</mat-label>
+                <input matInput type="text" placeholder="Skype ID" #SkypeId="ngModel" [(ngModel)]="formdata.SkypeId"
+                  name="SkypeId">
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-3">
+              <mat-form-field>
+                <mat-label>Country</mat-label>
+                <mat-select matInput placeholder="Country" #Country="ngModel" [(ngModel)]="formdata.CountryId"
+                  name="CountryId" (selectionChange)="changeOptionCountry($event.value)">
+                  <mat-option>
+                    <ngx-mat-select-search [(ngModel)]="contryFilter" [placeholderLabel]="'Search...'"
+                      [noEntriesFoundLabel]="'Not found'" name="contryFilter"></ngx-mat-select-search>
+                  </mat-option>
+                  <mat-option>None</mat-option>
+                  <mat-option
+                    *ngFor="let country of countryList | stringFilterBy:contryFilter:'CountryName';  trackByProperty: 'CountryId' "
+                    [value]="country.CountryId">
+                    {{country.CountryName}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+
+
+            <div class="col-md-3">
+              <mat-form-field>
+                <mat-label>Province</mat-label>
+                <mat-select placeholder="Province" #ProvinceId="ngModel" [(ngModel)]="formdata.ProvinceId"
+                  name="ProvinceId ">
+                  <mat-option>
+                    <ngx-mat-select-search [(ngModel)]="provinceFilter" [placeholderLabel]="'Search...'"
+                      [noEntriesFoundLabel]="'Not found'" name="provinceFilter"></ngx-mat-select-search>
+                  </mat-option>
+                  <mat-option>None</mat-option>
+                  <mat-option
+                    *ngFor="let province of provinceList | stringFilterBy:provinceFilter:'ProvinceName';  trackByProperty: 'ProvinceId' "
+                    [value]="province.ProvinceId">
+                    {{province.ProvinceName}}</mat-option>
+                </mat-select>
+                <mat-error *ngIf="ProvinceId .hasError('pattern')">Enter valid province</mat-error>
+              </mat-form-field>
+            </div>
+
+            <div class="col-md-3">
+              <mat-form-field>
+                <mat-label>City</mat-label>
+                <input matInput placeholder="City" #City="ngModel" [(ngModel)]="formdata.City" name="City"
+                  [pattern]="modelPattern.alphaNumericWithSpaceNew">
+                <mat-error *ngIf="City.hasError( 'pattern')">Enter Valid City</mat-error>
+              </mat-form-field>
+            </div>
+            <div class="col-md-3">
+              <mat-form-field>
+                <mat-label>Zip Code</mat-label>
+                <input matInput placeholder="Zip Code" type="text" #ZipCode="ngModel" [(ngModel)]="formdata.ZipCode"
+                  name="ZipCode" [pattern]="modelPattern.pincode" [maxlength]="modelPattern.pincodeMaxLength">
+                <mat-error *ngIf="ZipCode.hasError( 'pattern')">Enter Valid Zipcode/Postal Code</mat-error>
+              </mat-form-field>
+            </div>
+
+          </div>
+        
+          <div class="row" *ngIf="currentUser.RoleType===1">
+            <div class="col-md-12">
+              <h4>Institutional Email</h4>
+            </div>
+            <div class="col-md-6">
+              <mat-form-field>
+                <mat-label>Email</mat-label>
+                <input matInput placeholder="Email" name="InstEmail" #InstEmail="ngModel"
+                  [(ngModel)]="formdata.InstEmail" [pattern]="modelPattern.email" />
+                <mat-error *ngIf="InstEmail.hasError('pattern')">Enter Valid Email</mat-error>
+              </mat-form-field>
+            </div>
+            <div class="col-md-6">
+              <mat-form-field>
+                <mat-label>Username</mat-label>
+                <input matInput placeholder="Username" name="InstUser" #InstUser="ngModel"
+                  [(ngModel)]="formdata.InstUser" [required]="formdata?.InstEmail?.length>0" [pattern]="modelPattern.UserName"/>
+                <mat-error *ngIf="InstUser.hasError('required')">Username is required</mat-error>
+                <mat-error *ngIf="InstUser.hasError( 'pattern')">Enter valid username</mat-error>
+              </mat-form-field>
+            </div>
+            <div class="col-md-6">
+              <mat-form-field>
+                <mat-label>Password</mat-label>
+                <input type="password" matInput placeholder="Password" name="InstPassword" #InstPassword="ngModel"
+                  [(ngModel)]="formdata.InstPassword" [required]="formdata?.InstEmail?.length>0" />
+                <mat-error *ngIf="InstPassword.hasError('required')">Password is required</mat-error>
+              </mat-form-field>
+            </div>
+            <div class="col-md-6">
+              <mat-form-field>
+                <mat-label>SMTP Server</mat-label>
+                <input matInput placeholder="SMTP Server" name="InstSMTPServer" #InstSMTPServer="ngModel"
+                  [(ngModel)]="formdata.InstSMTPServer" [pattern]="modelPattern.smtpServer" [required]="formdata?.InstEmail?.length>0" />
+                <mat-error *ngIf="InstSMTPServer.hasError('required')">SMTP server is required</mat-error>
+                <mat-error *ngIf="InstSMTPServer.hasError('pattern')">Enter valid SMTP server</mat-error>
+              </mat-form-field>
+            </div>
+            <div class="col-md-6">
+              <mat-form-field>
+                <mat-label>SMTP Port</mat-label>
+                <input matInput placeholder="SMTP Port" name="InstSMTPPort" #InstSMTPPort="ngModel"
+                  [(ngModel)]="formdata.InstSMTPPort" [required]="formdata?.InstEmail?.length>0"
+                  [pattern]="modelPattern.smtpPort" />
+                <mat-error *ngIf="InstSMTPPort.hasError('pattern')">Enter Valid SMTP port</mat-error>
+                <mat-error *ngIf="InstSMTPPort.hasError('required')">SMTP port is required</mat-error>
+              </mat-form-field>
+            </div>
+            <div class="col-md-6">
+              <mat-checkbox #InstSSL="ngModel" [(ngModel)]="formdata.InstSSL" name="InstSSL">
+                SSL
+              </mat-checkbox>
+
+            </div>
+          </div>
+            <div class="row">
+            <div class="col-md-12">
+              <h4>Official Email</h4>
+            </div>
+            <div class="col-md-6">
+              <mat-form-field>
+                <mat-label>Email</mat-label>
+                <input matInput placeholder="Email" name="OfficeEmail" #OfficeEmail="ngModel"
+                  [(ngModel)]="formdata.OfficeEmail" [pattern]="modelPattern.email" />
+                <mat-error *ngIf="OfficeEmail.hasError('pattern')">Enter Valid Email</mat-error>
+              </mat-form-field>
+            </div>
+            <div class="col-md-6">
+              <mat-form-field>
+                <mat-label>Username</mat-label>
+                <input matInput placeholder="Username" name="OfficeUser" #OfficeUser="ngModel"
+                  [(ngModel)]="formdata.OfficeUser" [required]="formdata?.OfficeEmail?.length>0" [pattern]="modelPattern.UserName"/>
+                <mat-error *ngIf="OfficeUser.hasError('required')">Username is required</mat-error>
+                <mat-error *ngIf="OfficeUser.hasError( 'pattern')">Enter valid username</mat-error>
+                
+              </mat-form-field>
+            </div>
+            <div class="col-md-6">
+              <mat-form-field>
+                <mat-label>Password</mat-label>
+                <input type="password" matInput placeholder="Password" name="OfficePassword" #OfficePassword="ngModel"
+                  [(ngModel)]="formdata.OfficePassword" [required]="formdata?.OfficeEmail?.length>0" />
+                <mat-error *ngIf="OfficePassword.hasError('required')">Password is required</mat-error>
+              </mat-form-field>
+            </div>
+            <div class="col-md-6">
+              <mat-form-field>
+                <mat-label>SMTP Server</mat-label>
+                <input matInput placeholder="SMTP Server" name="OfficeSMTPServer" #OfficeSMTPServer="ngModel"
+                  [(ngModel)]="formdata.OfficeSMTPServer" [pattern]="modelPattern.smtpServer" [required]="formdata?.OfficeEmail?.length>0" />
+                <mat-error *ngIf="OfficeSMTPServer.hasError('required')">SMTP server is required</mat-error>
+                <mat-error *ngIf="OfficeSMTPServer.hasError('pattern')">Please enter valid SMTP server</mat-error>
+              </mat-form-field>
+            </div>
+            <div class="col-md-6">
+              <mat-form-field>
+                <mat-label>SMTP Port</mat-label>
+                <input matInput placeholder="SMTP Port" name="OfficeSMTPPort" #OfficeSMTPPort="ngModel"
+                  [(ngModel)]="formdata.OfficeSMTPPort" [required]="formdata?.OfficeEmail?.length>0"
+                  [pattern]="modelPattern.smtpPort" />
+                <mat-error *ngIf="OfficeSMTPPort.hasError('required')">SMTP port is required</mat-error>
+                <mat-error *ngIf="OfficeSMTPPort.hasError('pattern')">Enter Valid SMTP port</mat-error>
+              </mat-form-field>
+            </div>
+            <div class="col-md-6">
+              <mat-checkbox #OfficeSSL="ngModel" [(ngModel)]="formdata.OfficeSSL" name="OfficeSSL">
+                SSL
+              </mat-checkbox>
+
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-12 text-center">
+            <button mat-raised-button type="submit" [disabled]="isFormValueUpdated()" class="btn btn-danger btn-sm "
+              (click)="onSubmit(form)">Update</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+</div>

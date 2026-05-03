@@ -1,0 +1,137 @@
+<div class="row">
+    <div class="col-md-12">
+        <dx-data-grid [dataSource]="displayDocList" [showBorders]="true" [allowColumnResizing]="true"
+            [showColumnLines]="true" [showRowLines]="true" [rowAlternationEnabled]="true" [noDataText]="gridMessage"
+            [columnAutoWidth]="true" (onToolbarPreparing)="onToolbarPreparing($event)" [allowColumnReordering]="true" [wordWrapEnabled]="true" (onExporting)="activitylog()">
+
+            <dxo-filter-panel [visible]="true"></dxo-filter-panel>
+
+            <dxo-paging [enabled]="true" [pageSize]="10"></dxo-paging>
+            <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 25,50,100]" [showInfo]="true">
+            </dxo-pager>
+
+            <dxo-filter-row [visible]="showFilterRow"></dxo-filter-row>
+
+            <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
+
+            <dxo-export [enabled]="excel_permisson > 0" fileName="{{this.parentName}} {{this.title}}"></dxo-export>
+
+            <dxo-column-chooser [enabled]="true" mode="select" [allowSearch]="true">
+            </dxo-column-chooser>
+
+            <dxi-column *ngFor="let item of columns" [dataField]="item.dataField" [caption]="item.title | sentenceCase"
+                [dataType]="item.type" [format]="item.format" [visible]="item.visible">
+            </dxi-column>
+            <!-- <dxi-column caption="Received Stamp" *ngIf="received" [allowExporting]="false"  cellTemplate="receivedTemplate">
+                
+            </dxi-column> -->
+
+            <dxi-column caption="Action" [allowExporting]="false" [fixed]="true" fixedPosition="right" [width]="70"
+                cellTemplate="actionCellTemplate">
+            </dxi-column>
+            <!-- <div *dxTemplate="let d of 'receivedTemplate'">
+                {{d.data.ReceiveStamp}}
+            </div> -->
+
+
+            <div *dxTemplate="let d of 'actionCellTemplate'">
+                <mat-menu #docMenu="matMenu">
+                    <span class="menuempty">
+                        <span class="ref"></span>
+                    </span>
+                    <a target="_blank" mat-menu-item class=" text-info" (click)="$event.stopPropagation();"
+                        href="{{filepath+uploadDir+'/'+d.data.DocPath}}" color="primary" *ngIf="d.data.DocPath"
+                        data-toggle="tooltip" title="View">
+                        <span class="material-icons icon-position">
+                            remove_red_eye
+                        </span>View
+                    </a>
+
+                    <button type="button" class="mr-3  text-info" mat-menu-item color="primary"
+                        *ngIf="d.data.DocumentStatus!=2 && permission>1"
+                        (click)="$event.stopPropagation(); updateDocument(d.data.DocumentTypeId,d.data.DocumentId , d.data.DocDescription)"
+                        data-toggle="tooltip" title="Upload">
+                        <span class="material-icons icon-position">
+                            folder
+                        </span>Upload
+                    </button>
+
+                    <button type="button" class=" text-success" mat-menu-item color="primary"
+                        *ngIf="(showReceived && canReceive &&  !(d.data?.ReceiveStamp))" data-toggle="tooltip"
+                        title="Received" (click)="$event.stopPropagation(); receivedDateStamp(d.data , 1)">
+                        <span class="material-icons icon-position">
+                            check_box
+                        </span>Received
+                    </button>
+                    <!-- *ngIf="showReceived &&  permission>1 && receivedStatus" -->
+
+                    <button type="button" class="text-danger" mat-menu-item color="primary" data-toggle="tooltip"
+                        title="Undo" *ngIf="(showReceived  && canReceive && (d.data?.ReceiveStamp))"
+                        (click)="$event.stopPropagation(); receivedDateStamp(d.data , 0)">
+                        <span class="material-icons icon-position">
+                            undo
+                        </span> Undo
+                    </button>
+
+                    <ng-container
+                        *ngIf="showVerification && permission>1 && d.data.DocumentId>0 && user.RoleId!=2 && user.RoleId!=3 && showDecisionBtns">
+                        <button type="button" mat-menu-item class="text-success "
+                            (click)="$event.stopPropagation(); verifyDocument(d.data,2)"
+                            *ngIf="d.data.DocumentStatus!=2" data-toggle="tooltip" title="Approve">
+                            <span class="material-icons  icon-position">
+                                check_circle
+                            </span>Approve
+                        </button>
+
+                        <button type="button" mat-menu-item class="text-danger"
+                            (click)="$event.stopPropagation(); verifyDocument(d.data,3)"
+                            *ngIf="d.data.DocumentStatus!=3" data-toggle="tooltip" title="Reject">
+                            <span class="material-icons icon-position">
+                                cancel
+                            </span>Reject
+                        </button>
+                    </ng-container>
+
+                    <button type="button" class="mr-3" mat-menu-item color="primary"
+                        (click)="$event.stopPropagation(); delete(d.data.DocumentId, d.data?.DocumentTypeId)"
+                        *ngIf="permission>1 && d.data.DocPath && d.data.DocumentStatus!=2" data-toggle="tooltip"
+                        title="Delete">
+                        <span class="material-icons icon-position">
+                            close
+                        </span> Delete
+                    </button>
+                </mat-menu>
+                <button mat-icon-button [matMenuTriggerFor]="docMenu" (click)="$event.stopPropagation()">
+                    <mat-icon class="more_dropdown">keyboard_arrow_down</mat-icon>
+                </button>
+            </div>
+
+            <div *dxTemplate="let d of 'toolbarButton'">
+
+                <button class="text-danger" (click)="updateDocument()" *ngIf="permission>1 && showAddButton"
+                    mat-icon-button data-toggle="tooltip" title="New">
+                    <mat-icon>add</mat-icon>
+                </button>
+
+                <button class="text-danger" (click)="showFilterRow=!showFilterRow" mat-icon-button data-toggle="tooltip"
+                    title="Apply Filter">
+                    <mat-icon>filter_list</mat-icon>
+                </button>
+
+                <button class="text-danger" type="button" data-toggle="tooltip" title="Download"
+                    (click)="downloadDocument()" *ngIf="dataList?.length>1" mat-icon-button>
+                    <mat-icon>cloud_download</mat-icon>
+                </button>
+
+            </div>
+
+        </dx-data-grid>
+    </div>
+</div>
+
+<!-- Script For Tooltip -->
+<script>
+    $(document).ready(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+</script>

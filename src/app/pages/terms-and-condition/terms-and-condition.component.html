@@ -1,0 +1,6 @@
+<mat-checkbox [required]="required" [appRegisterFormControlModel]="form" 
+name="isConditionsAccepted" [registerModel]="isConditionsAccepted"
+[(ngModel)]="isAgree" #isConditionsAccepted="ngModel"
+>
+</mat-checkbox>
+<a class="btn btn-info btn-link" (click)="open()" style="padding: 0px;" >{{data?.AgreementDescription}}</a> 

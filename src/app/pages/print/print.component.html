@@ -1,0 +1,15 @@
+<form class="new-design">
+<div mat-dialog-title>
+  {{ title }}
+  <button class="close text-white" type="button" aria-label="Close" (click)="cancel()"><span
+      aria-hidden="true">×</span></button>
+</div>
+
+<div mat-dialog-content style="max-height: 80vh;">
+  <ngx-extended-pdf-viewer [base64Src]="data" [height]="'78vh'" [useBrowserLocale]="true"
+    [mobileFriendlyZoom]="mobileFriendlyZoomSetting" [showZoomButtons]="true" showSidebarOnLoad="false">
+  </ngx-extended-pdf-viewer>
+
+</div>
+
+</form>

@@ -1,0 +1,212 @@
+<div class="main-content new-design" *ngIf="instData">
+
+  <button  style="position: absolute; right:25px; top:25px; z-index: 1000;" mat-mini-fab routerLink="/member/institutions/edit-institutions/{{id}}" *ngIf="permission>1"> 
+    <mat-icon>edit</mat-icon>
+  </button>
+
+  <img style="height: 644px; width: 100%; " class="img-fluid" [src]="filepath+instData.InstImagePath" />
+
+  
+  
+
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card">
+          <div [ngStyle]="{'background-image':'url('+filepath+instData.InstImagePath+')', 'background-position':' center', 'height': '320px'}">
+            <div class="row">
+              <div class="col-md-3">
+                <div class="card-body">
+                  <div class="inttitution-logo">
+                    <img src="{{filepath+instData.InstLogoPath}}">
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-9">
+                <div class="card-body inttitution-name-body">
+                  <h3 class="inttitution-name text-center">{{instData.InstName}} </h3>
+                  <div class="text-center">
+                    <span class="inttitution-location"><i class="material-icons">location_on</i> {{instData.InstCity}},
+                      {{instData.InstProvince}}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-12">
+        <div class="row">
+          <div class="col-md-3">
+          </div>
+          <div class="col-md-3">
+            <span class="inttitution-founded"><i class="material-icons">star</i> <b style="padding: 0px 10px"> Founded :
+              </b> {{instData.InstFounded}}</span>
+          </div>
+          <div class="col-md-6 text-right">
+            <span class="inttitution-founded"><i class="material-icons">account_balance</i> <b
+                style="padding: 0px 10px">Type : </b> {{instData.InstType}}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-header">
+            <h4 class="card-title" style="font-weight: 800;">About</h4>
+          </div>
+          <div class="card-body" [innerHTML]="instData.InstAbout"  >
+           
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-header">
+            <h4 class="card-title" style="font-weight: 800;">Features</h4>
+          </div>
+          <div class="card-body" [innerHTML]="instData.InstFeatures" >
+           
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="container-fluid">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card">
+              <div class="card-header">
+                <h4 class="card-title" style="font-weight: 800;">Financials</h4>
+              </div>
+              <div class="card-body table-responsive">
+                <table class="table table-hover">
+                  <thead class="text-warning">
+                    <tr>
+                      <th>DESCRIPTION</th>
+                      <th>SUBTOTAL</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Avg Cost of Tuition/Year</td>
+                      <td>{{instData.InstCurrency}}  {{instData.InstAvgCostTuition_Year}}</td>
+                    </tr>
+                    <tr>
+                      <td>Cost of Living/Year</td>
+                      <td>{{instData.InstCurrency}}  {{instData.InstCostofLiving_Year}}</td>
+                    </tr>
+                    <tr>
+                      <td>*Application Fee</td>
+                      <td>{{instData.InstCurrency}}  {{instData.InstApplicationFee}}</td>
+                    </tr>
+                    <tr>
+                      <td><b>Estimated Total/Year</b></td>
+                      <td><b class="text-info">{{instData.InstCurrency}} 
+                          {{instData.InstAvgCostTuition_Year+instData.InstCostofLiving_Year+instData.InstApplicationFee}}</b>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+      <div class="col-md-8">
+        <div class="card">
+          <div class="card-header">
+            <h4 class="card-title" style="font-weight: 800;">Location</h4>
+          </div>
+          <div class="card-body">
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3502.072938740477!2d77.37031021442797!3d28.627575982419803!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390ce592b0706c4b%3A0xf8801a8864193646!2sI-Thum+Tower+A!5e0!3m2!1sen!2sin!4v1564328252984!5m2!1sen!2sin"
+              width="100%" height="400" frameborder="0" style="border:0" allowfullscreen></iframe>
+          </div>
+        </div>
+      </div>
+     
+    </div>
+  </div>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-5 d-none" >
+        <div class="card">
+          <div class="card-header ">
+            <h4 class="card-title" style="font-weight: 800;">Faculties</h4>
+          </div>
+          <div class="card-body">
+            <div style="height: 260px; text-align: center;">
+              <img src="./assets/img/pieChart.jpg">
+            </div>
+
+          </div>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-header">
+            <h4 class="card-title" style="font-weight: 800;">Programs</h4>
+          </div>
+          <div class="card-body">
+            <div class="table-responsive ">
+
+              <table mat-table #table [dataSource]="programList" class="table mat-elevation-z8">
+                <tr mat-header-row *matHeaderRowDef="columnToDisplay" class="text-primary">
+                </tr>
+                <tr mat-row *matRowDef="let row; columns:columnToDisplay"></tr>
+                <ng-container matColumnDef="ProgramName">
+                  <th mat-header-cell *matHeaderCellDef>Name </th>
+                  <td mat-cell *matCellDef="let institute">
+                  <a routerLink="/{{parentRoute}}/institutions/programs/details-program/{{institute.ProgramId}}">{{institute.ProgramName}}</a></td>
+                </ng-container>
+
+                <ng-container matColumnDef="Duration">
+                  <th mat-header-cell *matHeaderCellDef>Duration </th>
+                  <td mat-cell *matCellDef="let institute">{{institute.DurationTime}} {{institute.DurationType}}</td>
+                </ng-container>
+
+
+                <ng-container matColumnDef="ApplicationFee">
+                  <th mat-header-cell *matHeaderCellDef>Application Fee </th>
+                  <td mat-cell *matCellDef="let institute">{{institute.ApplicationFee}}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="TutionFee">
+                  <th mat-header-cell *matHeaderCellDef>Tuition Fee <small>(per year)</small> </th>
+                  <td mat-cell *matCellDef="let institute">{{institute.TutionFee}}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="ProgramStatus">
+                  <th mat-header-cell *matHeaderCellDef>Status </th>
+                  <td mat-cell *matCellDef="let institute">{{institute.ProgramStatus}}</td>
+                </ng-container>
+
+
+                <ng-container matColumnDef="Action">
+                  <th mat-header-cell *matHeaderCellDef> &nbsp; </th>
+                  <td mat-cell *matCellDef="let institute" class="td-actions text-right" style="padding-right: 0px;">
+                  <a class="btn btn-sm btn-primary btn-link" routerLink="/{{parentRoute}}eligibility/check"> Check Eligibility</a>
+                  </td>
+                </ng-container>
+
+              </table>
+
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

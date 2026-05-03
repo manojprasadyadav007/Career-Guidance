@@ -1,0 +1,19 @@
+.custom-form-control-toolbar
+{
+    position: absolute;
+    z-index: 1000;
+    right: 23px;
+}
+.custom-form-control-toolbar .label
+{
+    font-size: 12px;
+    font-weight: 900;
+}
+.custom-form-control-toolbar button{
+    font-size: 10px;
+    width: 20px;
+    height: 20px;
+}
+.custom-form-control-toolbar button mat-icon.mat-icon.notranslate.material-icons.mat-icon-no-color {
+    font-size: 18px;
+}

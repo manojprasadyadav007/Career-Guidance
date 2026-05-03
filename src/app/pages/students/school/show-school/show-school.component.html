@@ -1,0 +1,75 @@
+<div class="container">
+  <div class="row mb-2">
+    <div class="col-10">
+      <h4 class="card-title pull-left">School Attended</h4>
+    </div>
+    <div class="col-2" *ngIf="permission>1">
+      <button mat-mini-fab type="button" (click)="add()" class="bg-primary pull-right" color="primary"
+        style="margin:-5px 0px -10px 0px; ">
+        <i class="material-icons">add</i>
+      </button>
+    </div>
+  </div>
+  
+  <div class="row" *ngFor="let school of schoolList">
+    <div class="col-md-3 col-sm-12">
+      <div class="schName">{{school.NameOfInstitution}}</div>
+      <div class="schName">{{school.Degree}}</div>
+    </div>
+    <div class="col-md-4  col-sm-12">
+      <div>
+        <span class="schLevel">Level : </span>{{school.LevelOfEducationName}}
+      </div>
+      <div>
+        <span class="schLevel">Attended From </span>{{school.AttendendFrom | date:'dd MMM yyyy'}}<span
+          class="schLevel"> To </span> {{school.AttendendTo | date:'dd MMM yyyy'}}
+      </div>
+      <div>
+        <span class="schLevel">Language of instruction : </span>{{school.Language}}
+      </div>
+      <div>
+        <span class="schLevel">Board Of Education : </span> {{school.Addres}}
+      </div>
+    </div>
+    <div class="col-md-4  col-sm-12">
+      <div class="row">
+        <div class="col-6">
+          <label>Subject</label>
+        </div>
+        <div class="col-4">
+          <label> Min/Max/Grade</label>
+        </div>
+        <div class="col-2"> <label> Score</label> </div>
+      </div>
+      <div class="row" *ngFor="let item of school.Marks">
+        <div class="col-6">
+          {{item.SubjectName}}
+        </div>
+        <div class="col-4">
+          <span *ngIf="item.MinMarks"> {{item.MinMarks}} / {{item.MaxMarks}}</span> 
+          {{item.GradeName}}
+        </div>
+        <div class="col-2">
+          {{item.ObtainMarks}}
+        </div>
+      </div>
+    </div>
+  
+    <div class="col-md-1  col-sm-12">
+      <button mat-icon-button type="button" (click)="delete(school.SchoolId)" *ngIf="permission>1">
+        <span class="text-danger">
+          <mat-icon>delete</mat-icon>
+        </span>
+      </button>
+      <button mat-icon-button type="button" (click)="add(school.SchoolId)" *ngIf="permission>1">
+        <span class="text-primary">
+          <mat-icon>edit</mat-icon>
+        </span>
+      </button>
+    </div>
+    <div class="col-12">
+      <hr />
+    </div>
+  </div>
+</div>
+

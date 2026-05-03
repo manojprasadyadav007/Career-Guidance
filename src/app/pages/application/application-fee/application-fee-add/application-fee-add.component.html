@@ -1,0 +1,110 @@
+<form #form="ngForm" form class="new-design">
+
+   <div mat-dialog-title>
+      Fee Detail
+      <button class="close text-white" type="button" mat-dialog-close aria-label="Close"><span
+            aria-hidden="true">×</span></button>
+   </div>
+   <div mat-dialog-content>
+
+
+      <mat-form-field>
+         <mat-label>Type</mat-label>
+         <mat-select matInput placeholder="Type" #FeeType="ngModel" [(ngModel)]="formdata.FeeType" name="FeeType"
+            required (selectionChange)="onFeeTypeChange()">
+            <mat-option>
+               <ngx-mat-select-search [(ngModel)]="typeFilter" [placeholderLabel]="'Search...'"
+                  [noEntriesFoundLabel]="'Not found'" name="typeFilter"></ngx-mat-select-search>
+            </mat-option>
+            <mat-option value="">Select</mat-option>
+            <mat-option [value]="item" *ngFor="let item of feeTypeList | stringFilterBy:typeFilter:'item'"> {{item}}</mat-option>
+         </mat-select>
+         <mat-error>Type is required</mat-error>
+      </mat-form-field>
+
+      <!-- <mat-form-field>
+         <mat-label>Semester No</mat-label>
+         <input type="number" matInput name="SemesterNo" #SemesterNo="ngModel" [(ngModel)]="formdata.SemesterNo"
+            placeholder="Semester" required>
+      </mat-form-field> -->
+
+      <mat-form-field>
+         <mat-label>Fee Amount</mat-label>
+         <input type="number" matInput name="FeeDeposit" #FeeDeposit="ngModel" [(ngModel)]="formdata.FeeDeposit"
+            placeholder="Fee Amount" required [MinValue]="1" [pattern]="modelPattern.numberwithDecimals">
+         <span matSuffix>{{currency}}</span>
+         
+         <mat-error>Enter valid fee amount</mat-error>
+
+      </mat-form-field>
+
+      <app-date-picker [(value)]="formdata.DepositDate" placeholder="Deposit Date" name="DepositDate" required="true"
+         [maxDate]="todayDate" [form]="form">
+
+      </app-date-picker>
+
+      <mat-form-field>
+         <mat-label>Basis</mat-label>
+         <mat-select matInput placeholder="Basis" #FeeBasis="ngModel" [(ngModel)]="formdata.FeeBasis" name="FeeBasis"
+            required>
+            <mat-option>
+               <ngx-mat-select-search [(ngModel)]="basicFilter" [placeholderLabel]="'Search...'"
+                  [noEntriesFoundLabel]="'Not found'" name="basicFilter"></ngx-mat-select-search>
+            </mat-option>
+            <mat-option [value]="item" *ngFor="let item of feeBasisList | stringFilterBy:basicFilter:'item';"> {{item}}
+            </mat-option>
+         </mat-select>
+         <mat-error>Basis is required</mat-error>
+      </mat-form-field>
+
+      <mat-form-field>
+         <mat-label>Mode Of Payment</mat-label>
+         <mat-select matInput placeholder="Mode Of Payment" #PaymentMode="ngModel" [(ngModel)]="formdata.PaymentMode"
+            name="PaymentMode" required (selectionChange)="onPaymentMethodChange()">
+            <mat-option value="Application fee waiver">Application fee waiver</mat-option>
+            <mat-option value="Bank Transfer">Bank Transfer</mat-option>
+            <mat-option value="Credit Card">Credit Card</mat-option>
+            <mat-option value="Direct in College">Direct in College</mat-option>
+            <mat-option value="EPBC">EPBC</mat-option>
+            <mat-option value="Flywire">Flywire</mat-option>
+            <mat-option value="Forex">Forex</mat-option>
+            <mat-option value="Live Wire">Live Wire</mat-option>
+            <mat-option value="Paymytuition">Paymytuition</mat-option>
+            <mat-option value="PAYPAL">PAYPAL</mat-option>
+            <mat-option value="Simple Pay">Simple Pay</mat-option>
+            <mat-option value="Voucher Code">Voucher Code</mat-option>
+            <mat-option value="Western Union">Western Union</mat-option>
+         </mat-select>
+         <mat-error>Mode of payment is required</mat-error>
+      </mat-form-field>
+      <mat-form-field>
+         <mat-label>Receipt Type</mat-label>
+         <mat-select matInput placeholder="Receipt type" #ReceiptType="ngModel" [(ngModel)]="formdata.ReceiptType"
+            name="ReceiptType">
+            <mat-option>
+               <ngx-mat-select-search [(ngModel)]="receiptFilter" [placeholderLabel]="'Search...'"
+                  [noEntriesFoundLabel]="'Not found'" name="receiptFilter"></ngx-mat-select-search>
+            </mat-option>
+            <mat-option value="">Select</mat-option>
+            <mat-option [value]="item.RecTypeId"
+               *ngFor="let item of receiptTypeList | stringFilterBy:receiptFilter:'RecTypeName' trackByProperty: 'RecTypeId'">
+               {{item.RecTypeName}}</mat-option>
+         </mat-select>
+      </mat-form-field>
+
+      <div>
+         <app-file-upload [(file)]="receiptFile" [initialFilePath]="formdata.ReceiptPath" dir="student"
+            label="Upload Receipt"></app-file-upload>
+      </div>
+
+   </div>
+   <div mat-dialog-actions align="center">
+      <button mat-dialog-close class="btn btn-sm btn-primary modalclose">Close</button>
+      <button type="submit" (click)="feeAdd(form)" class="btn btn-sm btn-primary btn-cust" *ngIf="permission>1"
+         [disabled]="flagdisable">{{btnLabel}}</button>
+      <button id="stripe" (click)="checkoutStripe($event)" class="btn btn-danger" *ngIf="showStripe">
+         Pay With Stripe
+      </button>
+   </div>
+
+</form>

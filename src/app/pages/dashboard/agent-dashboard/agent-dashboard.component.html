@@ -1,0 +1,119 @@
+<div class="container-fluid">
+
+  <div class="row">
+    <div class="col-md-12" app-new-tiles>
+        
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+        <app-dashboard-task-display></app-dashboard-task-display>
+    </div>
+  </div>
+
+  <!-- <div class="row" app-tiles>
+
+  </div> -->
+  <div class="row px-3">
+    <div class="col-md-12 ps-child" app-news-ticker >
+
+    </div>
+  </div>
+  <!-- <div class="row  m-30">
+    <div class="col-12">
+      <app-my-to-do></app-my-to-do>
+    </div>
+  </div> -->
+  <div class="row px-3">
+    <div class="col-md-6 col-sm-12" app-program-wise-application-chart >
+
+    </div>
+    <div class="col-md-6 col-sm-12" app-month-wise-applicatin-chart >
+     
+    </div>
+  </div>
+
+
+  <div class="container-fluid">
+  <div class="row ">
+    <!-- <div class="col-lg-6 col-md-12">
+      <app-recent-programs></app-recent-programs>
+    </div> -->
+    <div class="col-lg-6 col-md-12">
+      <app-recent-applications></app-recent-applications>
+    </div>
+    <div class="col-lg-6 col-md-12">
+      <app-program-updates></app-program-updates>
+    </div>
+  </div>
+  </div>
+
+
+  <div class="row">
+    <div class="col-lg-8 col-md-12">&nbsp;</div>
+    <div class="col-lg-4  col-md-12">
+
+      <!-- <div class="row"> -->
+       
+       
+        <!-- <div class="col-12">
+          <div class="card">
+            <div class="card-header card-header-icon card-header-danger">
+              <div class="card-icon">
+                <mat-icon>monetization_on</mat-icon>
+              </div>
+              <h5 class="card-title">Revenue</h5>
+            </div>
+            <div class="card-body">
+              <span>Potential Revenue <label class="text-info">$000</label></span><br>
+              <span>Billed <label class="text-info">$0000</label></span><br>
+              <span>Balance <label class="text-info">$0000</label></span><br>
+            </div>
+          </div>
+        </div> -->
+      
+      
+      
+        <!-- <div class="col-12 m-30">
+          <div class="card">
+            <div class="card-header card-header-icon card-header-danger">
+              <div class="card-icon">
+                <mat-icon>contact_support</mat-icon>
+              </div>
+              <h5 class="card-title">Your Account Manager</h5>
+            </div>
+            <div class="card-body">
+              <img style="max-width: 75px; max-height: 75px; min-width: 75px; min-height: 75px;"
+                src="{{ accountManager?.ProfileImage ? (filepath+'User/'+accountManager?.ProfileImage) : './assets/img/avatar.jpg' }}"
+                alt="..." class="float-left rounded-circle" [hidden]="!accountManager">
+              <div class="message" [hidden]="!accountManager">
+                <mat-icon class="align-middle">person</mat-icon>&nbsp;&nbsp;&nbsp; <label
+                  class="text-danger">{{accountManager?.DisplayName}}</label><br>
+                <mat-icon class="align-middle">call</mat-icon> &nbsp;&nbsp;&nbsp; <label class="text-danger">
+                  {{accountManager?.MobileNo}}</label><br>
+                <mat-icon class="align-middle">mail</mat-icon> &nbsp;&nbsp;&nbsp; <label
+                  class="text-danger">{{accountManager?.EmailId}}</label><br>
+              </div>
+              <div class="message" [hidden]="accountManager">
+                <label class="text-danger">Account Manager Not Assigned</label>
+              </div>
+            </div>
+          </div>
+        </div> -->
+        
+        
+        <!-- <div class="col-12">
+          <div class="card">
+            <div class="card-body ">
+              <div class="d-flex flex-column justify-content-center">
+                <button mat-raised-button class="btn btn-outline btn-danger">Submit your feedback</button>
+              </div>
+            </div>
+          </div>
+        </div> -->
+      <!-- </div> -->
+    </div>
+  </div>
+
+ 
+</div>

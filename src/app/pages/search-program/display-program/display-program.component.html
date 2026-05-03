@@ -1,0 +1,78 @@
+<div class="main-content new-design">
+  <app-program-filter-display pageTitle="Program Search" (programList)="programList=$event" [programIds]="programIds" [nationality]="searchData.Nationality"></app-program-filter-display>
+  <div class="card">
+    <div class="card-body">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-12">
+            <form #form="ngForm" (submit)="onSubmit()" class="mt-1">
+              <div class="row justify-content-md-center">
+                <div class="col-md-4">
+                  <mat-form-field>
+                    <mat-label>Nationality</mat-label>
+                    <mat-select matInput placeholder="Nationality" #Nationality="ngModel"
+                      [(ngModel)]="searchData.Nationality" name="Nationality" required
+                      (selectionChange)="onNationalityChange()">
+                      <mat-option>
+                        <ngx-mat-select-search [(ngModel)]="nationFilter" [placeholderLabel]="'Search...'"
+                          [noEntriesFoundLabel]="'Not found'" name="nationFilter"></ngx-mat-select-search>
+                      </mat-option>
+                      <mat-option *ngFor="let country of nationalityList | stringFilterBy:nationFilter:'CountryName';  trackByProperty: 'CountryId'" [value]="country.CountryId">
+                        {{country.CountryName}}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div class="col-md-3">
+                  <mat-form-field>
+                    <mat-label>What do you want to study?</mat-label>
+                    <input type="text" matInput placeholder="What do you want to study?" 
+                    [(ngModel)]="searchData.param1" #param1="ngModel" name="param1"
+                    [matAutocomplete]="autoParam1" (keyup)="filterParam1(param1.value)" (focus)="filterParam1(param1.value)">
+                  </mat-form-field>
+                    <mat-autocomplete #autoParam1="matAutocomplete">
+                        <mat-optgroup *ngFor="let group of  filteredDisciplineListObs" [label]="group.label">
+                            <mat-option *ngFor="let option of group.data" [value]="option">
+                              {{option}}
+                            </mat-option>
+                          </mat-optgroup>
+                    </mat-autocomplete>
+                  <!-- <mat-form-field>
+                    <mat-label>What would you like to study?</mat-label>
+                    <input matInput type="text" placeholder="What would you like to study?"
+                      [(ngModel)]="searchData.param1" name="param1">
+                  </mat-form-field> -->
+                </div>
+                <div class="col-md-3">
+                  <mat-form-field  >
+                    <mat-label>Where?</mat-label>
+                  <input matInput type="text" placeholder="Where?" 
+                      [(ngModel)]="searchData.param2"  #param2="ngModel" name="param2"
+                      [matAutocomplete]="autoParam2" (keyup)="filterParam2(param2.value)" (focus)="filterParam2(param2.value)">
+                    </mat-form-field>
+                  <mat-autocomplete #autoParam2="matAutocomplete">
+                      <mat-optgroup *ngFor="let group of filteredInstListObs" [label]="group.label" >
+                          <mat-option *ngFor="let option of group.data" [value]="option.name">
+                            {{option.name}}
+                          </mat-option>
+                        </mat-optgroup>
+                  </mat-autocomplete>
+                  <!-- <mat-form-field>
+                    <mat-label>Where?</mat-label>
+                    <input matInput type="text" placeholder="Where?" [(ngModel)]="searchData.param2" name="param2">
+                  </mat-form-field> -->
+                </div>
+                <div class="col-md-2">
+                  <button type="submit" class="btn btn-danger btn-one btn-anim w-100" [disabled]="!form.valid">
+                    <i class="fa fa-search"></i> search</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+        
+      </div>
+      <app-program-search-display [programList]="programList" [assignedInst]="assignedInstList" ></app-program-search-display>
+    </div>
+  </div>
+
+</div>

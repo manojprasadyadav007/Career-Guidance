@@ -1,0 +1,9 @@
+<mat-form-field>
+    <mat-label>{{placeholder}}</mat-label>
+    <mat-select matInput [(ngModel)]="value" required="{{required}}" disabled="{{disabled}}" [MinValue]="minMinutes"
+    
+    >
+        <mat-option [value]="item" *ngFor="let item of minutes" [disabled]="(+item)<minMinutes" >{{item}}</mat-option>
+    </mat-select>
+    <mat-error *ngIf="!value">Enter valid {{placeholder | lowercase }}</mat-error>
+</mat-form-field>

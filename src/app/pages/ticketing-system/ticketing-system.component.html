@@ -1,0 +1,83 @@
+<!-- 
+<div class="main-content">
+
+    <div class="card">
+      <div class="card-body">
+<p>ticketing-system works!</p>
+
+      </div>
+    </div>
+</div> -->
+
+<div class="main-content new-design">
+
+    <div class="card">
+      <div class="card-body">
+  
+  
+        <dx-data-grid [dataSource]="dataList" [showBorders]="true" [allowColumnResizing]="true" [showColumnLines]="true"
+          [showRowLines]="true" [rowAlternationEnabled]="true" [columnAutoWidth]="true"
+          (onToolbarPreparing)="onToolbarPreparing($event)" [allowColumnReordering]="true"
+          (onRowClick)="edit($event.data)">
+  
+          <dxo-paging [enabled]="true" [pageSize]="10"></dxo-paging>
+          <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 25,50,100]" [showInfo]="true">
+          </dxo-pager>
+  
+          <dxo-filter-row [visible]="showFilterRow"></dxo-filter-row>
+  
+          <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
+  
+          <dxo-export [enabled]="excel_permisson > 0" fileName="programs"></dxo-export>
+  
+          <dxo-column-chooser [enabled]="true" mode="select" [allowSearch]="true">
+          </dxo-column-chooser>
+  
+          <!-- <dxo-scrolling mode="virtual"></dxo-scrolling> -->
+  
+          <dxi-column *ngFor="let item of columns" [dataField]="item.dataField" [minWidth]="100" [caption]="item.title | sentenceCase"
+            [dataType]="item.type" [format]="item.format">
+          </dxi-column>
+  
+          <dxi-column caption="Action" [allowExporting]="false" [minWidth]="50" cellTemplate="actionCellTemplate">
+          </dxi-column>
+  
+          <div *dxTemplate="let d of 'actionCellTemplate'">
+            <a target="_blank" href="{{filepath+'Program/'+d.data.ticketNo}}" mat-raised-button
+        class="btn btn-primary btn-link">
+        <i class="material-icons">visibility</i>
+      </a>
+  
+              <button type="button" mat-icon-button class="text-danger" 
+                (click)="$event.stopPropagation(); delete(d.data)">
+                <mat-icon>close</mat-icon>
+              </button>
+  
+          </div>
+  
+          <div *dxTemplate="let d of 'toolbarButton'">
+            <button class="text-danger" (click)="add()" mat-icon-button data-toggle="tooltip" title="New">
+              <mat-icon>add</mat-icon>
+            </button>
+  
+            <button class="text-danger" (click)="showFilterRow=!showFilterRow" mat-icon-button data-toggle="tooltip" title="Apply Filter">
+              <mat-icon>filter_list</mat-icon>
+          </button>
+          </div>
+  
+  
+        </dx-data-grid>
+  
+  
+  
+  
+      </div>
+    </div>
+  </div>
+
+<!-- Script For Tooltip -->
+<script>
+  $(document).ready(function () {
+    $('[data-toggle="tooltip"]').tooltip();
+  });
+</script>

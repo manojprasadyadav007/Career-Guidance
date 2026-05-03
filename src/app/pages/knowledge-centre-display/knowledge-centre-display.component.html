@@ -1,0 +1,91 @@
+<div class="main-content new-design">
+    <div class="card">
+        <div class="card-header">
+
+<div class="container-fluid new-design">
+
+    <!--filter-->
+    <div class="row">
+        <div class="col-md-12  mx-auto">
+            <form #form="ngForm">
+                <div class="row">
+                    <div class="col-md-5">
+                        <div class="form-group inputbox">
+                            <mat-form-field>
+                                <mat-label>Category Search</mat-label>
+                                <input type="text" matInput placeholder="Category Search" [(ngModel)]="searchData"
+                                    #param1="ngModel" name="CategoryName" (keyup)="filterParam1(param1.value)">
+                            </mat-form-field>
+                        </div>
+
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <ng-container
+        *ngFor="let item of displayList  | paginate: {id: 'inst', itemsPerPage: 4, currentPage: pageIndex } ; let i = index;">
+        <div class="row no-gutters align-items-center mt10">
+            <div class="col-12">
+                <div class="intcard">
+                    <h4>{{item.category}}</h4>
+                    <div class="row">
+                        <div class="col-3"
+                            *ngFor="let list of item.data| paginate: {id: 'i'+ i, itemsPerPage: 6, currentPage: item.p  }">
+
+                            <div class="intprograms check-eligibitlity text-center" (click)="openEvent(list.KnowledgeCID)" style="background-color: #f22112;cursor: pointer; border: 1px solid #f22112;padding: 10px;">
+                                <h5 style="color: #fff;text-transform:uppercase;margin-bottom: 0px;">{{list.DocumentTitle}}</h5>
+                            </div>
+
+                        </div>
+                        </div>
+                        <!-- <ol>
+                            <li *ngFor="let list of item.data| paginate: {id: 'i'+ i, itemsPerPage: 6, currentPage: item.p  }" style="font-weight: bold;font-size: 14px;color: #9c27b0;">
+                            
+                                <div (click)="openEvent(list.KnowledgeCID)">
+                                    <h5 style="width: fit-content;font-weight:bold; cursor: pointer;color: #9c27b0;">{{list.DocumentTitle}}</h5>
+                                </div>
+                            
+                            </li>
+                        </ol> -->
+
+                    
+                    <div class="row  no-gutters align-items-center mt10">
+                        <div class="col-12">
+                            <div class="d-flex justify-content-center">
+                                <pagination-controls id="{{'i'+ i }}" autoHide="true" responsive="true"
+                                    (pageChange)="item.p = $event"></pagination-controls>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </ng-container>
+    <ng-container *ngIf="!displayList || displayList?.length===0">
+        <div class="row no-gutters align-items-center mt10">
+            <div class="col-12">
+                <p class="d-flex justify-content-center  text-danger">
+                    No Categories to display
+                </p>
+            </div>
+        </div>
+    </ng-container>
+    <div class="row  no-gutters align-items-center mt10">
+        <div class="col-12">
+            <div class="d-flex justify-content-center">
+                <pagination-controls id="inst" autoHide="true" responsive="true" (pageChange)="pageIndex = $event">
+                </pagination-controls>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+        </div>
+    </div>
+</div>

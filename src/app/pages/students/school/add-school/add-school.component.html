@@ -1,0 +1,347 @@
+<form #form="ngForm" class="new-design">
+  <div mat-dialog-title>
+    School
+    <button class="close text-white" type="button" mat-dialog-close aria-label="Close"><span
+        aria-hidden="true">×</span></button>
+  </div>
+  <div mat-dialog-content>
+
+
+    <div class="row">
+      <div class="col-6">
+        <mat-form-field>
+          <mat-label>Level of Education</mat-label>
+          <mat-select matInput placeholder="Level of Education" #LevelOfEducation="ngModel"
+            [(ngModel)]="formdata.LevelOfEducation" name="LevelOfEducation" (selectionChange)="getEduName()" required>
+            <mat-option>
+              <ngx-mat-select-search [(ngModel)]="eduFilter" [placeholderLabel]="'Search...'"
+                [noEntriesFoundLabel]="'Not found'" name="eduFilter"></ngx-mat-select-search>
+            </mat-option>
+            <mat-option
+              *ngFor="let eduLevel of eduLevelList | stringFilterBy:eduFilter:'EduLevelName';  trackByProperty: 'EduLevelId'"
+              [value]="eduLevel.EduLevelId">
+              {{eduLevel.EduLevelName}}</mat-option>
+          </mat-select>
+          <mat-error *ngIf="LevelOfEducation.hasError( 'required') || LevelOfEducation.hasError( 'pattern')">Level of
+            Education is required</mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="col-md-6">
+        <mat-form-field>
+          <mat-label>Country of Institution</mat-label>
+          <mat-select matInput placeholder="Country of Institution" #CountryOfInstitution="ngModel"
+            [(ngModel)]="formdata.CountryOfInstitution" name="CountryOfInstitution" required
+            (selectionChange)="fillGrade()" [disabled]="formdata.Marks.length>0">
+            <mat-option>
+              <ngx-mat-select-search [(ngModel)]="instFilter" [placeholderLabel]="'Search...'"
+                [noEntriesFoundLabel]="'Not found'" name="instFilter"></ngx-mat-select-search>
+            </mat-option>
+            <mat-option
+              *ngFor="let country of countryList | stringFilterBy:instFilter:'CountryName';  trackByProperty: 'CountryId' "
+              [value]="country.CountryId">
+              {{country.CountryName}}</mat-option>
+          </mat-select>
+          <mat-error *ngIf="CountryOfInstitution.hasError( 'required') || CountryOfInstitution.hasError( 'pattern')">
+            Country of Institution is required</mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="col-md-12">
+        <mat-form-field>
+          <mat-label>Name of Institution</mat-label>
+          <input matInput placeholder="Name of Institution" #NameOfInstitution="ngModel"
+            [(ngModel)]="formdata.NameOfInstitution" name="NameOfInstitution" [pattern]="modelPattern.alphaNumericWithSpace">
+
+            <mat-error *ngIf="NameOfInstitution.hasError('pattern')"> Enter valid Institution name</mat-error>
+        </mat-form-field>
+      </div>
+      
+      <div class="col-md-4">
+        <mat-form-field>
+          <mat-label>Province</mat-label>
+          <mat-select placeholder="Province" #Province="ngModel" [(ngModel)]="formdata.Province" name="Province">
+            <mat-option>
+              <ngx-mat-select-search [(ngModel)]="provinceFilter" [placeholderLabel]="'Search...'"
+                [noEntriesFoundLabel]="'Not found'" name="provinceFilter"></ngx-mat-select-search>
+            </mat-option>
+            <mat-option>None</mat-option>
+            <mat-option
+              *ngFor="let province of provinceList | stringFilterBy:provinceFilter:'ProvinceName';  trackByProperty: 'ProvinceId' "
+              [value]="province.ProvinceId">
+              {{province.ProvinceName}}</mat-option>
+          </mat-select>
+          <mat-error *ngIf="Province.hasError('pattern')"> Enter valid Province</mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="col-md-4">
+        <mat-form-field>
+          <mat-label>City/Town</mat-label>
+
+          <input matInput placeholder="City/Town" #City="ngModel" [(ngModel)]="formdata.City" name="City"
+          [pattern]="modelPattern.alphaNumericWithSpace">
+          <mat-error *ngIf="City.hasError('pattern')"> Enter valid City/Town</mat-error>
+
+
+        </mat-form-field>
+      </div>
+
+      <div class="col-md-4">
+
+        <mat-form-field>
+          <mat-label>Primary Language of Instruction</mat-label>
+          <mat-select matInput placeholder="Primary Language of Instruction" #Language="ngModel"
+            [(ngModel)]="formdata.Language" name="Language">
+            <mat-option>
+              <ngx-mat-select-search [(ngModel)]="priminFilter" [placeholderLabel]="'Search...'"
+                [noEntriesFoundLabel]="'Not found'" name="priminFilter"></ngx-mat-select-search>
+            </mat-option>
+            <mat-option [value]="">None</mat-option>
+            <mat-option *ngFor="let language of languageList | stringFilterBy:priminFilter:'LanguageName';"
+              [value]="language.LanguageName">
+              {{language.LanguageName}}</mat-option>
+          </mat-select>
+
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="row">
+
+      <div class="col-md-4">
+        <app-date-picker [(value)]="formdata.AttendendFrom" placeholder="From" name="AttendendFrom" required="false"
+          maxDate="new Date()" [form]="form" [maxDate]="maxDate">
+        </app-date-picker>
+      </div>
+      <div class="col-md-4">
+
+        <app-date-picker [(value)]="formdata.AttendendTo" placeholder="To" name="AttendendTo" required="false"
+          [minDate]="formdata.AttendendFrom" [form]="form" [maxDate]="maxDate">
+        </app-date-picker>
+
+      </div>
+
+      <div class="col-md-4">
+        <mat-form-field>
+          <mat-label>Degree Awarded</mat-label>
+          <input matInput placeholder="Degree Awarded" #Degree="ngModel" [(ngModel)]="formdata.Degree" name="Degree"
+          [pattern]="modelPattern.alphaNumericWithSpace">
+          <mat-error *ngIf="Degree.hasError('pattern')"> Enter valid Degree</mat-error>
+
+        </mat-form-field>
+      </div>
+
+    </div>
+    <div class="row">
+      <div class="col-md-4">
+        <mat-form-field>
+          <mat-label>Stream</mat-label>
+          <mat-select matInput placeholder="Stream" #Language="ngModel"
+            [(ngModel)]="formdata.StreamId" name="stream">
+            <mat-option>
+              <ngx-mat-select-search [(ngModel)]="streamFilter" [placeholderLabel]="'Search...'"
+                [noEntriesFoundLabel]="'Not found'" name="streamFilter"></ngx-mat-select-search>
+            </mat-option>
+            <mat-option [value]="">None</mat-option>
+            <mat-option *ngFor="let stream of streamList | stringFilterBy:streamFilter:'StreamName';"
+              [value]="stream.StreamId">
+              {{stream.StreamName}}</mat-option>
+          </mat-select>
+
+        </mat-form-field>
+      </div>
+      <div class="col-md-8">
+        <mat-form-field>
+          <mat-label>Board Of Education</mat-label>
+          <input matInput placeholder="Board Of Education" #Addres="ngModel" [(ngModel)]="formdata.Addres"
+            name="Addres"  [pattern]="modelPattern.alphaNumericWithSpace">
+            <mat-error *ngIf="Addres.hasError('pattern')"> Enter valid Board</mat-error>
+
+        </mat-form-field>
+
+      </div>
+
+      <!-- <div class="col-md-4">
+        <mat-form-field >
+          <input matInput  placeholder="Degree Awarded On" #DegreeAwardedOn="ngModel"
+            [ngModel]="formdata.DegreeAwardedOn | date:'yyyy-MM-dd'" (ngModelChange)="formdata.DegreeAwardedOn = $event"
+            name="DegreeAwardedOn">
+        </mat-form-field>
+      </div> -->
+    </div>
+    <!-- <div class="row">
+      <div class="col-md-12">
+        <h5 class="mat-dialog-title">School Address</h5>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <mat-form-field >
+          <input matInput placeholder="Address" #Addres="ngModel" [(ngModel)]="formdata.Addres" name="Addres">
+        </mat-form-field>
+      </div>
+     
+
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <mat-form-field >
+    
+              <input matInput placeholder="Province" #Province="ngModel" [(ngModel)]="formdata.Province" name="Province">
+    
+            </mat-form-field>
+          </div>
+      <div class="col-md-4">
+
+        <mat-form-field >
+          <input matInput placeholder="City/Town" #City="ngModel" [(ngModel)]="formdata.City" name="City">
+
+        </mat-form-field>
+      </div>
+      <div class="col-md-4">
+        <mat-form-field >
+          <input matInput placeholder="Postal/Zip Code" #Pincode="ngModel" [(ngModel)]="formdata.Pincode"
+            name="Pincode">
+        </mat-form-field>
+      </div>
+    </div> -->
+
+
+
+
+    <form #marksForm="ngForm" (ngSubmit)="addMarks(marksForm);" novalidate>
+
+      <div class="row">
+        <div class="col-12">
+          <table class="table table-sm">
+            <tr *ngIf="!formdata?.Marks || formdata?.Marks?.length<=0">
+              <th colspan="6">
+                <mat-error> Enter marks for atleast 1 subject</mat-error>
+              </th>
+            </tr>
+            <tr>
+              <th style="width: 20%;">Subject</th>
+              <th style="width: 20%;">Grade</th>
+              <th style="width: 18%;">Min</th>
+              <th style="width: 18%;">Max</th>
+              <th style="width: 18%;">Score</th>
+              <th style="width: 6%;"></th>
+            </tr>
+            <tr *ngIf="formdata.CountryOfInstitution>0">
+              <td>
+                <mat-form-field floatLabel="never">
+                  <mat-label>Subject</mat-label>
+                  <mat-select matInput placeholder="Subject" #SubjectId="ngModel" [(ngModel)]="scoredata.SubjectId"
+                    name="SubjectId" required pattern="^[1-9]\d*$">
+                    <mat-option>
+                      <ngx-mat-select-search [(ngModel)]="subFilter" [placeholderLabel]="'Search...'"
+                        [noEntriesFoundLabel]="'Not found'" name="subFilter"></ngx-mat-select-search>
+                    </mat-option>
+
+                    <mat-option>None</mat-option>
+                    <mat-option
+                      *ngFor="let country of subjectList | stringFilterBy:subFilter:'SbjName';  trackByProperty: 'SbjId'"
+                      [value]="country.SbjId">
+                      {{country.SbjName}}</mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="SubjectId.hasError( 'required') || SubjectId.hasError( 'pattern')">Select Subject
+                  </mat-error>
+                </mat-form-field>
+              </td>
+              <td>
+                <mat-form-field floatLabel="never">
+                  <mat-label>Grade</mat-label>
+                  <mat-select matInput placeholder="Grade" #GradeId="ngModel" [(ngModel)]="scoredata.GradeId"
+                    name="GradeId" pattern="^[0-9]\d*$" (selectionChange)="onGradeChange()" placeholder="Grade">
+                    <mat-option>
+                      <ngx-mat-select-search [(ngModel)]="gradFilter" [placeholderLabel]="'Search...'"
+                        [noEntriesFoundLabel]="'Not found'" name="gradFilter"></ngx-mat-select-search>
+                    </mat-option>
+                    <mat-option [value]="0">None</mat-option>
+                    <mat-option
+                      *ngFor="let country of countryGradeList | stringFilterBy:gradFilter:'GrdSchemeName';  trackByProperty: 'GrdSchemeId'"
+                      [value]="country.GrdSchemeId">
+                      {{country.GrdSchemeName}}
+                    </mat-option>
+                    <mat-optgroup *ngIf="otherGradeList?.length>0" label="Other">
+                      <mat-option
+                        *ngFor="let country of otherGradeList  | stringFilterBy:gradFilter:'GrdSchemeName';  trackByProperty: 'GrdSchemeId'"
+                        [value]="country.GrdSchemeId">
+                        {{country.GrdSchemeName}}</mat-option>
+                    </mat-optgroup>
+
+                  </mat-select>
+                  <mat-error *ngIf="GradeId.hasError( 'required') || GradeId.hasError( 'pattern')">Select Grade or Enter
+                    Marks</mat-error>
+                </mat-form-field>
+              </td>
+              <td>
+
+                <mat-form-field floatLabel="never" *ngIf="!(scoredata.GradeId>0)">
+                  <mat-label>Min</mat-label>              
+                  <input type="number" matInput placeholder="Min" #MinMarks="ngModel" [(ngModel)]="scoredata.MinMarks"
+                    name="MinMarks" [MinValue]="1" [required]="scoredata.GradeId===0" [disabled]="scoredata.GradeId>0">
+
+                    <mat-error *ngIf="MinMarks.hasError( 'required')">Enter min marks or select grade</mat-error>
+                  <mat-error *ngIf="MinMarks.hasError( 'MinValue')">Enter value greater than 0</mat-error>
+                </mat-form-field>
+
+              </td>
+              <td>
+                <mat-form-field floatLabel="never" *ngIf="!(scoredata.GradeId>0)">
+                  <mat-label>Max</mat-label>
+                  <input type="number" matInput placeholder="Max" #MaxMarks="ngModel" [(ngModel)]="scoredata.MaxMarks"
+                    name="MaxMarks" [MinValue]="scoredata.MinMarks" [required]="scoredata.GradeId===0"
+                    [disabled]="scoredata.GradeId>0">
+                  <mat-error *ngIf="MaxMarks.hasError( 'required')">Enter max marks</mat-error>
+                  <mat-error *ngIf="MaxMarks.hasError( 'MinValue')">Enter value greater than Min value</mat-error>
+
+                </mat-form-field>
+              </td>
+              <td>
+                <mat-form-field floatLabel="never">
+                  <mat-label>Score</mat-label>
+                  <input type="text" matInput placeholder="Score" #ObtainMarks="ngModel" required
+                    [(ngModel)]="scoredata.ObtainMarks" name="ObtainMarks"
+                    [MinValue]='0'
+                    [MaxValue]="scoredata.GradeId===0 ? scoredata.MaxMarks : null" toUppercase
+                    [pattern]="selectedGrade?.InputPattern">
+                  <mat-hint>{{selectedGrade?.InputHint}}</mat-hint>
+                  <mat-error *ngIf="ObtainMarks.hasError( 'required')">Enter score</mat-error>
+                  <mat-error *ngIf="ObtainMarks.hasError( 'pattern')">Enter valid score</mat-error>
+                  <mat-error *ngIf="ObtainMarks.hasError( 'MinValue') && !(ObtainMarks.hasError( 'pattern'))">Enter valid score</mat-error>
+                  <mat-error *ngIf="ObtainMarks.hasError( 'MaxValue')">Enter score upto maximum marks</mat-error>
+                </mat-form-field>
+              </td>
+              <td>
+                <button type="submit" class="btn btn-sm btn-danger" data-toggle="tooltip" title="Add">Add</button>
+              </td>
+            </tr>
+            <tr *ngFor="let item of formdata.Marks">
+              <td>{{item.SubjectName}}</td>
+              <td>{{item.GradeName}}</td>
+              <td>{{item.MinMarks}}</td>
+              <td>{{item.MaxMarks}}</td>
+              <td>{{item.ObtainMarks}}</td>
+              <td><button type="button" mat-icon-button (click)=" deleteMarks(item , 1)" color="danger"
+                  class="text-danger" data-toggle="tooltip" title="Delete">
+                  <mat-icon>delete</mat-icon>
+                </button></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div mat-dialog-actions align="center">
+    <button type="button" mat-dialog-close class="btn btn-primary btn-sm modalclose" data-toggle="tooltip" title="Close">Close</button>
+    <button type="submit" (click)="onSubmit(form)" class="btn btn-primary btn-sm btn-cust" data-toggle="tooltip" title="{{btnLable}}" [disabled]="flagdisabled">{{btnLable}}</button>
+  </div>
+</form>
+
+<!-- Script For Tooltip -->
+<script>
+  $(document).ready(function () {
+    $('[data-toggle="tooltip"]').tooltip();
+  });
+</script>

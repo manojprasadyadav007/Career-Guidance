@@ -1,0 +1,60 @@
+<div class="{{ isPage? 'main-content':'' }}">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <dx-data-grid [dataSource]="dataList" [showBorders]="true" [allowColumnResizing]="true"
+                            [showColumnLines]="true" [showRowLines]="true" [rowAlternationEnabled]="true"
+                            [columnAutoWidth]="true" [noDataText]="gridMessage" (onToolbarPreparing)="onToolbarPreparing($event)"
+                            [allowColumnReordering]="true" (onRowClick)="edit($event.data.ApplicationId)" (onExporting)="activitylog()">
+                            <dxo-filter-panel [visible]="true"></dxo-filter-panel>
+                            <dxo-paging [enabled]="true" [pageSize]="10"></dxo-paging>
+                            <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 25,50,100]"
+                                [showInfo]="true">
+                            </dxo-pager>
+                            <dxo-filter-row [visible]="showFilterRow"></dxo-filter-row>
+                            <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
+                            <dxo-export [enabled]="excel_permisson > 0" fileName="{{this.parentName}} Associated Institutes"></dxo-export>
+                            <dxo-column-chooser [enabled]="true" mode="select" [allowSearch]="true">
+                            </dxo-column-chooser>
+                            <dxi-column *ngFor="let item of columns" [dataField]="item.dataField" [minWidth]="100"
+                                [caption]="item.title |sentenceCase" [dataType]="item.type" [format]="item.format">
+                            </dxi-column>
+                            <!-- <dxi-column caption="Action" [minWidth]="50" cellTemplate="actionCellTemplate"
+                                *ngIf="permission>2">
+                            </dxi-column> -->
+                            <dxi-column caption="Action" [allowExporting]="false" [minWidth]="50" cellTemplate="actionCellTemplate"></dxi-column>
+                            <div *dxTemplate="let d of 'actionCellTemplate'">
+                                <!-- <button type="button" mat-icon-button class="text-danger"
+                                    (click)="$event.stopPropagation(); deleteAssociateInstitute(d.data)"
+                                    *ngIf="permission>2">
+                                    <mat-icon>close</mat-icon>
+                                </button> -->
+                                <button type="button" mat-icon-button class="text-danger"
+                                    (click)="$event.stopPropagation(); deleteAssociateInstitute(d.data.InstituionId)" data-toggle="tooltip" title="Delete">
+                                    <mat-icon>close</mat-icon>
+                                </button>
+                            </div>
+                            <div *dxTemplate="let d of 'toolbarButton'">
+                                <button class="text-danger" (click)="openDialog()" mat-icon-button data-toggle="tooltip" title="New">
+                                    <mat-icon>add</mat-icon>
+                                </button>
+                                <button class="text-danger" (click)="showFilterRow=!showFilterRow" mat-icon-button data-toggle="tooltip" title="Apply Filter">
+                                    <mat-icon>filter_list</mat-icon>
+                                </button>
+                            </div>
+                        </dx-data-grid>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Script For Tooltip -->
+<script>
+    $(document).ready(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+</script>

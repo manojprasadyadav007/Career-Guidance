@@ -1,0 +1,6 @@
+<div class="main-content" [ngClass]="{'main-content':isProfile===0}">
+
+    <app-student-create-layout [mode]="3" parentId="0" parentType="6" [genInfoData]="genInfo" (onSubmitClick)="onSubmit($event)"
+           btnLabel="Save" [permission]="permission" *ngIf="permission>0">
+    </app-student-create-layout>
+</div>

@@ -1,0 +1,151 @@
+<div class="main-content new-design">
+    <div class="card">
+
+        <div class="card-body">
+
+            <dx-data-grid [dataSource]="dataList" [showBorders]="true" [allowColumnResizing]="true"
+                [showColumnLines]="true" [showRowLines]="true" [rowAlternationEnabled]="true" [noDataText]="gridMessage"
+                [columnAutoWidth]="true" (onToolbarPreparing)="onToolbarPreparing($event)"
+                [allowColumnReordering]="true" (onRowClick)="edit($event.data.InstitutionId)"
+                (onCellHoverChanged)="onCellHoverChanged($event)" class="agent-partner" (onExporting)="activitylog()">
+
+                <dxo-filter-panel [visible]="true"></dxo-filter-panel>
+                <dxo-state-storing [enabled]="true" type="localStorage" storageKey="insitiution"></dxo-state-storing>
+                <dxo-paging [enabled]="true" [pageSize]="10"></dxo-paging>
+                <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 25,50,100]" [showInfo]="true">
+                </dxo-pager>
+
+                <dxo-filter-row [visible]="showFilterRow"></dxo-filter-row>
+
+                <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
+
+                <dxo-export [enabled]="excel_permisson >0" fileName="Institutions"></dxo-export>
+
+                <dxo-column-chooser [enabled]="true" mode="select" [allowSearch]="true">
+                </dxo-column-chooser>
+
+                <!-- <dxo-scrolling mode="virtual"></dxo-scrolling> -->
+
+                <dxi-column *ngFor="let item of columns" [dataField]="item.dataField" [minWidth]="100"
+                    [caption]="item.title | sentenceCase" [dataType]="item.type" [format]="item.format">
+                </dxi-column>
+
+                <dxi-column caption="Status" [minWidth]="50" cellTemplate="statusCellTemplate"
+                *ngIf="currentUser.RoleType===1">
+                </dxi-column>
+
+
+                <dxi-column caption="AEF Status" [minWidth]="50" cellTemplate="aefStatusCellTemplate"
+                    *ngIf="currentUser.RoleId===2">
+                </dxi-column>
+
+
+                <div *dxTemplate="let d of 'aefStatusCellTemplate'" class="text-center">
+
+                    <button (click)="$event.stopPropagation(); openApplication(d.data)" class="btn btn-link"
+                        *ngIf="d.data.ApplicationId">
+                        <span
+                            [ngClass]="{'text-danger':d.data.ApplicationStatus===2,'text-success':d.data.ApplicationStatus===3,'text-info':d.data.ApplicationStatus<2}">{{
+                            getName( agentEvolutionFormStatusList,d.data.ApplicationStatus)}}</span>
+                    </button>
+
+                    <button mat-icon-button (click)="$event.stopPropagation(); openApplication(d.data)"
+                        *ngIf="!d.data.ApplicationId && currentUser.isPrimary===1 && d.data.AEFAvail"
+                        class="text-primary">
+                        <mat-icon>add</mat-icon>
+                    </button>
+
+                </div>
+
+                <dxi-column caption="Support" cssClass="header-center" [minWidth]="50" [width]="100" [fixed]="true"
+                    fixedPosition="right" cellTemplate="actionCellTemplate">
+
+                </dxi-column>
+
+                <div *dxTemplate="let d of 'actionCellTemplate'">
+                    <mat-menu #instMenu="matMenu">
+                        <span class="menuempty">
+                            <span class="ref"></span>
+                        </span>
+                        <button (click)="$event.stopPropagation(); openInNewTab(d.data.InstitutionId)" mat-menu-item
+                            *ngIf="currentUser.RoleId!=2">
+                            <span class="material-icons icon-position">
+                                remove_red_eye
+                            </span>View
+                        </button>
+
+                        <button (click)="$event.stopPropagation();" mat-menu-item
+                            routerLink="/member/institutions/programs/{{d.data.InstitutionId}}" class="">
+                            <span class="material-icons icon-position"> assignment</span>Program
+                        </button>
+
+                        <button (click)="$event.stopPropagation(); showMaterialDialog(d.data.InstitutionId)"
+                            mat-menu-item class="d-block mt-2" *ngIf="currentUser.RoleId===2">
+                            <span class="material-icons icon-position">assignment</span> Marketing-Collateral
+                        </button>
+                        <button (click)="$event.stopPropagation(); bulkUpdate(d.data.InstitutionId)" mat-menu-item
+                            *ngIf="permission > 2 && (currentUser.RoleType === 1 || currentUser.RoleType === 2) && (d.data.NoOfProgram>0)">
+                            <span class="material-icons icon-position"> backup </span>Program Bulk Update
+                        </button>
+                        <button type="button" mat-menu-item
+                            (click)="$event.stopPropagation(); delete(d.data.InstitutionId)" *ngIf="can_delete"
+                            data-toggle="tooltip" title="Delete">
+                            <span class="material-icons icon-position">
+                                close
+                            </span> Delete
+                        </button>
+                    </mat-menu>
+                    <button mat-icon-button [matMenuTriggerFor]="instMenu" (click)="$event.stopPropagation()">
+                        <mat-icon class="more_dropdown">keyboard_arrow_down</mat-icon>
+                    </button>
+
+
+                </div>
+                <div *dxTemplate="let d of 'statusCellTemplate'">
+
+                    <button (click)="$event.stopPropagation();changeStatus(d.data.InstitutionId,!(d.data.InstStatus))" mat-raised-button="" type="button" 
+                    *ngIf="permission > 2 && currentUser.RoleType === 1 "  
+                        ngClass="{{d.data.InstStatus=='1' ? 'btn btn-success btn-link': 'btn btn-danger btn-link' }}"
+                        class="btn btn-success btn-link" [matTooltip]="'Active/InActive'">
+                        <span class="mat-button-wrapper"><i class="material-icons">
+                                {{ d.data.InstStatus=="1" ? 'done_outline': 'highlight_off'  }}
+                            </i></span>
+                        <div class="mat-button-ripple mat-ripple" matripple=""></div>
+                        <div class="mat-button-focus-overlay"></div>
+                    </button>
+                </div>
+
+
+                <div *dxTemplate="let d of 'toolbarButton'">
+                    <button class="text-danger" routerLink="/member/institutions/add-institutions" mat-icon-button
+                        *ngIf="can_add" data-toggle="tooltip" title="New">
+                        <mat-icon>add</mat-icon>
+                    </button>
+
+                    <button class="text-danger" (click)="showFilterRow=!showFilterRow" mat-icon-button
+                        data-toggle="tooltip" title="Apply Filter">
+                        <mat-icon>filter_list</mat-icon>
+                    </button>
+
+
+                </div>
+                <dxo-grouping expandMode="rowClick"></dxo-grouping>
+            </dx-data-grid>
+            <dx-tooltip>
+                <div *dxTemplate="let  data of 'content'">
+                    {{ToolTipText}}
+                </div>
+            </dx-tooltip>
+
+
+        </div>
+    </div>
+
+</div>
+
+<!-- Script For Tooltip -->
+<script>
+    $(document).ready(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+</script>

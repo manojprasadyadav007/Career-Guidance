@@ -1,0 +1,97 @@
+<form #form="ngForm"  class="new-design">
+  <div mat-dialog-title>
+    Agreement
+    <button class="close text-white" type="button" mat-dialog-close  aria-label="Close"><span aria-hidden="true">×</span></button>
+  </div>
+
+  <div mat-dialog-content>
+
+
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-12" *ngIf="formdata.AgreementId===0 && parentType===9">
+          <mat-checkbox [(ngModel)]="formdata.IsNew" #IsNew="ngModel" name="IsNew">New Agreement</mat-checkbox>
+        </div>
+        <div class="col-md-12" *ngIf="parentType===9">
+          <mat-form-field>
+            <mat-label>Institution</mat-label>
+            <mat-select placeholder="Institution" #InstitutionId="ngModel" [(ngModel)]="formdata.InstitutionId"
+              name="InstitutionId" [disabled]="formdata.RequestId?.length>0"
+              (selectionChange)="fillSigningAuthority(true)" required>
+              <mat-option>
+                <ngx-mat-select-search [(ngModel)]="instFilter" [placeholderLabel]="'Search...'"
+                  [noEntriesFoundLabel]="'Not found'" name="instFilter"></ngx-mat-select-search>
+              </mat-option>
+              <mat-option [value]="0">MSM Self</mat-option>
+              <mat-option [value]="item.InstitutionId" *ngFor="let item of instiutionList | stringFilterBy:instFilter:'InstName';  trackByProperty: 'InstitutionId'">
+                {{item.InstName}}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="InstitutionId.hasError('pattern') || InstitutionId.hasError('required')">Select institution
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-md-12" *ngIf="formdata.IsNew || formdata.RequestId?.length>0">
+          <mat-form-field>
+            <mat-label>Signing Authority</mat-label>
+            <mat-select placeholder="Signing Authority" #SigningAuthority="ngModel"
+              [(ngModel)]="formdata.SigningAuthority" name="SigningAuthority" required
+              [disabled]="formdata.AgreementId>0">
+              <mat-option>
+                <ngx-mat-select-search [(ngModel)]="signFilter" [placeholderLabel]="'Search...'"
+                  [noEntriesFoundLabel]="'Not found'" name="signFilter"></ngx-mat-select-search>
+              </mat-option>
+              <mat-option [value]="item.UserId" *ngFor="let item of signingAuthorityList | stringFilterBy:signFilter:'DisplayName';  trackByProperty: 'UserId' ">
+                {{item.DisplayName+'/'+item.EmailId}}</mat-option>
+            </mat-select>
+            <mat-error *ngIf="SigningAuthority.hasError('pattern') || SigningAuthority.hasError('required')">
+              Select signing authority
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-md-6">
+          <app-date-picker [(value)]="formdata.StartDate" placeholder="Start Date" name="StartDate" [required]="true"
+            [form]="form"> </app-date-picker>
+        </div>
+        <div class="col-md-6" >
+          <app-date-picker [(value)]="formdata.EndDate" [minDate]="formdata.StartDate" placeholder="End Date" name="EndDate" [required]="true"
+            [form]="form"> </app-date-picker>
+        </div>
+        <div class="col-md-12">
+          <div class="form-group">
+            <label>Description</label><span style="color: red;"> *</span>
+            <dx-html-editor  placeholder="Description"
+            [(ngModel)]="formdata.AgreementDescription" name="AgreementDescription" #AgreementDescription="ngModel"
+            style="min-height: 100px;" required>
+              <dxo-toolbar [items]="items"> </dxo-toolbar>
+              <dx-validator >  
+                <dxi-validation-rule type='required' message='Description is required'></dxi-validation-rule>  
+              </dx-validator>
+          </dx-html-editor>
+            <!-- <ckeditor [editor]="Editor" tagName="textarea" placeholder="Description"
+              [(ngModel)]="formdata.AgreementDescription" name="AgreementDescription" #AgreementDescription="ngModel"
+              style="min-height: 100px;" required></ckeditor> -->
+              <!-- <mat-error *ngIf="AgreementDescription.hasError('required') && (AgreementDescription.touched || AgreementDescription.dirty || form.submitted)">Description is required</mat-error> -->
+          </div>  
+        </div>
+        <br>
+        <div class="col-md-12" *ngIf="!formdata?.RequestId && !formdata.IsNew">
+          <app-file-upload  (fileChange)="file=$event" fileType="application/pdf" label="attachment"
+            [initialFilePath]="formdata.AgreementPath" dir="Agreement">
+
+          </app-file-upload>
+          <mat-error *ngIf="formdata.AgreementId===0 && !file && !formdata.AgreementPath">Attachment is required</mat-error>
+        </div>
+      </div>
+    </div>
+    <dx-popup [showTitle]="true" title="Markup" [(visible)]="popupVisible" [showCloseButton]="true">
+      <textarea   [(ngModel)]="formdata.AgreementDescription" name="AgreementDescription" style="height:100% !important; width: 100%; display: block; border:0px;"  ></textarea>
+  </dx-popup>
+
+  </div>
+  <div mat-dialog-actions align="center">
+    <button type="button" mat-dialog-close class="btn btn-primary btn-sm modalclose">Close</button>
+
+    <button type="submit" class="btn btn-primary btn-sm btn-cust" (click)="save(form)" *ngIf="permission>1" [disabled]="flagdisabled">{{btnLabel}}</button>
+  </div>
+</form>

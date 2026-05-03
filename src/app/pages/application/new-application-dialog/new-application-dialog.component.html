@@ -1,0 +1,29 @@
+<form #form="ngForm"   class="new-design">
+    <div mat-dialog-content>New Application</div>
+    <div mat-dialog-content>
+        <mat-form-field>
+            <mat-label>Email ID</mat-label>
+            <input type="text" matInput name="inputText" [(ngModel)]="inputText" placeholder="Email ID" required
+                [pattern]="emailPattern" #InputT="ngModel" />
+            <mat-error *ngIf="InputT.hasError('required')">Email ID required</mat-error>
+            <mat-error *ngIf="InputT.hasError('pattern')">Enter valid email ID</mat-error>
+        </mat-form-field>
+
+      
+    </div>
+    <div mat-dialog-content >
+        <div [innerHTML]="termsData?.AgreementContents" style="margin-top: 8px; margin-bottom: 8px;" ></div>
+
+    </div>
+    <div mat-dialog-actions>
+        <mat-checkbox name="iAggreeed" required ngModel >{{termsData?.AgreementDescription}}</mat-checkbox>
+    </div>
+    <div mat-dialog-actions align="center">
+        <button type="button" mat-dialog-close class="btn btn-sm btn-primary modalclose">Cancel</button>
+        <button type="button" [mat-dialog-close]="inputText" class="btn btn-sm btn-primary btn-cust"
+            [disabled]="!form.valid">
+            OK
+        </button>
+    </div>
+
+</form>

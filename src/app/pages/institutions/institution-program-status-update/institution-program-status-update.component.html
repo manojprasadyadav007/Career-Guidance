@@ -1,0 +1,74 @@
+
+<div class="main-content new-design">
+    <div class="card">
+       <div class="card-body">
+           <div class="row">
+               <div class="col-md-6 col-sm-12">
+        <mat-form-field>
+            <mat-label>Intake</mat-label>
+              <mat-select matInput placeholder="Intake"  [(ngModel)]="intakeItem"
+              name="IntekStatus" required  (selectionChange) ="getIntakeProgram(intakeItem)">
+            
+              <mat-option>
+                <ngx-mat-select-search [(ngModel)]="intakeFilter" [placeholderLabel]="'Search...'"
+                  [noEntriesFoundLabel]="'Not found'" name="intakeFilter"></ngx-mat-select-search>
+              </mat-option>
+              <mat-option *ngFor="let item of intakeList" [value]="item.IntakeName">{{item.IntakeName}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+    </div>
+    </div>
+        <dx-data-grid [dataSource]="dataList" [showBorders]="true" [allowColumnResizing]="true"
+        [showColumnLines]="true" [showRowLines]="true" [rowAlternationEnabled]="true" [noDataText]="gridMessage" [columnAutoWidth]="true"
+        (onToolbarPreparing)="onToolbarPreparing($event)" [allowColumnReordering]="true">
+  
+        <dxo-filter-panel [visible]="true"></dxo-filter-panel>
+  
+        <dxo-paging [enabled]="true" [pageSize]="10"></dxo-paging>
+        <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 25,50,100]" [showInfo]="true">
+        </dxo-pager>
+  
+        <dxo-filter-row [visible]="showFilterRow"></dxo-filter-row>
+  
+        <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
+  
+        <!-- <dxo-export [enabled]="excel_permisson > 0" fileName="Program-bulk-status"></dxo-export> -->
+  
+        <dxo-column-chooser [enabled]="true" mode="select" [allowSearch]="true">
+        </dxo-column-chooser>
+  
+        <!-- <dxo-scrolling mode="virtual"></dxo-scrolling> -->
+  
+        <dxi-column *ngFor="let item of columns" [dataField]="item.dataField" [minWidth]="100"
+            [caption]="item.title | sentenceCase" [dataType]="item.type" [format]="item.format">
+        </dxi-column>
+  
+        <div *dxTemplate="let d of 'toolbarButton'">
+  
+            <button class="text-danger" (click)="showFilterRow=!showFilterRow" mat-icon-button>
+                <mat-icon>filter_list</mat-icon>
+            </button>
+  
+        </div>
+        <dxi-column caption="Status" [minWidth]="50" cellTemplate="actionCellTemplate" >
+        </dxi-column>
+
+        <div *dxTemplate="let d of 'actionCellTemplate'">
+
+        <mat-select matInput placeholder="Status"  [(ngModel)]="d.data.IntekStatus"
+        name="IntekStatus" required pattern="^[1-9]\d*$">
+        <mat-option>
+          <ngx-mat-select-search [(ngModel)]="d.data.statusFilter" [placeholderLabel]="'Search...'"
+            [noEntriesFoundLabel]="'Not found'" name="statusFilter"></ngx-mat-select-search>
+        </mat-option>
+        <mat-option *ngFor="let item of statusList | stringFilterBy:d.data.statusFilter:'StatusName';  trackByProperty: 'StatusId'" [value]="item.StatusId">{{item.StatusName}}</mat-option>
+      </mat-select>
+            
+            
+        </div>
+  
+    </dx-data-grid>
+    <button class=" btn btn-sm btn-danger float-right" (click)="onSubmit()" [disabled]="disabledFlag" *ngIf="currentUser.RoleType ===1 || currentUser.RoleType===2" > Update</button>
+        </div>
+    </div>
+ </div>

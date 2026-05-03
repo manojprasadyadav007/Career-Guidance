@@ -1,0 +1,141 @@
+<div class="container-fluid new-design">
+
+      <div class="d-flex align-items-center justify-content-between mb-3 pagetitle">
+        <h4 class="mb-0 font-weight-normal color-333">Tasks</h4>
+        <div *ngIf="currentUser.RoleId!=3">
+          <button type="button"  (click)="createTask()" data-toggle="tooltip" title="Create New Task" class="d-sm-inline-block btn btn-sm btn-primary btn-cust shadow-sm"><i class="fa fa-plus"></i> Create New Task</button>
+        </div>
+      </div>
+
+            
+      <!-- Content Row -->
+      <div class="row">
+      
+        <div class="col-12">
+          <div class="card shadow">
+            <div class="card-body">
+              <!-- <div class="row no-gutters align-items-center">
+                  <div class="">
+                    <div class="cardtitle">Assignee</div>
+                  </div>
+                </div> -->
+              <div class="row no-gutters align-items-center mb-16">
+
+                <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-3 d-sm-flex">
+                  <div class="col-12 col-sm-12 col-lg-12 col-xl-12 mt-3">
+                    <mat-form-field> 
+                      <mat-label>Assignee</mat-label>
+                     <mat-select matInput placeholder="" #AssignedTo="ngModel" (selectionChange)="listTask()" [(ngModel)]="formdata.AssignedTo"
+                    name="AssignedTo">
+                    <mat-option>
+                      <ngx-mat-select-search [(ngModel)]="assign" [placeholderLabel]="'Search...'"
+                        [noEntriesFoundLabel]="'Not found'" name="assign"></ngx-mat-select-search>
+                    </mat-option>
+                    <mat-option [value]="currentUser.UserId" > Me </mat-option>
+                    <mat-option [value]="item.UserId" *ngFor="let item of userList  | stringFilterBy:assign:'DisplayName';  trackByProperty: 'UserId' ">{{item.DisplayName}}</mat-option>
+                  </mat-select>
+                  </mat-form-field>
+                  <!-- <select class="form-control new-design-formcontrol" [(ngModel)]="formdata.AssignedTo" #AssignedTo (change)="listTask()">
+                    <option [value]="currentUser.UserId" > Me </option>
+                    <option [value]="item.UserId" *ngFor="let item of userList">{{item.DisplayName}}</option>
+                  </select> -->
+                  </div>
+                  <!-- <mat-select matInput placeholder="Assign To" #AssignedTo="ngModel" [(ngModel)]="formdata.AssignedTo"
+                    name="AssignedTo">
+                    <mat-option>
+                      <ngx-mat-select-search [(ngModel)]="assign" [placeholderLabel]="'Search...'"
+                        [noEntriesFoundLabel]="'Not found'" name="assign"></ngx-mat-select-search>
+                    </mat-option>
+                    <option [value]="currentUser.UserId" > Me </option>
+                    <option [value]="item.UserId" *ngFor="let item of userList  | stringFilterBy:countryFilter:'DisplayName';  trackByProperty: 'UserId' ">{{item.DisplayName}}</option>
+                  </mat-select> -->
+                </div>
+
+                <div class="col-12 col-sm-6 col-xl-4 d-sm-flex mt-3">
+                  <div class="col-12 col-sm-6 padding5">
+                      <app-date-picker [(value)]="formdata.FromDate" (valueChange)="filterdate($event)" placeholder="From Date" name="fromDate">
+                    </app-date-picker>
+                  </div>
+      
+                  <div class="col-12 col-sm-6 padding5">
+                    <app-date-picker [(value)]="formdata.ToDate" (valueChange)="filterdateTodate($event)" placeholder="To Date" name="toDate">
+                  </app-date-picker>
+                  </div>
+                </div>
+      
+                <div class="col-12 col-md-12 col-xl-5">
+                  <div class="row mr-0 ml-0">
+                    <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3 padding5">
+                      <button class="btn btn-lg btn-primary navbuttons navbuttonsAll"  data-toggle="tooltip" title="All" type="button" (click)="filterTask()">All</button>
+                    </div>
+                    <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3 padding5">
+                      <button class="btn btn-lg btn-primary navbuttons navbuttonsCritical" data-toggle="tooltip"
+                        title="High" type="button" (click)="filterTask(2)">High</button>
+                    </div>
+                    <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3 padding5">
+                      <button class="btn btn-sm btn-primary navbuttons navbuttonsMinor" data-toggle="tooltip"
+                        title="Medium" type="button" (click)="filterTask(1)">Medium</button>
+                    </div>
+                    <div class="col-12 col-sm-3 col-md-3 col-lg-3  col-xl-3 padding5">
+                      <button class="btn btn-sm btn-primary navbuttons navbuttonsLow" data-toggle="tooltip" title="Low" type="button" (click)="filterTask(0)">Low</button>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+      
+              
+                <mat-accordion class="w-100" id="institute-exp-panel">
+      
+                  <mat-expansion-panel  *ngFor="let item of filteredTask | paginate: {id: 'inst', itemsPerPage: 4, currentPage: pageIndex } ; let i = index;"  (opened)="panelOpenState = true ; fillComments(item)" (closed)="panelOpenState = false" class="mb-2 mep">
+                    <mat-expansion-panel-header class="meph">
+                      <mat-panel-title class="col-7 col-md-3 col-lg-4 col-xl-3 m-auto font-bold color-333">
+                        {{item.TaskSubject}}
+                      </mat-panel-title>
+                      <mat-panel-description class="col-9 col-md-9 col-lg-8 col-xl-9 color-333 m-auto">
+                        <div class="col-12 col-md-6 col-lg-6 col-xl-7 my-auto">{{item.AssignedTo}}</div>
+                        <div class="col-12 col-md-3 col-lg-4 col-xl-3 my-auto">{{item.DueDate | date:'dd MMM yyyy'}}</div>
+                        <div class="col-11 col-md-3 col-lg-2 col-xl-2 my-auto" *ngIf="item.TaskPriority ===2"><button class="btn btn-sm btn-primary navbuttons navbuttonsCritical pointer-none" type="button">High</button></div>
+
+                        <div class="col-11 col-md-3 col-lg-2 my-auto" *ngIf="item.TaskPriority ===1"><button class="btn btn-sm btn-primary navbuttons navbuttonsMinor pointer-none" type="button" >Medium</button></div>
+                        
+                        <div class="col-11 col-md-3 col-lg-2 my-auto" *ngIf="item.TaskPriority ===0"><button class="btn btn-sm btn-primary navbuttons navbuttonsLow pointer-none" type="button" >Low</button></div>
+                      </mat-panel-description>
+                    </mat-expansion-panel-header>
+                    <div class="col-12 mt-3">
+                      <b>Description:</b> {{item.TaskDescription}}<br><br>
+                      <b>Owner:</b> {{ item.TaskOwner}}<br><br>
+                      <b>Comments:</b> 
+                      <span *ngFor="let comment of comments">
+                          <li> {{comment.ActivityRemark}}</li>
+                      </span>
+                        <!-- Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
+                      fugiat nulla pariatur. - Abc Xyz -->
+                    </div>
+                    <div class="col-12"><button class="btn btn-sm btn-primary btn-cust navbuttons navbuttonsCritical w-auto float-right br-25" data-toggle="tooltip" title="Edit" type="button" (click)="editTask(item.TaskId)">Edit</button></div>
+                  </mat-expansion-panel>
+                  <div class="row  no-gutters align-items-center mt10">
+                    <div class="col-12">
+                        <div class="d-flex justify-content-center">
+                            <pagination-controls id="inst" autoHide="true" responsive="true" (pageChange)="pageIndex = $event">
+                            </pagination-controls>
+                        </div>
+            
+                    </div>
+                </div>
+      
+                  
+                </mat-accordion>
+              
+      
+  
+        </div>
+      
+        
+      </div>
+
+
+  </div>
+</div>
+
+</div>

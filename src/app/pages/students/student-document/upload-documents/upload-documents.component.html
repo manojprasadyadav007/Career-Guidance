@@ -1,0 +1,79 @@
+<!-- <h4 mat-dialog-title>Upload Document</h4> -->
+  <form #form="ngForm"  class="new-design">
+<div mat-dialog-title>
+  Upload Document
+  <button class="close text-white" type="button"   aria-label="Close"  (click)="cancel()"><span aria-hidden="true">×</span></button>
+</div>
+<div mat-dialog-content>
+   <div class="row">
+      <div class="col-12">
+          <mat-form-field >
+            <mat-label>Document</mat-label>
+              <mat-select matInput placeholder="Document" #DocumentTypeId="ngModel"
+                [(ngModel)]="formdata.DocumentTypeId" name="DocumentTypeId" required [pattern]="modelPattern.dropDownNumericValue"
+                [disabled]="isDisabled" (selectionChange)="documentChange()"  >
+                <mat-option>
+                  <ngx-mat-select-search [(ngModel)]="doumntFilter" [placeholderLabel]="'Search...'"
+                    [noEntriesFoundLabel]="'Not found'" name="doumntFilter"></ngx-mat-select-search>
+                </mat-option>
+                <mat-option [value]="0"> Select Document </mat-option>
+                <mat-option *ngFor="let document of documentList  | stringFilterBy:doumntFilter:'DocumentName';  trackByProperty: 'DocumentTypeId'" [value]="document.DocumentTypeId">
+                  {{document.DocumentName}}</mat-option>
+              </mat-select>
+              <mat-error *ngIf="DocumentTypeId.hasError( 'required') || DocumentTypeId.hasError( 'pattern')">Select document type</mat-error>
+            </mat-form-field>
+       </div>
+   <div class="col-6" *ngIf="expiryDateStatus">
+       <app-date-picker [(value)]="formdata.ExpiryDate" placeholder="Expiry Date" name="ExpiryDate" required="false"
+       [minDate]="pastDate" [form]="form">
+      </app-date-picker>
+  </div>
+ 
+  <div class="col-12" *ngIf="originDetails == 'agentDoc'">
+    <mat-form-field>
+      <mat-label>Description</mat-label>
+      <input matInput placeholder="Description" #DocumentName="ngModel"
+        [(ngModel)]="formdata.docDescription" name="Name" >
+    </mat-form-field>
+  </div>
+     <div class="col-md-12 d-flex">
+       <div class="col" >
+          <input type="file" placeholder="Select Document" 
+          (change)="fileChange($event)"
+          ngModel
+          name="DocumentFile" [required]="mydocpath?false : true" accept=".jpg,.png,.pdf" >
+          <mat-error *ngIf="sizeerror">{{sizeerror}}</mat-error>
+          <br/>
+       </div>
+       <div class="col-6" *ngIf="studentDoc =='studentDoc'">
+         <span style="padding-left:20px;">OR</span>
+       
+        <!-- <li>list of my doc </li> -->
+        <button type="button" (click)="myDoc()"  class="btn btn-sm btn-primary mx-3">My Doc</button>
+      <Span> {{mydocpath}}</Span>
+        </div>
+        <mat-error *ngIf="myDocError">Choose any one option </mat-error>
+     </div>
+    
+    
+     <div class="col-12" *ngIf="progress>0">
+       <br/>
+       {{progress}}
+        <mat-progress-bar mode="determinate" [value]="progress"></mat-progress-bar>
+     </div>
+   </div>
+   
+ 
+
+</div>
+<div mat-dialog-actions align="center">
+  <button type="button" (click)="cancel()" class="btn btn-sm btn-primary modalclose">Cancel</button>
+  <ng-container *ngIf="studentDoc =='studentDoc'">
+    <button type="button" (click)="upload(form.invalid)" class="btn btn-sm btn-primary btn-cust" [disabled]="form.invalid || flagdisable" >Upload</button>
+  </ng-container >
+  
+  <ng-container  *ngIf="studentDoc !='studentDoc'">
+    <button type="button" (click)="upload(form.valid)" class="btn btn-sm btn-primary btn-cust" [disabled]="(!form.valid || !DocumentFile ) || flagdisable" >Upload</button>
+  </ng-container>
+</div>
+</form>

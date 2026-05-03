@@ -1,0 +1,150 @@
+<form #form="ngForm" class="new-design"> 
+    <div mat-dialog-title>
+        Activity
+        <button class="close text-white" type="button" mat-dialog-close  aria-label="Close"><span aria-hidden="true">×</span></button>
+      </div>
+     
+        <div mat-dialog-content>
+         
+            <div class="container-fluid">
+              <div class="row">
+                <div class="col-md-6">
+                  <mat-form-field >
+                    <mat-label>Activity Type</mat-label>
+                    <mat-select placeholder="Activity Type" name="ActivityType" [(ngModel)]="formdata.ActivityType" #ActivityType="ngModel" required
+                      [pattern]="modelPattern.dropDownNumericValueWith0" >
+                      <mat-option>
+                        <ngx-mat-select-search [(ngModel)]="typeFilter" [placeholderLabel]="'Search...'"
+                          [noEntriesFoundLabel]="'Not found'" name="typeFilter"></ngx-mat-select-search>
+                      </mat-option>
+                      <mat-option [value]="item.TaskTypeId" *ngFor="let item of activityTypeList | stringFilterBy:typeFilter:'TaskTypeName';  trackByProperty: 'TaskTypeId'" >{{item.TaskTypeName}}</mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="ActivityType.hasError('required') || ActivityType.hasError('pattern') ">Enter valid activity type</mat-error>
+                  </mat-form-field>
+                </div>
+          
+                <div class="col-md-6" >
+                  <app-date-time-picker placeholder="Activity Date" [(value)]="formdata.ActivityDate" required="true" [minDate]="minActivitydate"
+                  [form]="form"   >
+                  </app-date-time-picker>
+                </div>
+
+                <div class="col-md-6" *ngIf="showagent">
+                  <mat-form-field>
+                      <mat-label>Agent</mat-label>
+                      <mat-select matInput placeholder="Agent" #ParentId="ngModel" [(ngModel)]="formdata.ParentId" required [pattern]="modelPattern.dropDownNumericValue"
+                          name="ParentId" (selectionChange)="fillInstitution(true)">
+                          <mat-option>
+                              <ngx-mat-select-search [(ngModel)]="agentFilter" [placeholderLabel]="'Search...'"
+                                [noEntriesFoundLabel]="'Not found'" name="agentFilter"></ngx-mat-select-search>
+                            </mat-option>
+                
+                          <mat-option *ngFor="let item of agentList | stringFilterBy:agentFilter:'CompanyName';  trackByProperty: 'AgentId'" [value]="item.AgentId">{{item.CompanyName}}
+                          </mat-option>
+                      </mat-select>
+                      <mat-error *ngIf="ParentId.hasError('required') || ParentId.hasError('pattern')">Agent is required</mat-error>
+                  </mat-form-field>
+              </div>
+
+                <div class="col-md-6" *ngIf="showfield">
+                  <mat-form-field>
+                      <mat-label>Institution</mat-label>
+                      <mat-select matInput placeholder="Institution" #InstitutionId="ngModel"
+                          [(ngModel)]="formdata.InstitutionId" required name="institution" (selectionChange)="fillProgram(true);fillIntake(true)"  [pattern]="modelPattern.dropDownNumericValue">
+      
+                          <mat-option>
+                              <ngx-mat-select-search [(ngModel)]="instituteFilter"
+                                  [placeholderLabel]="'Search...'" [noEntriesFoundLabel]="'Not found'"
+                                  name="instituteFilter"></ngx-mat-select-search>
+                          </mat-option>
+                          <mat-option
+                              *ngFor="let item of institutionList |  stringFilterBy:instituteFilter:'InstName';  trackByProperty: 'InstitutionId' "
+                              [value]="item.InstitutionId">
+                              {{item.InstName}}</mat-option>
+                      </mat-select>
+                      <mat-error *ngIf="InstitutionId.hasError('required') || InstitutionId.hasError('pattern')">Institution is required</mat-error>
+                  </mat-form-field>
+              </div>
+             <ng-container *ngIf="formdata.InstitutionId && formdata.InstitutionId>0">
+              <div class="col-md-6" *ngIf="showfield">
+                <mat-form-field>
+                    <mat-label>Program</mat-label>
+                    <mat-select matInput placeholder="Program" #ProgramId="ngModel" [(ngModel)]="formdata.ProgramId" required
+                        name="ProgramId"  (selectionChange)="OnprogramChange(true)" [pattern]="modelPattern.dropDownNumericValueWith0">
+                        <mat-option>
+                            <ngx-mat-select-search [(ngModel)]="prgFilter" [placeholderLabel]="'Search...'"
+                              [noEntriesFoundLabel]="'Not found'" name="prgFilter"></ngx-mat-select-search>
+                          </mat-option>
+                       <mat-option [value]="0" *ngIf="programList?.length>0">All</mat-option> 
+                        <mat-option *ngFor="let item of programList  | stringFilterBy:prgFilter:'ProgramName';  trackByProperty: 'ProgramId'" [value]="item.ProgramId">{{item.ProgramName}}
+                        </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="ProgramId.hasError('required') || ProgramId.hasError('pattern')">Program is required</mat-error>
+                </mat-form-field>
+            </div>
+            </ng-container>
+            <ng-container *ngIf="formdata.ProgramId && formdata.ProgramId>0">
+            <div class="col-md-6" *ngIf="showfield">
+                <mat-form-field>
+                    <mat-label>Intake</mat-label>
+                    <mat-select matInput placeholder="Intake" #IntakeGroupId="ngModel" [(ngModel)]="formdata.IntakeGroupId" required [pattern]="modelPattern.dropDownNumericValueWith0"
+                        name="IntakeGroupId" >
+                        <mat-option>
+                            <ngx-mat-select-search [(ngModel)]="intakeFilter" [placeholderLabel]="'Search...'"
+                              [noEntriesFoundLabel]="'Not found'" name="intakeFilter"></ngx-mat-select-search>
+                          </mat-option>
+                       <mat-option [value]="0">All</mat-option>
+                        <mat-option *ngFor="let item of intakeList | stringFilterBy:intakeFilter:'IntakeName';  trackByProperty: 'IntakeGroupId'" [value]="item.IntakeGroupId">{{item.IntakeName}}
+                        </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="IntakeGroupId.hasError('required') || IntakeGroupId.hasError('pattern')">Intake is required</mat-error>
+                </mat-form-field>
+            </div>
+            </ng-container>
+            <div class="col-md-6" *ngIf="showfield">
+              <mat-form-field>
+                <mat-label>Response</mat-label>
+                <mat-select placeholder="Response" name="ActivityResponse" [(ngModel)]="formdata.ActivityResponse" #ActivityResponse="ngModel" [pattern]="modelPattern.dropDownNumericValueWith0" required>
+                  <mat-option [value]="0">Negative</mat-option>
+                  <mat-option [value]="1">Positive</mat-option>
+                  <mat-option [value]="2">No Response</mat-option>
+                </mat-select> 
+                <mat-error *ngIf="ActivityResponse.hasError('required')">Response is required</mat-error>
+              </mat-form-field>
+            </div>
+               
+              
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label>Description</label><span style="color: red;"> *</span>
+                    <!-- <ckeditor [editor]="Editor" tagName="textarea" placeholder="Description"
+                      [(ngModel)]="formdata.ActivityDescription" name="ActivityDescription" #ActivityDescription="ngModel"
+                      style="min-height: 100px;" required ></ckeditor> -->
+                      <dx-html-editor placeholder="Description"
+                      [(ngModel)]="formdata.ActivityDescription" name="ActivityDescription" #ActivityDescription="ngModel"
+                      style="min-height: 100px;" id="ActivityDescription" required>
+                        <dxo-toolbar [items]="items"> </dxo-toolbar>
+                        <dx-validator >  
+                          <dxi-validation-rule type='required' message=''></dxi-validation-rule>  
+                        </dx-validator>
+                    </dx-html-editor>
+                    <mat-error *ngIf="ActivityDescription.hasError('required') && desError" style="margin-top: 5px; margin-left: 5px;">Description is required</mat-error>
+                  </div>
+                </div>
+              </div>
+            </div>
+        
+            <dx-popup [showTitle]="true" title="Markup" [(visible)]="popupVisible" [showCloseButton]="true">
+              <textarea   [(ngModel)]="formdata.ActivityDescription" name="ActivityDescription" style="height:100% !important; width: 100%; display: block; border:0px;"  ></textarea>
+          </dx-popup>
+         
+        </div>
+        <div mat-dialog-actions align="center">
+    
+          <button type="button" mat-dialog-close class="btn btn-primary btn-sm modalclose">Close</button>
+          <button type="submit" class="btn btn-primary btn-sm btn-cust" (click)="save(form)" *ngIf="permission>1" [disabled]="flagdisabled">{{btnLabel}}</button>
+        </div>
+    
+      </form>
+    
+     

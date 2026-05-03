@@ -1,0 +1,25 @@
+<form #form="ngForm"  class="new-design">
+    <div mat-dialog-title>{{title}}
+        <button class="close text-white" type="button" mat-dialog-close  aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div mat-dialog-content>
+
+        <mat-form-field>
+            <mat-label>{{title}}</mat-label>
+            <mat-select [placeholder]="title" [(ngModel)]="formdata.AttendeUserId" name="AttendeUserId"
+                #AttendeUserId="ngModel" required>
+                <mat-option>
+                    <ngx-mat-select-search [(ngModel)]="attendFilter" [placeholderLabel]="'Search...'"
+                      [noEntriesFoundLabel]="'Not found'" name="attendFilter"></ngx-mat-select-search>
+                  </mat-option>
+                <mat-option *ngFor="let item of userList | stringFilterBy:attendFilter:'DisplayName';  trackByProperty: 'UserId'" [value]="item.UserId">{{item.DisplayName+'/'+item.EmailId}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+
+    </div>
+    <div mat-dialog-actions align="center">
+        <button mat-dialog-close class="btn btn-sm btn-primary modalclose">cancel</button>
+        <button type="submit" (click)="add(form)" [disabled]="form.invalid || flagdisabled" class="btn btn-sm btn-primary btn-cust">Add</button>
+    </div>
+</form>

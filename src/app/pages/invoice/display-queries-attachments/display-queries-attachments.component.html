@@ -1,0 +1,29 @@
+<div class="new-design">
+  <div mat-dialog-title>
+    Queries and Attachments
+    <button class="close text-white" type="button" mat-dialog-close  aria-label="Close"><span aria-hidden="true">×</span></button>
+  </div>
+  <div mat-dialog-content>
+    <div class="row">
+        <div class="col-md-12">
+          <mat-label>Attachments</mat-label>
+          <app-display-documents parentName="Invoices" title="Queries and Attachments" *ngIf= "transactionId > 0" [parentId]="transactionId" [showRemark]="false" [parentType]="12" [permission]="permission">
+          </app-display-documents>
+        </div>
+      </div>
+      <div class="row mt-2">
+        <div class="col-md-12">
+          <mat-label>Queries</mat-label>
+          <app-activity [showStatusDropDown]="false" [showAdd]="permission>1" ActivityType="14"
+            [ActivityId]="transactionId" btnLable="Add" 
+            independed="true" [showCard]="false"   
+              >
+          </app-activity>
+        </div>
+      </div>
+  </div>
+
+  <!-- <div mat-dialog-actions align="center">
+    <button  type="button" mat-dialog-close class="btn btn-sm btn-primary modalclose">Close</button>
+  </div> -->
+</div>

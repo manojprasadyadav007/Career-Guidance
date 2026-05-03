@@ -1,0 +1,133 @@
+<form #eduform="ngForm" form (submit)="onEduInfoFormSubmit(eduform)" class="new-design">
+  <div mat-dialog-title>
+    Education Background
+    <button class="close text-white" type="button" mat-dialog-close aria-label="Close"><span
+        aria-hidden="true">×</span></button>
+  </div>
+  <div mat-dialog-content>
+    <div class="container-fluid pl-0 pr-0" *ngIf="eduInfoData">
+      <div class="row">
+        <div class="col-md-3">
+          <mat-form-field>
+            <mat-label>Country of Education</mat-label>
+
+            <mat-select matInput placeholder="Country of Education" #CountryOfEducation="ngModel"
+              [(ngModel)]="eduInfoData.CountryOfEducation" name="CountryOfEducation" required   [pattern]="modelPattern.dropDownNumericValue"
+              (selectionChange)="fillGrade(true)">
+              <mat-option>
+                <ngx-mat-select-search [(ngModel)]="countryEduFilter" [placeholderLabel]="'Search...'"
+                  [noEntriesFoundLabel]="'Not found'" name="countryEduFilter"></ngx-mat-select-search>
+              </mat-option>
+              <mat-option>None</mat-option>
+              <mat-option
+                *ngFor="let country of countryList | stringFilterBy:countryEduFilter:'CountryName';  trackByProperty: 'CountryId'"
+                [value]="country.CountryId">
+                {{country.CountryName}}</mat-option>
+            </mat-select>
+            <mat-error *ngIf="CountryOfEducation.hasError( 'required') || CountryOfEducation.hasError( 'pattern')">
+              Country of education is required</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-md-3">
+          <mat-form-field>
+            <mat-label>Highest Level of Education</mat-label>
+            <mat-select matInput placeholder="Hieghest Level of Education" #HighestLevelOfEducation="ngModel"
+              [(ngModel)]="eduInfoData.HighestLevelOfEducation" name="HighestLevelOfEducation"   [pattern]="modelPattern.dropDownNumericValue" required>
+              <mat-option>
+                <ngx-mat-select-search [(ngModel)]="highEduFilter" [placeholderLabel]="'Search...'"
+                  [noEntriesFoundLabel]="'Not found'" name="highEduFilter"></ngx-mat-select-search>
+              </mat-option>
+              <mat-option>None</mat-option>
+              <mat-option
+                *ngFor="let eduLevel of eduLevelList  | stringFilterBy:highEduFilter:'EduLevelName';  trackByProperty: 'EduLevelId' "
+                [value]="eduLevel.EduLevelId">
+                {{eduLevel.EduLevelName}}</mat-option>
+            </mat-select>
+            <mat-error
+              *ngIf="HighestLevelOfEducation.hasError( 'required') || HighestLevelOfEducation.hasError( 'pattern')">
+              Highest level of education is required
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <!-- <div class="col-md-2">
+                        <mat-form-field >
+                          <input matInput type="number" placeholder="Year of Education Start" #EduYearStart="ngModel"
+                            [(ngModel)]="eduInfoData.EduYearStart" name="EduYearStart" required pattern="^[1-2]{1}[9,0]{1}[0-9]{2}">
+                          <mat-error *ngIf="EduYearStart.hasError( 'pattern')">Enter Valid Start Year</mat-error>
+                          <mat-error *ngIf="EduYearStart.hasError( 'required')">Year of Education Start is required</mat-error>
+                        </mat-form-field>
+                      </div> -->
+        <!-- <div class="col-md-2">
+                        <mat-form-field >
+                          <input matInput type="number" placeholder="Year of Education End" #EduYearEnd="ngModel"
+                            [(ngModel)]="eduInfoData.EduYearEnd" name="EduYearEnd" required pattern="^[1-2]{1}[9,0]{1}[0-9]{2}"
+                            [MinValue]="eduInfoData.EduYearStart">
+                          <mat-error *ngIf="EduYearEnd.hasError( 'pattern')">Enter Valid End Year</mat-error>
+                          <mat-error *ngIf="EduYearEnd.hasError( 'required')">Year of Education End is required</mat-error>
+                          <mat-error *ngIf="EduYearEnd.hasError( 'MinValue')">Year end less than start</mat-error>
+                        </mat-form-field>
+                      </div> -->
+
+        <!-- <div class="col-md-4">
+                        <mat-form-field >
+                          <mat-select matInput placeholder="Grading Scheme"
+                          #GradingScheme="ngModel" [(ngModel)]="eduInfoData.GradingScheme"
+                          name="GradingScheme"
+                          >
+                            <mat-option>None</mat-option>
+                            <mat-option *ngFor="let gradeScheme of gradeSchemeList " [value]="gradeScheme.GrdSchemeId">
+                              {{gradeScheme.GrdSchemeName}}</mat-option>
+                          </mat-select>
+                        </mat-form-field>
+                      </div>-->
+
+        <!-- </div>
+          
+                    <div class="row"> -->
+
+        <div class="col-md-3">
+          <mat-form-field>
+            <mat-label>Grading Scheme</mat-label>
+            <mat-select matInput placeholder="Grading Scheme" #GradingScheme="ngModel" name="GradingScheme"
+              [(ngModel)]="eduInfoData.GradingScheme" (selectionChange)="onGradeChange(true)"   [pattern]="modelPattern.dropDownNumericValue"  required>
+              <!-- <mat-option [value]="0">None</mat-option> -->
+              <mat-option>
+                <ngx-mat-select-search [(ngModel)]="gradingFilter" [placeholderLabel]="'Search...'"
+                  [noEntriesFoundLabel]="'Not found'" name="gradingFilter"></ngx-mat-select-search>
+              </mat-option>
+              <mat-option *ngFor="let country of gradeList | stringFilterBy:gradingFilter:'GrdSchemeName';  trackByProperty: 'GrdSchemeId'" [value]="country.GrdSchemeId">
+                {{country.GrdSchemeName}}
+              </mat-option>
+            </mat-select>
+
+            <mat-error *ngIf="GradingScheme.hasError('required') || GradingScheme.hasError('pattern')" >Select grade scheme</mat-error>
+          </mat-form-field>
+
+        </div>
+
+        <div class="col-md-3">
+          <mat-form-field>
+            <mat-label>Grade Average</mat-label>
+            <input matInput placeholder="Grade Average" #GradeAverage="ngModel" [(ngModel)]="eduInfoData.GradeAverage"
+              name="GradeAverage" [pattern]="selectedGrade?.InputPattern" toUppercase required>
+            <mat-hint>{{selectedGrade?.InputHint}}</mat-hint>
+            <mat-error *ngIf="GradeAverage.hasError('required')">Grade average is required</mat-error>
+            <mat-error *ngIf="GradeAverage.hasError( 'pattern')">Enter valid score</mat-error>
+          </mat-form-field>
+        </div>
+
+
+        <!-- <div class="col-md-4">
+                        <br>
+                        <mat-checkbox #GraduatedMostRecent="ngModel" [(ngModel)]="eduInfoData.GraduatedMostRecent"
+                          name="GraduatedMostRecent">Graduated from most recent school</mat-checkbox>
+                      </div> -->
+      </div>
+    </div>
+  </div>
+  <div mat-dialog-actions align="center">
+    <button mat-dialog-close class="btn btn-sm btn-primary modalclose">Cancel</button>
+    <button *ngIf="parentId>0 && permission>1" type="submit" class="btn btn-sm btn-primary btn-cust">Update</button>
+  </div>
+</form>

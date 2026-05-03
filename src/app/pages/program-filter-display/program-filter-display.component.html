@@ -1,0 +1,54 @@
+<div class="container-fluid new-design">
+    <div class="row pagetitle mb-4">
+        <h1 class="mb-0 col-md-8">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="d-flex">
+                        <div>
+                            {{pageTitle}}
+                        </div>
+                        <div class="ml-2">
+                            <!-- <span class="greylabel">Filter: </span>
+                            <button class="btn btn-white">All</button>
+                            <button class="btn btn-white">Education</button>
+                            <button class="btn btn-white">English Scores</button>
+                            <button class="btn btn-white">Program </button> -->
+                        </div>
+                        <!-- <div class="flex-grow-1">
+                            <mat-form-field>
+                                <mat-label>Sort By</mat-label>
+                                <mat-select matInput placeholder="Sort By" #SortBy="ngModel"
+                                    [(ngModel)]="formdata.SortBy" name="SortBy">
+                                    <mat-option value="SchoolRank desc">School Rank Highest First</mat-option>
+                                    <mat-option value="Commission desc" *ngIf="currentUser.RoleId===2"
+                                        [hidden]="!formdata.ShowCommission">Commission Highest First</mat-option>
+                                    <mat-option value="Commission" *ngIf="currentUser.RoleId===2"
+                                        [hidden]="!formdata.ShowCommission">Commission Lowest First</mat-option>
+                                    <mat-option value="TuitionFee">Tuition - Lowest First</mat-option>
+                                    <mat-option value="TuitionFee desc">Tuition - Highest First</mat-option>
+                                    <mat-option value="ApplicationFee desc">Application Fee - Highest First</mat-option>
+                                    <mat-option value="ApplicationFee">Application Fee - Lowest First</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                        <div>
+                            <mat-slide-toggle labelPosition="before" #ShowCommission="ngModel"
+                                [(ngModel)]="formdata.ShowCommission" name="ShowCommission">Commissions
+                            </mat-slide-toggle>
+                        </div> -->
+                    </div>
+                </div>
+            </div>
+        </h1>
+        <div class="mb-0 col-md-4" style="text-align:right;">
+            <button type="button" class="d-sm-inline-block btn btn-sm btn-danger shadow-sm"
+                (click)="clearFilter()">
+                <i class="fa fa-close"></i> Clear Filter
+            </button>
+            <button type="button" class="d-sm-inline-block btn btn-sm btn-danger shadow-sm"
+                (click)="showFilter()">
+                <i class="fa fa-filter"></i> General Filter
+            </button>
+        </div>
+    </div>
+</div>

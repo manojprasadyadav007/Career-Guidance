@@ -1,0 +1,91 @@
+<div class="main-content new-design">
+
+    <div class="card">
+      <div class="card-body">
+  
+  
+        <dx-data-grid [dataSource]="dataList" [showBorders]="true" [allowColumnResizing]="true" [showColumnLines]="true"
+          [showRowLines]="true" [rowAlternationEnabled]="true" [noDataText]="gridMessage" [columnAutoWidth]="true"
+          (onToolbarPreparing)="onToolbarPreparing($event)" [allowColumnReordering]="true"
+          (onRowClick)="edit($event.data)" (onExporting)="activitylog()">
+          <dxo-filter-panel [visible]="true" [filterEnabled]="true"></dxo-filter-panel>
+          <dxo-paging [enabled]="true" [pageSize]="10"></dxo-paging>
+          <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 25,50,100]" [showInfo]="true">
+          </dxo-pager>
+  
+          <dxo-filter-row [visible]="showFilterRow"></dxo-filter-row>
+  
+          <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
+  
+          <dxo-export [enabled]="excel_permisson > 0" fileName="Partner Type"></dxo-export>
+  
+          <dxo-column-chooser [enabled]="true" mode="select" [allowSearch]="true">
+          </dxo-column-chooser>
+  
+          <!-- <dxo-scrolling mode="virtual"></dxo-scrolling> -->
+  
+          <dxi-column *ngFor="let item of columns" [dataField]="item.dataField" [minWidth]="50" [caption]="item.title | sentenceCase"
+            [dataType]="item.type">
+          </dxi-column>
+  
+          <dxi-column caption="Action" [allowExporting]="false" [minWidth]="50" cellTemplate="actionCellTemplate">
+          </dxi-column>
+  
+          <div *dxTemplate="let d of 'actionCellTemplate'">
+  
+  
+            <div>
+              <mat-menu #instMenu="matMenu">
+                <!-- <span class="menuempty">
+                    <span class="ref"></span>
+                </span>
+                <button type="button"  mat-menu-item 
+                (click)="$event.stopPropagation(); changePermission(d.data)">
+                <span class="material-icons icon-position">
+                  lock_open
+                  </span> Permission
+              </button> -->
+  
+              <button type="button"  mat-menu-item 
+                (click)="$event.stopPropagation(); delete(d.data)">
+                <span class="material-icons icon-position">
+                  close
+                  </span> Delete
+              </button>
+            
+            </mat-menu>
+            <button  mat-icon-button [matMenuTriggerFor]="instMenu"
+            (click)="$event.stopPropagation()">
+                <mat-icon class="more_dropdown">keyboard_arrow_down</mat-icon>
+            </button>
+            </div>
+  
+  
+          </div>
+  
+          <div *dxTemplate="let d of 'toolbarButton'">
+            <button class="text-danger" (click)="add()" mat-icon-button data-toggle="tooltip" title="New">
+              <mat-icon>add</mat-icon>
+            </button>
+  
+            <button class="text-danger" (click)="showFilterRow=!showFilterRow" mat-icon-button data-toggle="tooltip" title="Apply Filter">
+              <mat-icon>filter_list</mat-icon>
+          </button>
+          </div>
+  
+  
+        </dx-data-grid>
+  
+  
+  
+  
+      </div>
+    </div>
+  </div>
+  
+  <!-- Script For Tooltip -->
+  <script>
+    $(document).ready(function () {
+      $('[data-toggle="tooltip"]').tooltip();
+    });
+  </script>

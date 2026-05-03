@@ -1,0 +1,256 @@
+<div class="container-fluid new-design">
+  <div class="d-flex align-items-center justify-content-between mb-3 pagetitle">
+    <h4 class="mb-0 font-weight-normal color-333">Tasks</h4>
+    <div>
+      <!-- <a >
+            <i class="fa fa-cog" style="margin-right:10px;color:#959595;"></i>
+          </a> -->
+      <button type="button" (click)="createTask()" data-toggle="tooltip" title="Create New Task"
+        class="d-sm-inline-block btn btn-sm btn-primary shadow-sm btn-cust"><i class="fa fa-plus"></i>
+        Create New Task</button>
+    </div>
+  </div>
+
+  <!-- Content Row -->
+  <div class="row">
+
+    <!-- Earnings (Monthly) Card Example -->
+    <!-- class="col-xl-7 col-md-6 mb-4" -->
+    <div [ngClass]="filteredTask?.length ? 'col-xl-7 col-md-6 mb-4': 'col-xl col-md mb-4'">
+      <div class="card shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="">
+              <div class="cardtitle">Assignee</div>
+            </div>
+          </div>
+          <div class="row align-items-center">
+            <div class="col-12 col-sm-12 col-md-12 col-xl-4">
+              <select class="form-control new-design-formcontrol" [(ngModel)]="selectedUser" (change)="listTask()">
+                <option [value]="currentUser.UserId"> Me </option>
+                <option [value]="item.UserId" *ngFor="let item of userList">{{item.DisplayName}}</option>
+              </select>
+            </div>
+            <div class="col-12 col-sm-12 col-md-12 col-xl-8 pr-pl">
+              <div class="row mr-0 ml-0">
+                <div class="col-12 col-sm-3 col-md-6 col-lg-6 col-xl-3 padding5">
+                  <button class="btn btn-sm btn-primary navbuttons navbuttonsAll" data-toggle="tooltip" title="All"
+                    type="button" (click)="filterTask()">All</button>
+                </div>
+                <div class="col-12 col-sm-3 col-md-6 col-lg-6 col-xl-3 padding5">
+                  <button class="btn btn-sm btn-primary navbuttons navbuttonsCritical" data-toggle="tooltip"
+                    title="High" type="button" (click)="filterTask(2)">High</button>
+                </div>
+                <div class="col-12 col-sm-3 col-md-6 col-lg-6 col-xl-3 padding5">
+                  <button class="btn btn-sm btn-primary navbuttons navbuttonsMinor" data-toggle="tooltip"
+                    title="Medium" type="button" (click)="filterTask(1)">Medium</button>
+                </div>
+                <div class="col-12 col-sm-3 col-md-6 col-lg-6 col-xl-3 padding5">
+                  <button class="btn btn-sm btn-primary navbuttons navbuttonsLow" data-toggle="tooltip" title="Low"
+                    type="button" (click)="filterTask(0)">Low</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row no-gutters align-items-center tasktable">
+            <div class="col-12">
+              <dx-data-grid [dataSource]="filteredTask" [showBorders]="false" [allowColumnResizing]="false"
+                [showColumnLines]="false" [showRowLines]="false" [rowAlternationEnabled]="false"
+                [noDataText]="gridMessage" [columnAutoWidth]="true" [allowColumnReordering]="false" [showColumnHeaders]="false"
+                class="customDesignDxGrid" (onRowClick)="getTask($event.data.TaskId);">
+
+                <dxo-paging [enabled]="true" [pageSize]="10"></dxo-paging>
+
+                <dxi-column caption="Action" [allowExporting]="false" cellTemplate="actionCellTemplate">
+
+                </dxi-column>
+
+                <div *dxTemplate="let d of 'actionCellTemplate'">
+                  <div class="taskrow">
+                    
+                    <div class="tasktablecont"
+                      [ngClass]="{ 'low':d.data.TaskPriority===0,'minor':d.data.TaskPriority===1,'critical':d.data.TaskPriority===2 }">
+                      <div class="row">
+                        <div class="col-12 col-sm-8 col-md-12 col-lg-12 col-xl-8">
+                          {{d.data.TaskSubject}} - {{ getname(taskStatus,d.data.TaskStatus) }}
+                        </div>
+                        <div class="col-12 col-sm-4 col-md-12 col-lg-12 col-xl-4 tasktabletime"
+                          [ngClass]="{ 'low':d.data.TaskPriority===0,'minor':d.data.TaskPriority===1,'critical':d.data.TaskPriority===2 }">
+                          <i class="fa fa-clock"></i> {{d.data.DueDate | date:'dd MMM yyyy'}}
+                          <a class="ml-2" (click)="editTask(d.data.TaskId)"><i data-toggle="tooltip" title="Edit" class="fa fa-edit"></i></a>
+                        </div>
+                      </div>
+                    </div>
+
+                  
+                  </div>
+
+                </div>
+              </dx-data-grid>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Earnings (Monthly) Card Example -->
+    <div *ngIf="filteredTask?.length" class="col-xl-5 col-md-6 mb-4 taskcontainer" >
+  
+    <!-- <div [ngClass]="filteredTask?.length ? 'col-md-6': 'col-md-12'"> -->
+      <div class="card shadow h-100 py-0">
+        <div class="card-body" *ngIf="currentTask">
+          <div class="row no-gutters align-items-center">
+            <div class="col-4 padding5">
+              <button class="btn btn-primary navbuttons "
+                [ngClass]="{ 'navbuttonsLow':currentTask.TaskPriority===0,'navbuttonsMinor':currentTask.TaskPriority===1,'navbuttonsCritical':currentTask.TaskPriority===2 }">
+                {{getname(taskPriority,currentTask.TaskPriority)}}
+              </button>
+            </div>
+            <div class="col-7">
+              <div class="tasktabletime" style="text-align:left;padding-left:20px;">
+                {{currentTask.DueDate | date:'dd MMM yyyy'}}
+              </div>
+            </div>
+            <!-- <div class="col-2" style="text-align:right;">
+              <a href="javascript:void()">
+                <i class="fa fa-circle" style="color: #EEEEEE;font-size:10px;margin-right:3px;"></i>
+                <i class="fa fa-circle" style="color: #EEEEEE;font-size:10px;margin-right:3px;"></i>
+                <i class="fa fa-circle" style="color: #EEEEEE;font-size:10px;margin-right:3px;"></i>
+              </a>
+            </div> -->
+          </div>
+
+          <div class="row no-gutters align-items-center">
+            <div class="">
+              <div class="tasktitle">{{currentTask.TaskSubject}}</div>
+            </div>
+          </div>
+          <div class="row align-items-center p-10">
+            <div class="col-md-6 col-sm-12">
+              <select class="form-control new-design-formcontrol" [(ngModel)]="currentTask.TaskStatus"
+                (change)="updateTask()">
+                <option *ngFor="let item of  tastStatusList" [value]="item.value">{{item.text}}</option>
+              </select>
+            </div>
+
+          </div>
+
+          <div class="row no-gutters align-items-center">
+
+            <div class="cardtitle mt20 col-md-12">Description </div>
+            <div class="col-md-12">
+              <p [innerHTML]="currentTask.TaskDescription" class="my-0">
+
+              </p>
+            </div>
+
+          </div>
+
+          <hr class="sidebar-divider">
+
+          <div class="row no-gutters align-items-center">
+
+            <div class="cardtitle col-12">Owner </div>
+            <p class="col-12">
+              {{currentTask.TaskOwnerName}}
+            </p>
+
+            <div class="cardtitle col-12">Assignee </div>
+            <p class="col-12 my-0">
+              <select class="form-control new-design-formcontrol" [(ngModel)]="currentTask.AssignedTo"
+                (change)="updateTask()">
+                <option *ngFor="let item of  userList" [value]="item.UserId">{{item.DisplayName}}</option>
+              </select>
+              <!-- {{currentTask.AssignedToName}} -->
+            </p>
+          </div>
+
+          <hr class="sidebar-divider">
+
+          <div class="row no-gutters align-items-center">
+
+            <div class="col-12">
+              <div class="cardtitle">
+                Comments
+              </div>
+              <ng-container *ngFor="let item of currentTask.comments">
+                <div class="row">
+                  <div class="col-1 commentimage">
+                    <img src="{{item.ProfileImage ? filepath+'User/'+item.ProfileImage : ''}}" onerror="this.src='./assets/img/avatar.jpg'">
+                  </div>
+                  <div class="col-7 commentname ml-2">
+                    {{item.DisplayName}}
+                  </div>
+                  <div class="col-12 col-xl-4">
+                    <div class="tasktabletime">
+                      {{item.ActivityStamp | date:'dd MMM yyyy'}}
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <!-- <div class="col-1 commentimage">
+
+                  </div> -->
+                  <div class="col-12 commentname" style="padding-left: 15px;">
+                    <p>
+                      {{item.ActivityRemark}}
+                    </p>
+                  </div>
+                </div>
+              </ng-container>
+
+              <div class="row">
+                <div class="col-12">
+
+                  <form #form="ngForm">
+                    <div class="row">
+                      <div class="col-1 commentimage">
+                        <img src="{{ currentUser.ProfileImage  ? filepath+'User/'+currentUser.ProfileImage :  '' }}" onerror="this.src='./assets/img/avatar.jpg'">
+                      </div>
+                      <div class="col-8 col-lg-8 commentname ml-2 pr-0">
+                        <input type="text" [(ngModel)]="comment" name="comment"
+                          class="form-control new-design-formcontrol bg-light border-0 small"
+                          placeholder="Add a comment..." aria-label="Search" aria-describedby="basic-addon2"
+                          [required]="true" />
+
+                      </div>
+                      <div class="col-2 px-0">
+                        <div class="tasktabletime px-0" style="text-align: center !important;">
+                          <input type="submit" value="Send" class="btn btn-link btn-default"
+                            style="padding: 0px;color:#E92429;" (click)="addComment(form)" [disabled]="form.invalid" />
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+
+
+                </div>
+
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+        <!-- <div class="card-body" *ngIf="!currentTask">
+          <div class="row">
+            <div class="col-12 align-items-center">
+              <p> No task for display</p>
+            </div>
+          </div>
+        </div> -->
+    
+    </div>
+  </div>
+  </div>
+
+</div>
+
+<!-- Script For Tooltip -->
+<script>
+  $(document).ready(function () {
+    $('[data-toggle="tooltip"]').tooltip();
+  });
+</script>

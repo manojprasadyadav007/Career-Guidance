@@ -1,0 +1,79 @@
+<div class="container-fluid new-design">
+    <ng-container *ngFor="let item of programList | paginate: {id: 'inst', itemsPerPage: 4, currentPage: pageIndex }">
+        <div class="row no-gutters align-items-center mt10">
+            <div class="col-12">
+                <div class="intcard">
+                    <a href="#/institutions/institutions-details/{{item.InstitutionId}}" target="_blank">
+                        <h4>{{item.InstName}}</h4>
+                    </a>
+                    <div class="row">
+                        <div class="col-12 col-md-4"
+                            *ngFor="let program of item.programs | paginate: {id: 'i'+item.InstitutionId, itemsPerPage: 6, currentPage: item.p }">
+
+                            <div class="intprograms check-eligibitlity"
+                                [ngClass]="program.ProgramStatus.toLowerCase()==='open' ? 'open' :'closed'">
+                                <a href="#/institutions/programs/details-program/{{program.ProgramId}}" target="_blank">
+                                    <h5>{{program.ProgramName}}</h5>
+                                    <div class="mb-2">
+                                        <div class="intdetails" *ngFor="let item of program.Intakes">
+                                            {{item.IntakeName}} : {{item.StatusName}}</div>
+
+                                    </div>
+                                    <div class="intdetails" *ngFor="let feeItem of program.FeeDetail">
+                                        {{feeItem.FeeType}} : {{program.ProgramCurrency}} {{feeItem.FeeAmount}}</div>
+                                    <span class="intprogramsopen">Open</span>
+                                    <span class="intprogramsclose">Close</span>
+                                </a>
+                                <div class="d-flex justify-content-end">
+                                    <a href="#/{{parentRoute}}eligibility/check/{{program.ProgramId}}/{{item.InstitutionId}}"
+                                        class="btn btn-sm btn-primary btn-check-eligibitlity btn-cust" *ngIf="!showApply"> check
+                                        eligibility </a>
+
+                                    <ng-container *ngIf="item.canApply">
+                                        <button type="button"
+                                            (click)="onApply.emit({ProgramId:program.ProgramId,InstitutionId:item.InstitutionId});"
+                                            class="btn btn-sm btn-primary btn-check-eligibitlity btn-cust"
+                                            *ngIf="showApply">Apply </button>
+
+                                        <a href="#/member/application/apply/0/{{ currentUser.RoleId===3 ? currentUser.RefId : 0 }}/{{program.ProgramId}}/{{item.InstitutionId}}"
+                                            class="btn btn-sm btn-primary btn-check-eligibitlity ml-2 btn-cust"
+                                            *ngIf="!showApply">Apply</a>
+                                    </ng-container>
+
+
+                                </div>
+                            </div>
+
+
+                        </div>
+                        <div class="col-12">
+                            <div class="d-flex justify-content-center">
+                                <pagination-controls id="{{ 'i'+item.InstitutionId }}" autoHide="true" responsive="true"
+                                    (pageChange)="item.p = $event"></pagination-controls>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ng-container>
+    <ng-container *ngIf="!programList || programList?.length===0">
+        <div class="row no-gutters align-items-center mt10">
+            <div class="col-12">
+                <p class="d-flex justify-content-center text-danger mb-0">
+                    No programs for display
+                </p>
+            </div>
+        </div>
+    </ng-container>
+    <div class="row  no-gutters align-items-center mt10">
+        <div class="col-12">
+            <div class="d-flex justify-content-center">
+                <pagination-controls id="inst" autoHide="true" responsive="true" (pageChange)="pageIndex = $event">
+                </pagination-controls>
+            </div>
+
+        </div>
+    </div>
+</div>

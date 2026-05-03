@@ -1,0 +1,16 @@
+<mat-form-field>
+  <mat-label>{{placeholder}}</mat-label>
+  <input matInput placeholder="{{placeholder}} MM/YY" type="text" [matDatepicker]="monthDatepicker" [ngModel]="value"
+    (ngModelChange)="value=$event; valueChange.emit($event)" [min]="minDate" [max]="maxDate" name="{{name}}"
+    #MonthPicker="ngModel" required="{{required}}" [appRegisterFormControlModel]="form" [registerModel]="MonthPicker"
+    [disabled]="disabled" readonly>
+  <mat-datepicker #monthDatepicker startView="multi-year" (yearSelected)="chosenYearHandler($event)"
+    (monthSelected)="chosenMonthHandler($event, monthDatepicker)"></mat-datepicker>
+  <mat-datepicker-toggle matSuffix [for]="monthDatepicker"></mat-datepicker-toggle>
+  <mat-hint *ngIf="hint">
+    {{hint}}
+  </mat-hint>
+
+  <mat-error *ngIf="MonthPicker.hasError('required') ">{{placeholder}} is required</mat-error>
+  <mat-error *ngIf="MonthPicker.invalid && !MonthPicker.hasError('required')">Invalid {{placeholder}}</mat-error>
+</mat-form-field>

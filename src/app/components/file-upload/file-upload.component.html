@@ -1,0 +1,32 @@
+<div class="file-input-box">
+
+
+  <label>{{label}}</label>
+  <div class="d-flex flex-row">
+    <div *ngIf="initialFilePath">
+      <a mat-icon-button data-toggle="tooltip" title="View" target="_blank" href="{{filepath+dir+'/'+initialFilePath}}">
+        <mat-icon>visibility</mat-icon>
+      </a>
+    </div>
+    <div class="flex-grow-1" *ngIf="file">
+      <span>{{file.name}}</span>
+    </div>
+    <div class="boder">
+      <button mat-icon-button type="button" [disabled]="uploadIconDisable" class="text-info" (click)="changeFile()">
+        <mat-icon  data-toggle="tooltip" title="Upload File" >folder</mat-icon>
+      </button>
+      <input id="{{controlName}}" type="file" (change)="onFileChange($event)" [name]="controlName" accept="{{fileType}}"
+        style="display: none;" 
+         >
+      <mat-error *ngIf="sizeerror">{{sizeerror}}</mat-error>
+     
+    </div>
+  </div>
+</div>
+
+<!-- Script For Tooltip -->
+<script>
+  $(document).ready(function () {
+    $('[data-toggle="tooltip"]').tooltip();
+  });
+</script>

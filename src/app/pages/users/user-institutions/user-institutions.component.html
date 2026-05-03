@@ -1,0 +1,116 @@
+<div class="main-content new-design">
+
+<div class="card">
+    <div class="card-body">
+
+
+        <dx-data-grid [dataSource]="dataList" [showBorders]="true" [allowColumnResizing]="true"
+      [showColumnLines]="true" [showRowLines]="true" [rowAlternationEnabled]="true" [noDataText]="gridMessage" [columnAutoWidth]="true"
+      (onToolbarPreparing)="onToolbarPreparing($event)" [allowColumnReordering]="true"   (onRowClick)="(permission>1 ? edit($event.data.AssignId) :null)">
+  
+      <dxo-filter-panel [visible]="true"></dxo-filter-panel>
+
+      <dxo-paging [enabled]="true" [pageSize]="10"></dxo-paging>
+      <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 25,50,100]" [showInfo]="true">
+      </dxo-pager>
+  
+      <dxo-filter-row [visible]="showFilterRow"></dxo-filter-row>
+  
+      <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
+  
+      <dxo-export [enabled]="excel_permisson > 0" fileName="institutions"></dxo-export>
+  
+      <dxo-column-chooser [enabled]="true" mode="select" [allowSearch]="true">
+      </dxo-column-chooser>
+  
+      <dxi-column *ngFor="let item of columns" [dataField]="item.dataField" [minWidth]="100"
+          [caption]="item.title | sentenceCase" [dataType]="item.type" [format]="item.format">
+      </dxi-column>
+  
+      <dxi-column caption="Action" [allowExporting]="false" [minWidth]="50" cellTemplate="actionCellTemplate">
+  
+      </dxi-column>
+  
+  
+      <div *dxTemplate="let d of 'actionCellTemplate'">
+  
+          <button type="button" mat-icon-button class="text-danger"
+              (click)="$event.stopPropagation(); delete(d.data.AssignId);" *ngIf="permission>2">
+              <mat-icon>close</mat-icon>
+          </button>
+      </div>
+  
+      <div *dxTemplate="let d of 'toolbarButton'">
+          <button class="text-danger"  (click)="edit(0)" mat-icon-button *ngIf="permission>1 && (roleType!=2 || dataList?.length<1)" data-toggle="tooltip" title="New">
+              <mat-icon>add</mat-icon>
+          </button>
+  
+          <button class="text-danger" (click)="showFilterRow=!showFilterRow" mat-icon-button data-toggle="tooltip" title="Apply Filter">
+              <mat-icon>filter_list</mat-icon>
+          </button>
+  
+      </div>
+  
+  </dx-data-grid>
+        <!-- <div class="table-responsive ">
+            <table mat-table #table [dataSource]="institutionList" class="table mat-elevation-z8">
+                <tr mat-header-row *matHeaderRowDef="columnToDisplay" class="text-primary">
+                </tr>
+                <tr mat-row *matRowDef="let row; columns:columnToDisplay"></tr>
+                <ng-container matColumnDef="Institution">
+                    <th mat-header-cell *matHeaderCellDef>Institution </th>
+                    <td mat-cell class="img" *matCellDef="let element">{{element.InstName}}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="Region">
+                    <th mat-header-cell *matHeaderCellDef [hidden]="roleType===2" > Region </th>
+                    <td mat-cell *matCellDef="let element" [hidden]="roleType===2" >{{element.CountryName}}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="Zone">
+                    <th mat-header-cell *matHeaderCellDef [hidden]="roleType===2" > Zone </th>
+                    <td mat-cell *matCellDef="let element" [hidden]="roleType===2" >{{element.Zone}}</td>
+                </ng-container>
+
+
+                <ng-container matColumnDef="Action">
+                    <th mat-header-cell *matHeaderCellDef style="padding-right: 0px; " class="td-actions text-right">
+                        <button mat-mini-fab type="button" *ngIf="permission>1 && (roleType!=2 || institutionList?.data?.length<1)" (click)="edit(0)" class="pull-right"
+                            style="margin-right: 10px;">
+                            <i class="material-icons">add</i>
+                        </button>
+                    </th>
+                    <td mat-cell *matCellDef="let element" class="td-actions text-right">
+
+                        <button (click)="edit(element.AssignId)" mat-raised-button="" type="button"
+                            class="btn btn-success btn-link" *ngIf="permission>1">
+                            <span class="mat-button-wrapper"><i class="material-icons">edit</i></span>
+                            <div class="mat-button-ripple mat-ripple" matripple=""></div>
+                            <div class="mat-button-focus-overlay"></div>
+                        </button>
+
+                        <button (click)="delete(element.AssignId);" mat-raised-button="" type="button"
+                            *ngIf="permission>2" class="btn btn-danger btn-link">
+                            <span class="mat-button-wrapper"><i class="material-icons">close</i></span>
+                            <div class="mat-button-ripple mat-ripple" matripple=""></div>
+                            <div class="mat-button-focus-overlay"></div>
+                        </button>
+                    </td>
+                </ng-container>
+            </table>
+            <mat-paginator [pageSizeOptions]="[10,25, 50, 100]" showFirstLastButtons 
+            [hidden]="!institutionList || institutionList?.data.length<=10" 
+            ></mat-paginator>
+        </div> -->
+
+    </div>
+</div>
+
+</div>
+
+<!-- Script For Tooltip -->
+<script>
+    $(document).ready(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+</script>

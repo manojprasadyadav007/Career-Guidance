@@ -1,0 +1,53 @@
+<div [ngClass]="{'card':showCard}">
+  <div [ngClass]="{'card-body':showCard}">
+
+
+
+    <dx-data-grid [dataSource]="dataList" [showBorders]="true" [allowColumnResizing]="true" [showColumnLines]="true"
+      [showRowLines]="true" [rowAlternationEnabled]="true" [columnAutoWidth]="true"
+      (onToolbarPreparing)="onToolbarPreparing($event)" [allowColumnReordering]="true"
+      (onCellPrepared)="onCellPrepared($event)" (onExporting)="activitylog()">
+      <dxo-filter-panel [visible]="true"></dxo-filter-panel>
+
+      <dxo-paging [enabled]="true" [pageSize]="10"></dxo-paging>
+      <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 25,50,100]" [showInfo]="true">
+      </dxo-pager>
+
+      <dxo-filter-row [visible]="showFilterRow"></dxo-filter-row>
+
+      <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
+
+      <dxo-export [enabled]="excel_permisson > 0" fileName="{{this.parentName}} Status"></dxo-export>
+
+      <dxo-column-chooser [enabled]="true" mode="select" [allowSearch]="true">
+      </dxo-column-chooser>
+
+      <dxi-column *ngFor="let item of columns" [dataField]="item.dataField" [minWidth]="100" [caption]="item.title | sentenceCase"
+        [dataType]="item.type" [format]="item.format">
+      </dxi-column>
+
+
+      <div *dxTemplate="let d of 'toolbarButton'">
+        <!-- <button class="text-danger"  (click)="add()" mat-icon-button
+    *ngIf="permission>1" >
+        <mat-icon>add</mat-icon>
+    </button> -->
+
+        <button class="text-danger" (click)="showFilterRow=!showFilterRow" mat-icon-button data-toggle="tooltip"
+          title="Apply Filter">
+          <mat-icon>filter_list</mat-icon>
+        </button>
+
+      </div>
+
+    </dx-data-grid>
+
+  </div>
+</div>
+
+<!-- Script For Tooltip -->
+<script>
+  $(document).ready(function () {
+    $('[data-toggle="tooltip"]').tooltip();
+  });
+</script>

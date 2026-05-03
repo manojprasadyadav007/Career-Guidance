@@ -1,0 +1,33 @@
+<div class="main-content new-design">
+        <div class="container-fluid" *ngIf="currentUser.RoleId != 3">
+                <div class="row">
+                        <div class="col-md-12 text-right" >
+                                <button type="button" (click)="showStudentSelect()" 
+                                  class="d-sm-inline-block btn btn-sm btn-primary shadow-sm">{{studentId>0 ? genInfo?.FirstName+' '+genInfo?.MiddleName+' '+genInfo?.LastName  : 'Select Student'}}</button>
+                              </div>
+                </div>
+        </div>        
+        <app-student-create-layout parentId="0" parentType="7" [programInfoData]="programInfo" [genInfoData]="genInfo"
+          [permission]="permission" (onSubmitClick)="onSubmit($event)"
+                btnLabel="Save" mode="2" [program]="program"  [flagDisabled] = "flagDisabled">
+
+        </app-student-create-layout>
+
+        <!-- <app-student-form-layout
+        parentId="0" parentType="7"
+        [programInfoData]="programInfo"
+        [genInfoData]="genInfo"
+       [eduInfoData]="eduInfo"
+       [testScoreData]="testScore"
+       [emergencyInfoData]="emergencyInfo"
+        
+        [permission]="permission"  [user]="currentUser" 
+         (onSubmitClick)="onSubmit($event)" backlink="/member/application" 
+       btnLabel="Save" mode="2" 
+       [program]="program" 
+       
+       >
+        </app-student-form-layout> -->
+
+
+</div>

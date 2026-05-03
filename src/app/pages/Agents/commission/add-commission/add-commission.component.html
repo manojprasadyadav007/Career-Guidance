@@ -1,0 +1,342 @@
+<form #form="ngForm" (submit)="onSubmit(form)" form class="new-design">
+  <div mat-dialog-title>
+    Commission
+    <button class="close text-white" type="button" mat-dialog-close aria-label="Close"><span
+        aria-hidden="true">×</span></button>
+  </div>
+  <div mat-dialog-content>
+    <div class="row">
+      <!-- {{ formdata | json }} -->
+      <div class="col-12">
+        <mat-form-field *ngIf="currentUser.RoleType != 2">
+          <mat-label>Institution</mat-label>
+          <mat-select matInput placeholder="Institution" #InstitutionId="ngModel" [(ngModel)]="formdata.InstitutionId"
+            name="InstitutionId" required (selectionChange)="onChangeInstitution($event)" [disabled]="fieldsdisabled">
+            <mat-option>
+              <ngx-mat-select-search [(ngModel)]="instFilter" [placeholderLabel]="'Search...'"
+                [noEntriesFoundLabel]="'Not found'" name="instFilter"></ngx-mat-select-search>
+            </mat-option>
+            <mat-option
+              *ngFor="let institute of institutionList | stringFilterBy:instFilter:'InstName';  trackByProperty: 'InstitutionId'"
+              [value]="institute.InstitutionId">
+              {{institute.InstName}}</mat-option>
+          </mat-select>
+          <mat-error *ngIf="InstitutionId.hasError('pattern') || InstitutionId.hasError('required')">Institution is
+            required</mat-error>
+        </mat-form-field>
+      </div>
+
+
+      <!-- <div class="col-12">
+        <mat-form-field>
+          <mat-label>Region</mat-label>
+          <mat-select matInput placeholder="Region" #RegionId="ngModel" [(ngModel)]="formdata.RegionId" name="RegionId"
+            required (selectionChange)="onChangeRegion()" [disabled]="fieldsdisabled">
+            <mat-option>
+              <ngx-mat-select-search [(ngModel)]="regionFilter" [placeholderLabel]="'Search...'"
+                [noEntriesFoundLabel]="'Not found'" name="regionFilter"></ngx-mat-select-search>
+            </mat-option>
+            <mat-option [value]="0" *ngIf="regionList?.length>0" >All</mat-option>
+            <mat-option *ngFor="let item of regionList | stringFilterBy:regionFilter:'CountryName';  trackByProperty: 'CountryId'" [value]="item.CountryId">{{item.CountryName}}</mat-option>
+          </mat-select>
+          <mat-error *ngIf="RegionId.hasError('pattern') || RegionId.hasError('required')">Region is required
+          </mat-error>
+        </mat-form-field>
+      </div> -->
+
+      <div class="col-12" *ngIf="currentUser.RoleId != 2">
+        <mat-form-field>
+          <mat-label>Agent</mat-label>
+          <mat-select matInput placeholder="Agent" #AgentId="ngModel" [(ngModel)]="formdata.AgentId" name="AgentId"
+            required [disabled]="fieldsdisabled">
+            <mat-option>
+              <ngx-mat-select-search [(ngModel)]="agentFilter" [placeholderLabel]="'Search...'"
+                [noEntriesFoundLabel]="'Not found'" name="agentFilter"></ngx-mat-select-search>
+            </mat-option>
+            <mat-option [value]="0">All</mat-option>
+            <mat-option
+              *ngFor="let item of agentList | stringFilterBy:agentFilter:'CompanyName';  trackByProperty: 'AgentId'"
+              [value]="item.AgentId">{{item.CompanyName}}</mat-option>
+          </mat-select>
+          <mat-error *ngIf="AgentId.hasError('pattern') || AgentId.hasError('required')">Agent is required
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <!-- <div class="col-12">
+        <mat-form-field>
+          <mat-label>Program</mat-label>
+          <mat-select matInput placeholder="Program" #ProgramId="ngModel" [(ngModel)]="formdata.ProgramId"
+            name="ProgramId" required  (selectionChange)="onChangeProgram()" [disabled]="fieldsdisabled" >
+            <mat-option>
+              <ngx-mat-select-search [(ngModel)]="prgFilter" [placeholderLabel]="'Search...'"
+                [noEntriesFoundLabel]="'Not found'" name="prgFilter"></ngx-mat-select-search>
+            </mat-option>
+            <mat-option [value]="0" *ngIf="programList?.length>0" >All</mat-option>
+            <mat-option *ngFor="let item of programList | stringFilterBy:prgFilter:'ProgramName';  trackByProperty: 'ProgramId'" [value]="item.ProgramId">{{item.ProgramName}}</mat-option>
+          </mat-select>
+          <mat-error *ngIf="ProgramId.hasError('pattern') || ProgramId.hasError('required')">Program is required
+          </mat-error>
+        </mat-form-field>
+      </div> -->
+
+      <!-- <div class="col-12" *ngIf="formdata.ProgramId && formdata.ProgramId>0">
+        <mat-form-field>
+          <mat-label>Intake</mat-label>
+          <mat-select matInput placeholder="Intake" #IntakeId="ngModel" [(ngModel)]="formdata.IntakeId" name="IntakeId"
+            required [disabled]="fieldsdisabled">
+            <mat-option>
+              <ngx-mat-select-search [(ngModel)]="intakeFilter" [placeholderLabel]="'Search...'"
+                [noEntriesFoundLabel]="'Not found'" name="intakeFilter"></ngx-mat-select-search>
+            </mat-option>
+            <mat-option [value]="0" *ngIf="intakeList?.length>0" >All</mat-option>
+            <mat-option *ngFor="let item of intakeList | stringFilterBy:intakeFilter:'IntakeName';  trackByProperty: 'IntekId'" [value]="item.IntekId">{{item.IntakeName}}</mat-option>
+          </mat-select>
+          <mat-error *ngIf="IntakeId.hasError('pattern') || IntakeId.hasError('required')">Intake is required
+          </mat-error>
+        </mat-form-field>
+      </div> -->
+
+      <div class="col-4">
+        <mat-form-field>
+          <mat-label>Type</mat-label>
+          <mat-select matInput placeholder="Commission Type" #CommissionType="ngModel"
+            [(ngModel)]="formdata.CommissionType" name="CommissionType" required [disabled]="fieldsdisabled"
+            (selectionChange)="setMethodLabel();">
+            <mat-option [value]="0">Semester wise</mat-option>
+            <mat-option [value]="1">Course wise</mat-option>
+            <mat-option [value]="2">Credit wise</mat-option>
+          </mat-select>
+          <mat-error *ngIf="CommissionType.hasError('pattern') || CommissionType.hasError('required')">Type
+            is required</mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="col-4">
+        <mat-form-field>
+          <mat-label>Method</mat-label>
+          <mat-select matInput placeholder="Method" #MethodType="ngModel" [(ngModel)]="formdata.MethodType"
+            name="MethodType" required [disabled]="fieldsdisabled">
+            <mat-option [value]="0">% of Tuition fees per {{methodLabel}}</mat-option>
+            <mat-option [value]="1">Fixed Amount per {{methodLabel}}</mat-option>
+          </mat-select>
+          <mat-error *ngIf="MethodType.hasError('pattern') || MethodType.hasError('required')">Method
+            is required</mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="col-md-4">
+        <mat-form-field>
+          <mat-label>Number of {{methodLabel}}</mat-label>
+          <input matInput placeholder="No of {{methodLabel}}" type="number" #NoOfSemester="ngModel"
+            [(ngModel)]="formdata.NoOfSemester" name="NoOfSemester" [step]="1"  appAcceptOnlyNumber
+             integerValidate rangeValidator minValue=1 maxValue=100 required [disabled]="fieldsdisabled">
+          <mat-error *ngIf="NoOfSemester.hasError('pattern') || NoOfSemester.hasError('required')">Number of
+            {{methodLabel}} is required</mat-error>
+          <!-- <mat-error *ngIf="NoOfSemester.hasError('MinValue') || NoOfSemester.hasError('MaxValue')">Enter valid Number
+            of {{methodLabel}}</mat-error> -->
+            <mat-error *ngIf="(NoOfSemester.touched || NoOfSemester.dirty) && (NoOfSemester.errors?.maxValueInvalid || NoOfSemester.errors?.minValueInvalid)">
+              Value should be between 1 to 100
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="col-12" *ngIf="formdata.MethodType==0">
+        <div class="row">
+          <div class="col-md-4 pt-3 pb-3">
+            <mat-checkbox [(ngModel)]="formdata.IsMaximumLimit" #IsMaximumLimit="ngModel" name="IsMaximumLimit">Is there
+              any
+              maximum limit of commission</mat-checkbox>
+          </div>
+          <div class="col-md-4" *ngIf="formdata.IsMaximumLimit">
+            <mat-form-field>
+              <mat-label>Maximum amount of commission</mat-label>
+              <input matInput placeholder="Maximum amount of commission" type="number" #MaximumAmount="ngModel"
+                [(ngModel)]="formdata.MaximumAmount" name="MaximumAmount" [MinValue]="1" [min]="1" required
+                [disabled]="fieldsdisabled">
+              <mat-error *ngIf="MaximumAmount.hasError('pattern') || MaximumAmount.hasError('required')">Maximum amount
+                is
+                required</mat-error>
+              <mat-error *ngIf="MaximumAmount.hasError('MinValue') || MaximumAmount.hasError('MaxValue')">Enter valid
+                maximum amount of commission</mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+
+
+
+
+      <div class="col-md-6">
+        <mat-form-field>
+          <mat-label>{{ formdata.MethodType==0 ? '%' : 'Amount' }}{{formdata.MethodType==null ? '/%':''}} of
+            commission </mat-label>
+          <input matInput placeholder="{{ formdata.MethodType==0 ? '%' : 'Amount' }}{{formdata.MethodType==null ? '/%':''}} of commission" type="number"
+            #CommissionPer="ngModel" [(ngModel)]="formdata.CommissionPer" name="CommissionPer" [minValue]="0" 
+            [step]=".5" [maxValue]="formdata.MethodType==0 ? 100 : null" rangeValidator 
+            required [disabled]="fieldsdisabled">
+          <mat-error *ngIf="CommissionPer.hasError('pattern') || CommissionPer.hasError('required')">{{
+            formdata.MethodType==0 ? '%' : 'Amount' }}{{formdata.MethodType==null ? '/%':''}} of commission is required</mat-error>
+          <mat-error *ngIf=" (CommissionPer.touched || CommissionPer.dirty) && (CommissionPer.errors?.maxValueInvalid || CommissionPer.errors?.minValueInvalid)">Enter valid {{
+            formdata.MethodType==0 ? '%' : 'Amount' }}{{formdata.MethodType==null ? '/%':''}} of commission
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="col-md-6">
+        <mat-form-field>
+          <mat-label>Currency</mat-label>
+          <mat-select matInput placeholder="Currency" #Currency="ngModel" [(ngModel)]="formdata.Currency"
+            name="Currency" required>
+            <mat-option>
+              <ngx-mat-select-search [(ngModel)]="cnyFilter" [placeholderLabel]="'Search...'"
+                [noEntriesFoundLabel]="'Not found'" name="cnyFilter"></ngx-mat-select-search>
+            </mat-option>
+            <mat-option>None</mat-option>
+            <mat-option *ngFor="let currency of currencyList | stringFilterBy:cnyFilter:'currency';" [value]="currency">
+              {{currency}}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="Currency.hasError('pattern') || Currency.hasError('required')">Currency
+            is required</mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="col-md-6 pt-3 pb-3">
+        <mat-checkbox [(ngModel)]="formdata.isNoOfStImpact" #isNoOfStImpact="ngModel" name="isNoOfStImpact">Is number of
+          students recruited has any impact on commission
+        </mat-checkbox>
+      </div>
+
+      <div class="col-6" *ngIf="formdata.isNoOfStImpact">
+        <mat-form-field>
+          <mat-label>Impact of number of students recruited based on</mat-label>
+          <mat-select matInput placeholder="Impact of number of students recruited based on" #ImpactBase="ngModel"
+            [(ngModel)]="formdata.ImpactBase" name="ImpactBase" required [disabled]="fieldsdisabled">
+            <mat-option [value]="0">Per annum</mat-option>
+            <mat-option [value]="1">Per intake</mat-option>
+          </mat-select>
+          <mat-error *ngIf="ImpactBase.hasError('pattern') || ImpactBase.hasError('required')">Impact base
+            is required</mat-error>
+        </mat-form-field>
+      </div>
+      <div class="col-md-3" [hidden]="!(formdata.isNoOfStImpact && formdata.ImpactBase==0)">
+        <app-date-picker [(value)]="formdata.ImpactFromDate" placeholder="From" name="ImpactFrom"
+          [required]="formdata.isNoOfStImpact==true && formdata.ImpactBase===0" [maxDate]="formdata.ImpactToDate"
+          [form]="form">
+        </app-date-picker>
+      </div>
+      <div class="col-md-3" [hidden]="!(formdata.isNoOfStImpact && formdata.ImpactBase==0)">
+        <app-date-picker [(value)]="formdata.ImpactToDate" placeholder="To" name="ImpactToDate"
+          [required]="formdata.isNoOfStImpact==true && formdata.ImpactBase===0" [minDate]="formdata.ImpactFromDate"
+          [form]="form">
+        </app-date-picker>
+      </div>
+      <div class="col-md-12  table-responsive" *ngIf="formdata.isNoOfStImpact">
+        
+          <form #slabForm="ngForm" (ngSubmit)="addSlab(slabForm)">
+            <table class=" table table-bordered table-sm">
+              <thead>
+                <tr >
+                  <th class="font-weight-bold">Start</th>
+                  <th class="font-weight-bold">End</th>
+                  <th class="font-weight-bold">Commission Rate</th>
+                  <th *ngIf="permission>1" class="font-weight-bold">Action</th>
+                </tr>
+                <tr *ngIf="permission>1">
+                  <th>
+                    <mat-form-field>
+                      <mat-label>Start</mat-label>
+                      <input matInput placeholder="Start" type="text" #SlabStart="ngModel"
+                        [(ngModel)]="slabData.SlabStart" name="SlabStart" [MinValue]="0" min="0" appAcceptOnlyNumber required>
+                      <mat-error *ngIf="SlabStart.hasError('pattern') || SlabStart.hasError('required')">Start is
+                        required
+                      </mat-error>
+                      <mat-error *ngIf="SlabStart.hasError('MinValue') || SlabStart.hasError('MaxValue')">Enter valid
+                        start
+                        value</mat-error>
+                    </mat-form-field>
+                  </th>
+                  <th>
+                    <mat-form-field>
+                      <mat-label>End</mat-label>
+                      <input matInput placeholder="End" type="text" #SlabEnd="ngModel" [(ngModel)]="slabData.SlabEnd"
+                        name="SlabEnd" [MinValue]="slabData.SlabStart" [min]="slabData.SlabStart" appAcceptOnlyNumber required>
+                      <mat-error *ngIf="SlabEnd.hasError('pattern') || SlabEnd.hasError('required')">End is required
+                      </mat-error>
+                      <mat-error *ngIf="SlabEnd.hasError('MinValue') || SlabEnd.hasError('MaxValue')">Enter end value greater than start value</mat-error>
+                    </mat-form-field>
+                  </th>
+                  <th>
+                    <mat-form-field>
+                      <mat-label>Commission rate</mat-label>
+                      <input matInput placeholder="Commission Rate" type="text" #CommRate="ngModel"
+                        [(ngModel)]="slabData.CommRate" name="CommRate" [MinValue]="0" [min]="0" appAcceptNumberWithDecimals="1" required>
+                      <mat-error *ngIf="CommRate.hasError('pattern') || CommRate.hasError('required')">Commission rate
+                        is required
+                      </mat-error>
+                      <mat-error *ngIf="CommRate.hasError('MinValue') || CommRate.hasError('MaxValue')">Enter valid
+                        commission rate</mat-error>
+                    </mat-form-field>
+                  </th>
+                  <th>
+                    <button mat-icon-button data-toggle="tooltip"
+                    title="Add" class="text-danger">
+                      <mat-icon>add</mat-icon>
+                    </button>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of formdata.slabList;let index=index">
+                  <td>{{item.SlabStart}}</td>
+                  <td>{{item.SlabEnd}}</td>
+                  <td>{{item.CommRate}}</td>
+                  <td *ngIf="permission>1"><button mat-icon-button data-toggle="tooltip"
+                    title="Delete" class="text-danger" type="button" (click)="removeSlab(index)">
+                      <mat-icon>close</mat-icon>
+                    </button></td>
+                </tr>
+              </tbody>
+            </table>
+
+          </form>
+         
+      </div>
+
+
+      <div class="col-12">
+        <div class="form-group">
+          <label style="color: black;">Terms &amp; conditions</label>
+          <dx-html-editor [disabled]="fieldsdisabled" #CommissionTerms="ngModel" [(ngModel)]="formdata.CommissionTerms"
+            name="CommissionTerms" placeholder="Terms &amp; conditions">
+            <dxo-toolbar [items]="items"> </dxo-toolbar>
+          </dx-html-editor>
+        </div>
+
+      </div>
+
+
+
+    </div>
+  </div>
+  <dx-popup [showTitle]="true" title="Markup" [(visible)]="popupVisible" [showCloseButton]="true">
+    <textarea [(ngModel)]="formdata.CommissionTerms" name="CommissionTerms"
+      style="height:100% !important; width: 100%; display: block; border:0px;"></textarea>
+  </dx-popup>
+  <div mat-dialog-actions align="center">
+    <button type="button" mat-dialog-close data-toggle="tooltip"
+    title="Close" class="btn btn-sm btn-primary modalclose">Close</button>
+
+    <button type="submit" class="btn btn-sm btn-primary btn-cust" *ngIf="permission>1" data-toggle="tooltip"
+      title="{{btnLabel}}"
+      [disabled]="flagdisabled">{{btnLabel}}</button>
+
+  </div>
+</form>
+
+<!-- Script For Tooltip -->
+<script>
+  $(document).ready(function () {
+    $('[data-toggle="tooltip"]').tooltip();
+  });
+</script>

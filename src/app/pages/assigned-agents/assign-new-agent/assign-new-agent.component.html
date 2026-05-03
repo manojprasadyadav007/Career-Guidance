@@ -1,0 +1,128 @@
+<form #form="ngForm" form (ngSubmit)="onSubmit(form)" class="new-design">
+  <div mat-dialog-title>
+    Assign Agent
+    <button class="close text-white" type="button" mat-dialog-close aria-label="Close"><span
+        aria-hidden="true">×</span></button>
+  </div>
+  <div mat-dialog-content>
+
+    <div class="container-fluid">
+
+
+      <div class="row">
+
+        <div class="col-md-6">
+          <mat-form-field>
+            <mat-label>Country</mat-label>
+            <mat-select matInput placeholder="Select Country" #Country="ngModel" [(ngModel)]="formdata.CountryId"
+              name="CountryId" required (selectionChange)="changeOption($event.value)"
+              [pattern]="(permission<3 ? modelPattern.dropDownNumericValue : modelPattern.dropDownNumericValueWith0)">
+              <mat-option>
+                <ngx-mat-select-search [(ngModel)]="contryFilter" [placeholderLabel]="'Search...'"
+                  [noEntriesFoundLabel]="'Not found'" name="contryFilter"></ngx-mat-select-search>
+              </mat-option>
+              <mat-option
+                *ngFor="let country of countryList | stringFilterBy:contryFilter:'CountryName';  trackByProperty: 'CountryId' "
+                [value]="country.CountryId">
+                {{country.CountryName}}</mat-option>
+            </mat-select>
+            <mat-error *ngIf="form.submitted && Country.hasError('required')">Country is required </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="col-md-6">
+          <mat-form-field>
+            <mat-label>Province</mat-label>
+            <mat-select matInput placeholder="Select Province" #ProvinceId="ngModel"
+              (selectionChange)="changeProvinceOption($event.value)" [(ngModel)]="formdata.ProvinceId"
+              name="ProvinceId">
+              <mat-option>
+                <ngx-mat-select-search [(ngModel)]="provineFilter" [placeholderLabel]="'Search...'"
+                  [noEntriesFoundLabel]="'Not found'" name="provineFilter"></ngx-mat-select-search>
+              </mat-option>
+              <mat-option>None</mat-option>
+              <mat-option
+                *ngFor="let req of provinceList | stringFilterBy:provineFilter:'ProvinceName';  trackByProperty: 'ProvinceId'  "
+                [value]="req.ProvinceId">{{req.ProvinceName}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <mat-form-field class="search-field">
+
+            <mat-label>Search by keyword</mat-label>
+            <input matInput name="keyword" [(ngModel)]="keyword" aria-label="Search by keyword">
+            <!-- <mat-hint>search by keyword</mat-hint> -->
+
+          </mat-form-field>
+        </div>
+        <div div class="col-md-3">
+          <button type="submit" data-toggle="tooltip" title="Search" class="btn btn-sm btn-primary btn-cust">Search</button>
+        </div>
+      </div>
+
+
+    </div>
+
+    
+
+    <div class="col-12 col-sm-12 col-md-8 d-sm-flex searchdiv" style="z-index: 1;" *ngIf="showButtons">
+        <button type="button" (click)="selectAllProgram(true)" mat-raised-button class="btn btn-sm btn-danger mx-1"
+
+        [disabled]="permission<3" >Select All</button>
+        <button type="button" (click)="selectAllProgram(false)" [disabled]="clearAlldisabled" mat-raised-button class="btn btn-sm btn-danger mx-1" [disabled]="permission<3">Clear All</button>
+    </div>
+    <dx-data-grid [dataSource]="dataList" [showBorders]="true" [allowColumnResizing]="true" [showColumnLines]="true"
+      [showRowLines]="true" [rowAlternationEnabled]="true" [noDataText]="gridMessage" [columnAutoWidth]="true"
+      (onToolbarPreparing)="onToolbarPreparing($event)" [allowColumnReordering]="true" [disabled]="disableGrid"
+      > 
+
+      <dxo-filter-panel [visible]="true"></dxo-filter-panel>
+
+      <dxo-paging [enabled]="true" [pageSize]="10"></dxo-paging>
+      <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 25,50,100]" [showInfo]="true">
+      </dxo-pager>
+
+      <dxo-filter-row [visible]="showFilterRow"></dxo-filter-row>
+
+      <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
+
+      <dxo-export [enabled]="excel_permisson > 0" fileName="SelectStudent"></dxo-export>
+
+      <dxi-column caption="Assign Agent" cellTemplate="assignAgentCellTemplate"> </dxi-column>
+
+      <dxo-column-chooser [enabled]="true" mode="select" [allowSearch]="true">
+      </dxo-column-chooser>
+
+      <div *dxTemplate="let d of 'assignAgentCellTemplate'">
+        <div>
+          <!-- {{d.data | json }} -->
+          <mat-checkbox [checked]="d.data.AgentisAssigned" (click)="$event.stopPropagation();"
+            (change)="onStatusChange($event, d.data)" [disabled]="permission<3 && d.data.AgentisAssigned">
+          </mat-checkbox>
+        </div>
+      </div>
+
+
+      <dxi-column *ngFor="let item of columns" [dataField]="item.dataField" [minWidth]="100" [caption]="item.title | sentenceCase"
+        [dataType]="item.type" [format]="item.format">
+      </dxi-column>
+      <div *dxTemplate="let d of 'toolbarButton'">
+
+        <button class="text-danger" (click)="showFilterRow=!showFilterRow" mat-icon-button data-toggle="tooltip"
+          title="Apply Filter">
+          <mat-icon>filter_list</mat-icon>
+        </button>
+
+      </div>
+
+
+    </dx-data-grid>
+  </div>
+  <div mat-dialog-actions align="center">
+    <button type="button" mat-dialog-close class="btn btn-sm btn-primary modalclose">Close</button>
+  </div>
+</form>

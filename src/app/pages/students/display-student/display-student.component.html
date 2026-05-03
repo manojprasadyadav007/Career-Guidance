@@ -1,0 +1,81 @@
+<div class="new-design"  [ngClass]="{'main-content':isProfile===0}">
+    <app-student-view-layout *ngIf="id>0 && formdata" [genInfo]="formdata?.genInfo" [eduInfo]="formdata?.eduInfo"
+        [testScore]="formdata?.testScore" [parentId]="id" [parentType]="6" [permission]="permission"
+        (onUpdate)="get();"></app-student-view-layout>
+
+
+    <div class="container-fluid mt-4" *ngIf="formdata">
+        <mat-accordion multi>
+            <mat-expansion-panel class="mb-4">
+                <mat-expansion-panel-header>
+                    <div class="d-flex w-100 justify-content-between">
+                        
+                        <h1 class="sbheading">Visa</h1>
+                        
+                    </div>
+                </mat-expansion-panel-header>
+                <app-visa-status-show [parentName]="parentName" [StudentId]="id" [permission]="permission" [showCard]="false">
+
+                </app-visa-status-show>
+            </mat-expansion-panel>
+
+            <mat-expansion-panel class="mb-4">
+                <mat-expansion-panel-header>
+                    <div class="d-flex w-100 justify-content-between">
+                        
+                        <h1 class="sbheading">Interest</h1>
+                        
+                    </div>
+                </mat-expansion-panel-header>
+
+                <app-interest [parentName]="parentName" [LeadId]="id" [permission]="permission" [showCard]="false">
+
+                </app-interest>
+            </mat-expansion-panel>
+
+
+            <mat-expansion-panel class="mb-4" *ngIf="isProfile===0">
+                <mat-expansion-panel-header>
+                    <div class="d-flex w-100 justify-content-between">
+                        
+                        <h1 class="sbheading">Activities</h1>
+                        
+                    </div>
+                </mat-expansion-panel-header>
+
+                <app-campaign-activity [parentName]="parentName" [parentId]="id" parentType="8" [permission]="permission" [showCard]="false" [showfield]="false" [showagent]="false">
+                </app-campaign-activity>
+            </mat-expansion-panel>
+
+
+            <mat-expansion-panel class="mb-4">
+                <mat-expansion-panel-header>
+                    <div class="d-flex w-100 justify-content-between">
+                        
+                        <h1 class="sbheading">Query</h1>
+                        
+                    </div>
+                </mat-expansion-panel-header>
+                <app-activity [showStatusDropDown]="false" [showAdd]="permission>1" ActivityType="10" [ActivityId]="id"
+                    btnLable="Add"  [independed]="true" [showCard]="false">
+                </app-activity>
+            </mat-expansion-panel>
+
+
+            <mat-expansion-panel class="mb-4">
+                <mat-expansion-panel-header>
+                    <div class="d-flex w-100 justify-content-between">
+                        
+                        <h1 class="sbheading">Applications</h1>
+                        
+                    </div>
+                </mat-expansion-panel-header>
+                <app-show-student-application [parentName]="parentName" [StudentId]="id" [showCard]="false">
+
+                </app-show-student-application>
+            </mat-expansion-panel>
+
+        </mat-accordion>
+    </div>
+
+</div>

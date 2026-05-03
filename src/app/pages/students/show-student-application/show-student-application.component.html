@@ -1,0 +1,81 @@
+<div class="container-fluid">
+
+  <div class="row">
+    <div class="col-md-12">
+      <div [ngClass]="{'card':showCard}">
+
+        <div [ngClass]="{'card-body':showCard}">
+
+
+          <dx-data-grid [dataSource]="dataList" [showBorders]="true" [allowColumnResizing]="true"
+            [showColumnLines]="true" [showRowLines]="true" [rowAlternationEnabled]="true" [noDataText]="gridMessage" [columnAutoWidth]="true"
+            (onToolbarPreparing)="onToolbarPreparing($event)" [allowColumnReordering]="true"
+            (onRowClick)=" edit1($event.data.ApplicationId)" (onExporting)="activitylog()">
+
+            <dxo-filter-panel [visible]="true"></dxo-filter-panel>
+
+            <dxo-paging [enabled]="true" [pageSize]="10"></dxo-paging>
+            <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 25,50,100]" [showInfo]="true">
+            </dxo-pager>
+
+            <dxo-filter-row [visible]="showFilterRow"></dxo-filter-row>
+
+            <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
+
+            <dxo-export [enabled]="excel_permisson > 0" fileName="{{this.parentName}} Applications"></dxo-export>
+
+            <dxo-column-chooser [enabled]="true" mode="select" [allowSearch]="true">
+            </dxo-column-chooser>
+
+            <dxi-column *ngFor="let item of columns" [dataField]="item.dataField" 
+              [caption]="item.title | sentenceCase" [dataType]="item.type" [format]="item.format">
+            </dxi-column>
+
+
+            <dxi-column caption="Activity" cellTemplate="statusCellTemplate">
+
+            </dxi-column>
+
+            <dxi-column caption="Action" [allowExporting]="false" [fixed]="true" fixedPosition="right" [minWidth]="50" cellTemplate="actionCellTemplate">
+
+            </dxi-column>
+            <div *dxTemplate="let d of 'statusCellTemplate'">
+              <span class="text-info">{{d.data.ApplicationStatus}}</span>
+              <!-- <a class="link" (click)="openNotification(d.data.RequestId)">{{d.data.LastActivity}} </a>  -->
+            </div>
+
+
+            <div *dxTemplate="let d of 'actionCellTemplate'">
+
+              <button type="button" mat-icon-button class="text-danger"
+                (click)="$event.stopPropagation(); deleteApplication(d.data.ApplicationId)" *ngIf="permission>2">
+                <mat-icon>close</mat-icon>
+              </button>
+            </div>
+
+            <div *dxTemplate="let d of 'toolbarButton'">
+              <button class="text-danger" (click)="addApplication()" mat-icon-button *ngIf="permission>1" data-toggle="tooltip" title="New">
+                <mat-icon>add</mat-icon>
+              </button>
+
+              <button class="text-danger" (click)="showFilterRow=!showFilterRow" mat-icon-button data-toggle="tooltip" title="Apply Filter">
+                <mat-icon>filter_list</mat-icon>
+              </button>
+
+            </div>
+
+          </dx-data-grid>
+
+            </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Script For Tooltip -->
+<script>
+  $(document).ready(function () {
+    $('[data-toggle="tooltip"]').tooltip();
+  });
+</script>

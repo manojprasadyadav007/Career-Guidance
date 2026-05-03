@@ -1,0 +1,44 @@
+<!-- <mat-form-field >
+  <mat-label>{{placeholder}}</mat-label>
+
+  <input matInput [owlDateTime]="intekDatePicker" [owlDateTimeTrigger]="intekDatePicker"
+    placeholder="{{placeholder}} DD/MM/YYYY H24:MM" [ngModel]="value"
+    (ngModelChange)="value=$event; valueChange.emit($event)" [min]="minDate" [max]="maxDate" name="{{name}}"
+    #MyDatePicker="ngModel" required="{{required}}" 
+    [appRegisterFormControlModel]="form" [registerModel]="MyDatePicker"
+    >
+  <span matSuffix [owlDateTimeTrigger]="intekDatePicker">
+    <mat-icon>calendar_today</mat-icon>
+  </span>
+  <owl-date-time #intekDatePicker></owl-date-time>
+
+  <mat-hint *ngIf="hint">
+    {{hint}}
+  </mat-hint>
+
+  <mat-error *ngIf="MyDatePicker.hasError('required')">{{placeholder}} is required</mat-error>
+  <mat-error *ngIf="MyDatePicker.hasError('min') || MyDatePicker.hasError('max')">invalid date</mat-error>
+
+</mat-form-field> -->
+
+<mat-form-field >
+  <mat-label>{{placeholder}}</mat-label>
+<input matInput  placeholder="{{placeholder}}" type="text" [matDatepicker]="intekDatepicker" [ngModel]="value"
+  (ngModelChange)="value=$event; valueChange.emit($event)" [min]="minDate" [max]="maxDate" 
+  name="{{name}}" #MyDatePicker="ngModel"
+  required="{{required}}"
+  [appRegisterFormControlModel]="form" [registerModel]="MyDatePicker"
+  >
+<mat-datepicker #intekDatepicker></mat-datepicker>
+<mat-datepicker-toggle matSuffix [for]="intekDatepicker"></mat-datepicker-toggle>
+
+<mat-hint *ngIf="hint">
+  {{hint}}
+</mat-hint>
+<mat-error *ngIf="!required"> 
+  <span *ngIf="MyDatePicker.touched && MyDatePicker.invalid">Enter valid date </span>
+ </mat-error>
+ <mat-error  *ngIf="MyDatePicker.dirty && MyDatePicker.invalid"> Enter valid date</mat-error>
+<mat-error *ngIf="MyDatePicker.hasError('required') && !MyDatePicker.dirty" >{{placeholder | sentenceCase}} is required</mat-error>
+<mat-error *ngIf="MyDatePicker.hasError('min') || MyDatePicker.hasError('max')">Invalid date</mat-error>
+</mat-form-field>

@@ -1,0 +1,568 @@
+<form #geneform="ngForm" autocomplete="off" form (submit)="onGenInfoFormSubmit(geneform)" class="new-design">
+  <div mat-dialog-title>
+    Personal Information<small>(as indicated on your passport)</small>
+    <button class="close text-white" type="button" mat-dialog-close aria-label="Close"><span
+        aria-hidden="true">×</span></button>
+  </div>
+  <div mat-dialog-content>
+    <div class="container-fluid pl-0 pr-0" *ngIf="genInfoData">
+      <div class="row" *ngIf="mode===3">
+        <div class="col-md-6">
+          <mat-form-field>
+            <mat-label>Source</mat-label>
+            <mat-select placeholder="Lead Source" [(ngModel)]="genInfoData.LeadSource" name="LeadSource"
+              #LeadSource="ngModel" required>
+              <mat-option>
+                <ngx-mat-select-search [(ngModel)]="sourceFilter" [placeholderLabel]="'Search...'"
+                  [noEntriesFoundLabel]="'Not found'" name="sourceFilter"></ngx-mat-select-search>
+              </mat-option>
+              <mat-option
+                *ngFor="let item of leadSourceList  | stringFilterBy:sourceFilter:'text';  trackByProperty: 'value'"
+                [value]="item.value">
+                {{item.text}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-md-6">
+          <mat-form-field>
+            <mat-label>Status</mat-label>
+            <mat-select placeholder="Lead Status" [(ngModel)]="genInfoData.LeadStatus" name="LeadStatus"
+              #LeadStatus="ngModel" required>
+              <mat-option>
+                <ngx-mat-select-search [(ngModel)]="statusFilter" [placeholderLabel]="'Search...'"
+                  [noEntriesFoundLabel]="'Not found'" name="statusFilter"></ngx-mat-select-search>
+              </mat-option>
+              <mat-option
+                *ngFor="let item of leadStatusList | stringFilterBy:statusFilter:'text';  trackByProperty: 'value'"
+                [value]="item.value">
+                {{item.text}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-3">
+
+          <mat-form-field>
+            <mat-label>Title</mat-label>
+            <mat-select placeholder="Title" #Salution="ngModel" [(ngModel)]="genInfoData.Salution" name="Salution"
+              (selectionChange)="changetitle($event)">
+              <mat-option value="Mr."> Mr.</mat-option>
+              <mat-option value="Ms."> Ms.</mat-option>
+              <mat-option value="Miss"> Miss</mat-option>
+              <mat-option value="Mrs."> Mrs.</mat-option>
+            </mat-select>
+            <mat-error *ngIf="Salution.hasError('pattern') || Salution.hasError('required')">Select title
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-md-3">
+          <mat-form-field>
+            <mat-label>First Name</mat-label>
+            <input matInput placeholder="First Name" #FirstName="ngModel" [(ngModel)]="genInfoData.FirstName"
+              name="FirstName" required maxlength="50" [pattern]="modelPattern.personName">
+            <mat-error *ngIf="FirstName.hasError('required')">First name is required</mat-error>
+            <!-- <mat-error *ngIf="FirstName.hasError('maxlength')">You have more than 50 characters</mat-error>
+                    <mat-error *ngIf="FirstName.hasError('minlength')">Enter Valid First Name</mat-error> -->
+            <mat-error *ngIf="FirstName.hasError('pattern')">Enter valid first name</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-md-3">
+          <mat-form-field>
+            <mat-label>Middle Name</mat-label>
+            <input matInput placeholder="Middle Name" #MiddleName="ngModel" [(ngModel)]="genInfoData.MiddleName"
+              name="MiddleName" [pattern]="modelPattern.personName">
+            <mat-error *ngIf="MiddleName.hasError('pattern')">Enter valid middle name</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-md-3">
+          <mat-form-field>
+            <mat-label>Last Name</mat-label>
+            <input matInput placeholder="Last Name" #LastName="ngModel" [(ngModel)]="genInfoData.LastName"
+              name="LastName" maxlength="50" [pattern]="modelPattern.personName">
+            <mat-error *ngIf="LastName.hasError( 'required')">Last name is required</mat-error>
+
+            <mat-error *ngIf="LastName.hasError('pattern')">Enter valid last name</mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-3">
+
+          <div class="custom-form-control">
+            <mat-form-field>
+              <mat-label>Gender</mat-label>
+              <mat-select placeholder="Title" #Gender="ngModel" [(ngModel)]="genInfoData.Gender" name="Gender">
+                <mat-option value="Male"> Male</mat-option>
+                <mat-option value="Female"> Female</mat-option>
+                <mat-option value="Other">Other</mat-option>
+              </mat-select>
+              <mat-error *ngIf="Salution.hasError('required')">Gender is
+                required
+              </mat-error>
+            </mat-form-field>
+            <!-- 
+            <mat-label id="genderlable" class="radio-label">Gender <ng-container *ngIf="mode!=3">*</ng-container> :
+            </mat-label>
+
+            <mat-radio-group area-label="genderlable" class="example-radio-group" #Gender="ngModel" placeholder="Gender"
+              [(ngModel)]="genInfoData.Gender" name="Gender" aria-labelledby="gender">
+              <mat-radio-button value="male">Male</mat-radio-button>
+              <mat-radio-button value="female">Female</mat-radio-button>
+
+            </mat-radio-group>
+            <mat-error class="mat-form-field-subscript-wrapper" *ngIf="Gender.hasError( 'required')">Gender is
+              required</mat-error> -->
+          </div>
+
+
+        </div>
+        <div class="col-md-3">
+
+          <app-date-picker [(value)]="genInfoData.DateOfBirth" placeholder="Date Of Birth" name="DateOfBirth"
+            required="true" [form]="geneform" [maxDate]="minDob">
+
+          </app-date-picker>
+        </div>
+        <div class="col-md-3">
+          <mat-form-field>
+            <mat-label>Civil  Status</mat-label>
+            <mat-select placeholder="Civil Status" #MaritialStatus="ngModel" [(ngModel)]="genInfoData.MaritialStatus"
+              name="MaritialStatus">
+              <mat-option value="single"> Single</mat-option>
+              <mat-option value="married"> Married</mat-option>
+              <mat-option value="divorced"> Divorced</mat-option>
+              <mat-option value="separated"> Separated</mat-option>
+              <mat-option value="widowed"> Widowed</mat-option>
+              <mat-option value="common-law"> Common-law</mat-option>
+            </mat-select>
+            <mat-error *ngIf="MaritialStatus.hasError('pattern') || MaritialStatus.hasError('required')">Maritial
+              status is required
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="row">
+      </div>
+      <div class="row">
+        <div class="col-md-4">
+          <mat-form-field>
+            <mat-label>Country of Citizenship</mat-label>
+            <mat-select matInput placeholder="Country of Citizenship" #Citizenship="ngModel"
+              [(ngModel)]="genInfoData.Citizenship" name="Citizenship" required
+              [pattern]="modelPattern.dropDownNumericValue">
+              <mat-option>
+                <ngx-mat-select-search [(ngModel)]="countryCitzFilter" [placeholderLabel]="'Search...'"
+                  [noEntriesFoundLabel]="'Not found'" name="countryCitzFilter"></ngx-mat-select-search>
+              </mat-option>
+              <mat-option>None</mat-option>
+              <mat-option
+                *ngFor="let country of citizenCountryList | stringFilterBy:countryCitzFilter:'CountryName';  trackByProperty: 'CountryId' "
+                [value]="country.CountryId">
+                {{country.CountryName}}</mat-option>
+            </mat-select>
+            <mat-error *ngIf="Citizenship.hasError( 'required') || Citizenship.hasError( 'pattern')">Citizenship is
+              required</mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="col-md-4">
+          <mat-form-field>
+            <mat-label>First Language</mat-label>
+            <mat-select matInput placeholder="First Language" #Language="ngModel" [(ngModel)]="genInfoData.Language"
+              name="Language">
+              <mat-option>
+                <ngx-mat-select-search [(ngModel)]="firstLanFilter" [placeholderLabel]="'Search...'"
+                  [noEntriesFoundLabel]="'Not found'" name="firstLanFilter"></ngx-mat-select-search>
+              </mat-option>
+              <mat-option>None</mat-option>
+              <mat-option *ngFor="let language of languageList | stringFilterBy:firstLanFilter:'LanguageName';"
+                [value]="language.LanguageName">
+                {{language.LanguageName}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+
+
+      </div>
+
+      <div class="row">
+        <div class="col-md-4">
+          <mat-form-field>
+            <mat-label>Passport Number</mat-label>
+            <input matInput placeholder="Passport Number" #PassportNo="ngModel" [(ngModel)]="genInfoData.PassportNo"
+              toUppercase name="PassportNo" maxlength="50" [pattern]="modelPattern.agentCode"
+              [appCheckPassportno]="parentType!=7 || genInfoData.StudentId===0" [ignoreValue]="prePassportNo"
+              (change)="makeExpiryEmpty(genInfoData.PassportNo)">
+            <mat-error *ngIf="PassportNo.hasError( 'required')">Passport number is required</mat-error>
+            <mat-error *ngIf="PassportNo.hasError( 'minlength') || PassportNo.hasError( 'pattern')">Enter only
+              alphanumeric characters</mat-error>
+            <mat-error *ngIf="PassportNo.hasError('isPassportExists')">Passport number already exists</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-md-4">
+
+          <app-date-picker [(value)]="genInfoData.PassportExpiryDate" placeholder="Expiry Date"
+          name="PassportExpiryDate" [form]="geneform">
+        </app-date-picker>
+          <!-- <app-date-picker [(value)]="genInfoData.PassportExpiryDate" placeholder="Expiry Date"
+            name="PassportExpiryDate" [form]="geneform" [minDate]="minExporyDat" [maxDate]="maxExpiryDate">
+          </app-date-picker> -->
+        </div>
+        <div class="col-md-4">
+          <mat-form-field>
+            <mat-label>Phone Number</mat-label>
+            <input matInput type="tel" placeholder="Phone Number" autocomplete="" #MobileNo="ngModel"
+              [(ngModel)]="genInfoData.MobileNo" name="MobileNo" [required]="user.RoleType !== 1 ? true : undefined"
+              [pattern]="modelPattern.phoneno">
+            <mat-error *ngIf="MobileNo.hasError( 'required')">Phone number is required</mat-error>
+            <mat-error *ngIf="MobileNo.hasError( 'pattern')">Enter valid phone number</mat-error>
+
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="row">
+
+        <div class="col-md-4">
+          <mat-form-field>
+            <mat-label>Contact Email</mat-label>
+            <input matInput placeholder="Contact Email" #Email="ngModel" [(ngModel)]="genInfoData.Email" name="Email"
+              required [pattern]="modelPattern.email"
+              [appCheckUsername]="!(+parentType===7 && (parentId>0 || genInfoData.StudentId>0)) || (+parentType===6 && parentId>0)"
+              [disabled]="(+parentType===7 && (parentId>0 || genInfoData.StudentId>0)) || (+parentType===6 && parentId>0 )">
+            <mat-error *ngIf="Email.hasError( 'required')">Email is required</mat-error>
+            <mat-error *ngIf="Email.hasError( 'pattern')">Enter valid email address</mat-error>
+            <mat-error *ngIf="Email.hasError( 'isUserExists')">Email id is already registred with us</mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="col-md-4" *ngIf="+parentType===6 || genInfoData.StudentId===0">
+          <mat-form-field>
+            <mat-label>Skype ID</mat-label>
+
+            <input matInput type="text" placeholder="Skype ID" autocomplete="off" #SkypeId="ngModel" [(ngModel)]="genInfoData.SkypeId"
+              name="SkypeId" [pattern]="modelPattern.skypeId">
+            <mat-error *ngIf="SkypeId.hasError( 'required')">Skype id is required</mat-error>
+            <mat-error *ngIf="SkypeId.hasError( 'pattern')">Enter valid skype id</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-md-4" *ngIf="+parentType===7 && user.RoleType === 1">
+          <mat-form-field>
+            <mat-label>Password</mat-label>
+
+            <input type="password" matInput placeholder="Password" name="Password" #App_Password="ngModel"
+              [(ngModel)]="genInfoData.App_Password"  minlength="3"
+              maxlength="100" autocomplete="off" readonly onfocus="this.removeAttribute('readonly');" />
+
+          </mat-form-field>
+        </div>
+      </div>
+
+
+
+      <div class="row">
+        <div class="col-12">
+          <h5 class="modaltitle">Residential Address</h5>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-8">
+          <mat-form-field>
+            <mat-label>Address</mat-label>
+            <input matInput placeholder="Address" #Addres="ngModel" [(ngModel)]="genInfoData.Addres" name="Addres" (input)="matchAddress('address')"
+              [pattern]="modelPattern.alphaNumericWithSpecialCharacters">
+            <mat-error *ngIf="Addres.hasError('pattern')">Enter valid address</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-md-4">
+          <mat-form-field>
+            <mat-label>Country</mat-label>
+            <mat-select placeholder="Country" #Country="ngModel" [(ngModel)]="genInfoData.Country"
+              (selectionChange)="fillProvince(genInfoData.Country,true)" name="Country" required>
+              <mat-option>
+                <ngx-mat-select-search [(ngModel)]="countyFilter" [placeholderLabel]="'Search...'"
+                  [noEntriesFoundLabel]="'Not found'" name="countyFilter"></ngx-mat-select-search>
+              </mat-option>
+              <mat-option>None</mat-option>
+              <mat-option
+                *ngFor="let country of countryList| stringFilterBy:countyFilter:'CountryName';  trackByProperty: 'CountryId' "
+                [value]="country.CountryId">
+                {{country.CountryName}}</mat-option>
+            </mat-select>
+            <mat-error *ngIf="Country.hasError('pattern') || Country.hasError('required')">Country is required
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-4">
+          <mat-form-field>
+            <mat-label>Province</mat-label>
+            <mat-select placeholder="Province" #Province="ngModel" [(ngModel)]="genInfoData.Province" name="Province" (selectionChange)="matchAddress('province')">
+              <mat-option>
+                <ngx-mat-select-search [(ngModel)]="provinceFilter" [placeholderLabel]="'Search...'"
+                  [noEntriesFoundLabel]="'Not found'" name="provinceFilter"></ngx-mat-select-search>
+              </mat-option>
+              <mat-option>None</mat-option>
+              <mat-option
+                *ngFor="let province of provinceList | stringFilterBy:provinceFilter:'ProvinceName';  trackByProperty: 'ProvinceId' "
+                [value]="province.ProvinceId">
+                {{province.ProvinceName}}</mat-option>
+            </mat-select>
+
+            <mat-error *ngIf="Province.hasError( 'pattern')">Enter valid provice</mat-error>
+
+          </mat-form-field>
+        </div>
+        <div class="col-md-4">
+          <mat-form-field>
+            <mat-label>City/Town</mat-label>
+            <input matInput placeholder="City/Town" #City="ngModel" [(ngModel)]="genInfoData.City" name="City" (input)="matchAddress('city')"
+              [pattern]="modelPattern.alphaNumericWithSpaceNew">
+            <mat-error *ngIf="City.hasError( 'pattern')">Enter valid city/town</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-md-4">
+          <mat-form-field>
+            <mat-label>Postal/Zip Code</mat-label>
+            <input matInput placeholder="Postal/Zip Code" #Pincode="ngModel" [(ngModel)]="genInfoData.Pincode" (input)="matchAddress('pin')"
+              name="Pincode" [pattern]="modelPattern.pincode" [maxlength]="modelPattern.pincodeMaxLength">
+            <mat-error *ngIf="Pincode.hasError('required')">Postal/Zip code is required</mat-error>
+            <mat-error *ngIf="Pincode.hasError('pattern')">Enter valid postal/zip code</mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+
+      <div class="row">
+        <div class="col-12">
+          <mat-checkbox [(ngModel)]="genInfoData.MailingAddressSame" name="MailingAddressSame"
+            #MailingAddressSame="ngModel" matPrefix (change)="checkValue($event)" [checked]="MailingAddressSame">Same as
+            above
+          </mat-checkbox>
+        </div>
+
+        <div class="col-12">
+          <h5 class="modaltitle">Mailing Address</h5>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-8">
+          <mat-form-field>
+            <mat-label>Address</mat-label>
+            <input matInput placeholder="Address" #MailingAddres="ngModel" [(ngModel)]="genInfoData.MailingAddres" [disabled]="genInfoData.MailingAddressSame"
+              name="MailingAddres" [pattern]="modelPattern.alphaNumericWithSpecialCharacters">
+            <mat-error *ngIf="MailingAddres.hasError('pattern')">Enter valid mailing address</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-md-4">
+          <mat-form-field>
+            <mat-label>Country</mat-label>
+            <mat-select placeholder="Country" #MailingCountry="ngModel" [(ngModel)]="genInfoData.MailingCountry" [disabled]="genInfoData.MailingAddressSame"
+              name="MailingCountry" (selectionChange)="fillProvinceForMailing(genInfoData.MailingCountry,true)">
+              <mat-option>
+                <ngx-mat-select-search [(ngModel)]="countryFilter" [placeholderLabel]="'Search...'"
+                  [noEntriesFoundLabel]="'Not found'" name="countryFilter"></ngx-mat-select-search>
+              </mat-option>
+              <mat-option>None</mat-option>
+              <mat-option
+                *ngFor="let country of countryList | stringFilterBy:countryFilter:'CountryName';  trackByProperty: 'CountryId' "
+                [value]="country.CountryId">
+                {{country.CountryName}}</mat-option>
+            </mat-select>
+            <mat-error *ngIf="MailingCountry.hasError('pattern') || MailingCountry.hasError('required')">Country is
+              required
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-4">
+          <mat-form-field>
+            <mat-label>Province</mat-label>
+            <mat-select placeholder="Province" #MailingProvince="ngModel" [(ngModel)]="genInfoData.MailingProvince" [disabled]="genInfoData.MailingAddressSame"
+              name="MailingProvince">
+              <mat-option>
+                <ngx-mat-select-search [(ngModel)]="mailingProvinceFilter" [placeholderLabel]="'Search...'"
+                  [noEntriesFoundLabel]="'Not found'" name="provinceFilter"></ngx-mat-select-search>
+              </mat-option>
+              <mat-option>None</mat-option>
+              <mat-option
+                *ngFor="let province of provinceListForMailing | stringFilterBy:mailingProvinceFilter:'ProvinceName';  trackByProperty: 'ProvinceId' "
+                [value]="province.ProvinceId">
+                {{province.ProvinceName}}</mat-option>
+            </mat-select>
+
+            <mat-error *ngIf="MailingProvince.hasError('pattern')">Enter valid mailing province</mat-error>
+
+
+          </mat-form-field>
+        </div>
+        <div class="col-md-4">
+          <mat-form-field>
+            <mat-label>City/Town</mat-label>
+            <input matInput placeholder="City/Town" #MailingCity="ngModel" [(ngModel)]="genInfoData.MailingCity" [disabled]="genInfoData.MailingAddressSame"
+              name="MailingCity" [pattern]="modelPattern.alphaNumericWithSpace">
+            <mat-error *ngIf="MailingCity.hasError('pattern')">Enter valid city/town</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-md-4">
+          <mat-form-field>
+            <mat-label>Postal/Zip Code</mat-label>
+            <input matInput placeholder="Postal/Zip Code" #MailingPincode="ngModel"
+              [(ngModel)]="genInfoData.MailingPincode" name="MailingPincode" [pattern]="modelPattern.pincode" [disabled]="genInfoData.MailingAddressSame"
+              [maxlength]="modelPattern.pincodeMaxLength">
+            <mat-error *ngIf="MailingPincode.hasError('required')">Postal/Zip code is required</mat-error>
+            <mat-error *ngIf="MailingPincode.hasError('pattern')">Enter valid postal/zip code</mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+
+
+      <div class="row">
+        <div class="col-12">
+          <mat-checkbox [(ngModel)]="genInfoData.EmergencyAddressSame" name="EmergencyAddressSame"
+            #EmergencyAddressSame="ngModel" matPrefix (change)="checkEmergencyValue($event)"
+            [checked]="EmergencyAddressSame">Same as
+            above
+          </mat-checkbox>
+        </div>
+
+        <div class="col-12">
+          <h5 class="modaltitle">Emergency Contact</h5>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-12">
+          <mat-form-field>
+            <mat-label>Name</mat-label>
+            <input matInput placeholder="Name" name="EmrgencyName" #EmrgencyName="ngModel" 
+              [(ngModel)]="genInfoData.EmrgencyName" maxlength="100" [pattern]="modelPattern.personFullName" />
+            <mat-error *ngIf="EmrgencyName.hasError('pattern')">Enter valid name</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-md-12">
+          <mat-form-field>
+            <mat-label>Email</mat-label>
+            <input matInput placeholder="Email" name="EmergencyEmail" #EmergencyEmail="ngModel" [disabled]="genInfoData.EmergencyAddressSame"
+              [(ngModel)]="genInfoData.EmergencyEmail" [pattern]="modelPattern.email" maxlength="100" />
+            <mat-error *ngIf="EmergencyEmail.hasError('pattern')">Enter valid Email</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-md-6">
+          <mat-form-field>
+            <mat-label>Relation</mat-label>
+            <input matInput placeholder="Relation" name="EmergencyRelation" #EmergencyRelation="ngModel"
+              [(ngModel)]="genInfoData.EmergencyRelation" maxlength="50"
+              [pattern]="modelPattern.alphaNumericWithSpace" />
+            <mat-error *ngIf="EmergencyRelation.hasError('pattern')">Enter valid relation</mat-error>
+
+          </mat-form-field>
+        </div>
+        <div class="col-md-6">
+          <mat-form-field>
+            <mat-label>Home Phone</mat-label>
+            <input matInput placeholder="Home Phone" name="EmergencyHomePhone" #EmergencyHomePhone="ngModel"
+              [(ngModel)]="genInfoData.EmergencyHomePhone" [pattern]="modelPattern.phoneno" maxlength="50" />
+            <mat-error *ngIf="EmergencyHomePhone.hasError('pattern')">Enter valid home phone</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-md-6">
+          <mat-form-field>
+            <mat-label>Cell Phone</mat-label>
+            <input matInput placeholder="Cell Phone" name="EmergencyCellPhone" #EmergencyCellPhone="ngModel"
+              [(ngModel)]="genInfoData.EmergencyCellPhone" [pattern]="modelPattern.mobileno" maxlength="50" />
+            <mat-error *ngIf="EmergencyCellPhone.hasError('pattern')">Enter valid cell phone</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-md-6">
+          <mat-form-field>
+            <mat-label>Business Phone</mat-label> <input matInput placeholder="Business Phone"
+              name="EmergencyBusinessPhone" #EmergencyBusinessPhone="ngModel"
+              [(ngModel)]="genInfoData.EmergencyBusinessPhone" [pattern]="modelPattern.phoneno" maxlength="50" />
+            <mat-error *ngIf="EmergencyBusinessPhone.hasError('pattern')">Enter valid business phone</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-md-12">
+          <mat-form-field>
+            <mat-label>Address</mat-label> <input matInput placeholder="Address" name="EmergencyAddress" [disabled]="genInfoData.EmergencyAddressSame"
+              #EmergencyAddress="ngModel" [(ngModel)]="genInfoData.EmergencyAddress"
+              [pattern]="modelPattern.alphaNumericWithSpecialCharacters" />
+            <mat-error *ngIf="EmergencyAddress.hasError('pattern')">Enter valid address</mat-error>
+
+          </mat-form-field>
+        </div>
+        <div class="col-md-3">
+          <mat-form-field>
+            <mat-label>City</mat-label>
+            <input matInput placeholder="City" name="EmergencyCity" #EmergencyCity="ngModel" [disabled]="genInfoData.EmergencyAddressSame"
+              [(ngModel)]="genInfoData.EmergencyCity" maxlength="50" [pattern]="modelPattern.alphaNumericWithSpace" />
+            <mat-error *ngIf="EmergencyCity.hasError('pattern')">Enter valid city</mat-error>
+
+          </mat-form-field>
+        </div>
+        <div class="col-md-3">
+          <mat-form-field>
+            <mat-label>Country</mat-label>
+            <mat-select matInput placeholder="Country" #EmergencyCountry="ngModel" [disabled]="genInfoData.EmergencyAddressSame"
+              [(ngModel)]="genInfoData.EmergencyCountry" name="EmergencyCountry"
+              (selectionChange)="fillProvinceForEmergency(genInfoData.EmergencyCountry,true)">
+              <mat-option>
+                <ngx-mat-select-search [(ngModel)]="contryFilter" [placeholderLabel]="'Search...'"
+                  [noEntriesFoundLabel]="'Not found'" name="contryFilter"></ngx-mat-select-search>
+              </mat-option>
+              <mat-option value="">Select</mat-option>
+              <mat-option
+                *ngFor="let item of countryList | stringFilterBy:contryFilter:'CountryName';  trackByProperty: 'CountryId'"
+                [value]="item.CountryId">{{item.CountryName}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-md-3">
+          <mat-form-field>
+            <mat-label>Province</mat-label>
+            <mat-select placeholder="Province" #EmergencyProvince="ngModel" [(ngModel)]="genInfoData.EmergencyProvince" [disabled]="genInfoData.EmergencyAddressSame"
+              name="EmergencyProvince"> 
+              <mat-option>
+                <ngx-mat-select-search [(ngModel)]="emergencyProvinceFilter" [placeholderLabel]="'Search...'"
+                  [noEntriesFoundLabel]="'Not found'" name="provinceFilter"></ngx-mat-select-search>
+              </mat-option>
+              <mat-option>None</mat-option>
+              <mat-option
+                *ngFor="let province of provinceListForEmergency | stringFilterBy:emergencyProvinceFilter:'ProvinceName';  trackByProperty: 'ProvinceId' "
+                [value]="province.ProvinceId">
+                {{province.ProvinceName}}</mat-option>
+            </mat-select>
+            <mat-error *ngIf="EmergencyProvince.hasError( 'pattern')">Enter valid province</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-md-3">
+          <mat-form-field>
+            <mat-label>Pincode</mat-label> <input matInput placeholder="Pincode" name="EmergencyPincode" [disabled]="genInfoData.EmergencyAddressSame"
+              #EmergencyPincode="ngModel" [(ngModel)]="genInfoData.EmergencyPincode" [pattern]="modelPattern.pincode"
+              [maxlength]="modelPattern.pincodeMaxLength" />
+            <mat-error *ngIf="EmergencyPincode.hasError('pattern')">Enter valid pincode</mat-error>
+
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <div mat-dialog-actions align="center">
+    <button mat-dialog-close class="btn btn-sm btn-primary modalclose">Cancel</button>
+    <button type="submit" class="btn btn-sm btn-primary btn-cust" [disabled]="isFormValueUpdated()">Update</button>
+  </div>
+</form>

@@ -1,0 +1,25 @@
+<div class="main-content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12 ml-auto mr-auto">
+        <div class="card card-calendar">
+          <div class="card-body ">
+            <full-calendar  deepChangeDetection="true"   defaultView="dayGridMonth" [plugins]="calendarPlugins"  
+                [events]="eventList"
+                [customButtons]="options.customButtons"
+                [header]="{ left:   'title',
+              center: 'dayGridMonth,timeGridWeek,timeGridDay',
+              right:  'microsoft,google,today prev,next'}"
+              (eventClick)="eventClick($event)"
+              (eventRender)="eventRender($event)"
+              (dateClick)="onDayClick($event)"
+
+              nextDayThreshold="09:00:00"
+              allDay="false"
+                ></full-calendar>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

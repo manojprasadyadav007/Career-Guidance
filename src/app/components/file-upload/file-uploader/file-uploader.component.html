@@ -1,0 +1,33 @@
+<div class="file-input-box">
+    <label>{{label}}</label>
+    <div class="d-flex flex-row justify-content-between ">
+      <div class="">
+        <a mat-icon-button target="_blank" href="{{filepath+dir+'/'+initialFilePath}}" *ngIf="initialFilePath">
+          <mat-icon data-toggle="tooltip"
+          title="View">visibility</mat-icon>
+        </a> 
+        <span class="ellipsis" *ngIf="file" data-toggle="tooltip" [title]="file.name">
+          <span>{{file.name}}</span>
+        </span>
+        <button mat-icon-button type="button" class="text-info" (click)="changeFile()" data-toggle="tooltip" title="Upload">
+            <mat-icon>folder</mat-icon>
+        </button>
+        <button mat-icon-button type="button" class="text-danger" (click)="onFileChange(undefined)" *ngIf="initialFilePath" data-toggle="tooltip" title="Delete">
+            <mat-icon>close</mat-icon>
+        </button>
+        <input id="{{controlName}}" type="file" (change)="onFileChange($event)" [name]="controlName" [accept]="fileType"
+          style="display: none;" [required]="required && !initialFilePath" 
+            ngModel
+           #FileUpload1="ngModel" >
+        <mat-error *ngIf="sizeerror">{{sizeerror}}</mat-error>
+        <mat-error *ngIf="formatError">{{formatError}}</mat-error>
+        <mat-error *ngIf="(FileUpload1.hasError('required') && (initialFilePath === '' || initialFilePath === null)) || noFile">File upload required</mat-error>
+      </div>
+      <div class="boder">
+        <!-- <button mat-icon-button type="button" class="text-info" (click)="changeFile()" *ngIf="!file">
+          <mat-icon>folder</mat-icon>
+        </button> -->
+        
+      </div>
+    </div>
+  </div>

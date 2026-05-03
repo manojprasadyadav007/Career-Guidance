@@ -1,0 +1,91 @@
+<div class="row">
+    <div class="col-md-12">
+        <dx-data-grid [dataSource]="displayDocList" [showBorders]="true" [allowColumnResizing]="true" [showColumnLines]="true"
+            [showRowLines]="true" [rowAlternationEnabled]="true" 
+            [columnAutoWidth]="true"
+            (onToolbarPreparing)="onToolbarPreparing($event)" [allowColumnReordering]="true"
+            >
+
+            <dxo-filter-panel [visible]="true"></dxo-filter-panel>
+
+            <dxo-paging [enabled]="true" [pageSize]="10"></dxo-paging>
+            <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 25,50,100]" [showInfo]="true">
+            </dxo-pager>
+
+            <dxo-filter-row [visible]="showFilterRow"></dxo-filter-row>
+
+            <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
+
+            <dxo-export [enabled]="excel_permisson > 0" fileName="attachments"></dxo-export>
+
+            <dxo-column-chooser [enabled]="true" mode="select" [allowSearch]="true">
+            </dxo-column-chooser>
+
+            <dxi-column *ngFor="let item of columns" [dataField]="item.dataField" [minWidth]="100"
+                [caption]="item.title | sentenceCase" [dataType]="item.type" [format]="item.format">
+            </dxi-column>
+
+            <dxi-column caption="Action" [allowExporting]="false" [minWidth]="50" cellTemplate="actionCellTemplate">
+
+            </dxi-column>
+
+
+            <div *dxTemplate="let d of 'actionCellTemplate'">
+
+                <a mat-icon-button target="_blank" class="mr-3 text-info" (click)="$event.stopPropagation();"
+                    href="{{filepath+uploadDir+'/'+d.data.DocPath}}" color="primary" *ngIf="d.data.DocPath"
+                    data-toggle="tooltip" title="View">
+                    <mat-icon>visibility</mat-icon>
+                </a>
+
+                <button type="button" class="mr-3  text-info" mat-icon-button color="primary"
+                    *ngIf="d.data.DocumentStatus!=2 && permission>1"
+                    (click)="$event.stopPropagation(); updateDocument(d.data.DocumentTypeId,d.data.DocumentId)" data-toggle="tooltip" title="Upload">
+                    <mat-icon>folder</mat-icon>
+                </button>
+
+                <ng-container
+                    *ngIf="showVerification && permission>1 && d.data.DocumentId>0 && user.RoleId!=2 && user.RoleId!=3">
+                    <button type="button" mat-icon-button class="text-success" (click)="$event.stopPropagation(); verifyDocument(d.data,2)"
+                        *ngIf="d.data.DocumentStatus!=2" data-toggle="tooltip" title="Approve">
+                        <mat-icon>check_circle</mat-icon>
+                    </button>
+
+                    <button type="button" mat-icon-button class="text-danger" (click)="$event.stopPropagation(); verifyDocument(d.data,3)"
+                        *ngIf="d.data.DocumentStatus!=3" data-toggle="tooltip" title="Reject">
+                        <mat-icon>cancel</mat-icon>
+                    </button>
+                </ng-container>
+
+                <button type="button" class="mr-3" mat-icon-button color="primary" (click)="$event.stopPropagation(); delete(d.data.DocumentTypeId)"
+                    *ngIf="permission>1 && d.data.DocPath && d.data.DocumentStatus!=2" data-toggle="tooltip" title="Remove">
+                    <mat-icon>delete</mat-icon>
+                </button>
+            </div>
+
+            <div *dxTemplate="let d of 'toolbarButton'">
+
+                <button class="text-danger" (click)="updateDocument()" *ngIf="permission>1" mat-icon-button data-toggle="tooltip" title="New">
+                    <mat-icon>add</mat-icon>
+                </button>
+
+                <button class="text-danger" (click)="showFilterRow=!showFilterRow" mat-icon-button data-toggle="tooltip" title="Apply Filter">
+                    <mat-icon>filter_list</mat-icon>
+                </button>
+
+                <button class="text-danger" type="button" (click)="downloadDocument()" *ngIf="dataList?.length>1" mat-icon-button>
+                    <mat-icon>cloud_download</mat-icon>
+                </button>
+
+            </div>
+
+        </dx-data-grid>
+    </div>
+</div>
+
+<!-- Script For Tooltip -->
+<script>
+    $(document).ready(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+</script>

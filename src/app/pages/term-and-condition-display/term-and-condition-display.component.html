@@ -1,0 +1,32 @@
+<div class="main-content new-design mx-3">
+    <div class="card">
+        <div class="card-header">
+            <div class="card-title font-weight-bold" style="font-size: 20px;">
+            Terms and conditions
+            </div>
+        </div>
+        <div class="card-body p-0 mx-3 mb-3" style="border: 1px solid #bfbfbf;">
+            <div class="content mx-3 mt-1 mb-3" [innerHTML]="content">
+                    this is service and terms
+            </div>
+
+            <form #form="ngForm" style="width: 100%;">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-9">
+                            <mat-checkbox [(ngModel)]="iAgree" #IAgree="ngModel" name="IAgree" required>I agree to MSM Services
+                                Terms & Conditions </mat-checkbox>
+                        </div>
+                        <div class="col-md-3 text-right">
+                            <button mat-raised-button type="button" [disabled]="!form.valid" (click)="onSubmit()"
+                                class="btn btn-danger">Submit</button>
+                        </div>
+                    </div>
+                </div>
+            
+            </form>
+
+        </div>
+        
+    </div>
+</div>

@@ -1,0 +1,113 @@
+<div class="body">
+    <section class="section app-hero1 policy-hero">
+
+        <div class="hero-content">
+            <div class="container-fluid">
+                <div class="row">
+
+                    <div class="col-md-8 col-lg-8 col-sm-12">
+                        <div class="vector-img"><img src="./assets/img/vector1.png" alt="MSM" class="img-fluid"></div>
+                    </div>
+
+                    <div class="col-md-4 col-lg-4 col-sm-12">
+
+
+                        <div class="login-form">
+                            <img src="./assets/img/logo-login.png" alt="MSM" class="img-fluid">
+                            <h3>Confirm Your Detail</h3>
+
+                            <form #form="ngForm">
+                                <div class="card bg-transparent ">
+                                    <div class="card-body">
+                                        <div class="row">
+
+
+                                            <div class="col-md-12">
+                                                <mat-form-field>
+
+                                                    <mat-label> Email</mat-label>
+
+                                                    <input matInput placeholder="Email" #Email="ngModel"
+                                                        [(ngModel)]="formdata.Email" name="Email" required
+                                                        [pattern]="modelPattern.email"
+                                                        [disabled]="userData.Email?.length>0"
+                                                         >
+                                                    <mat-error *ngIf="Email.hasError('required')">Email is required
+                                                    </mat-error>
+                                                    <mat-error *ngIf="Email.hasError('pattern')">Enter valid email
+                                                        address</mat-error>
+                                                    <mat-error *ngIf="Email.hasError('isUserExists')">Email ID is
+                                                        already registred with us</mat-error>
+                                                </mat-form-field>
+                                            </div>
+
+                                            <div class="col-md-12">
+                                                <mat-form-field>
+                                                    <mat-label>First Name</mat-label>
+                                                    <input matInput placeholder="First Name" #FirstName="ngModel"
+                                                        [(ngModel)]="formdata.FirstName" name="FirstName" required
+                                                        maxlength="50" minlength="3" pattern="^[a-zA-Z ]{3,50}$">
+                                                    <mat-error *ngIf="FirstName.hasError('required')">First Name is
+                                                        required</mat-error>
+                                                    <!-- <mat-error *ngIf="FirstName.hasError('maxlength')">You have more than 50 characters</mat-error>
+                                                  <mat-error *ngIf="FirstName.hasError('minlength')">Enter Valid First Name</mat-error> -->
+                                                    <mat-error *ngIf="FirstName.hasError('pattern')">Enter Valid First
+                                                        Name</mat-error>
+                                                </mat-form-field>
+                                            </div>
+
+                                            <div class="col-md-12">
+                                                <mat-form-field>
+                                                    <mat-label>Last Name</mat-label>
+                                                    <input matInput placeholder="Last Name" #LastName="ngModel"
+                                                        [(ngModel)]="formdata.LastName" name="LastName" 
+                                                        maxlength="50" pattern="^[a-zA-Z ]{1,50}$">
+                                                    <mat-error *ngIf="LastName.hasError('required')">Last Name is
+                                                        required</mat-error>
+                                                    <!-- <mat-error *ngIf="FirstName.hasError('maxlength')">You have more than 50 characters</mat-error>
+                                                  <mat-error *ngIf="FirstName.hasError('minlength')">Enter Valid First Name</mat-error> -->
+                                                    <mat-error *ngIf="LastName.hasError('pattern')">Enter Valid Last
+                                                        Name</mat-error>
+                                                </mat-form-field>
+                                            </div>
+
+                                            <div class="col-md-12">
+                                                <mat-form-field>
+                                                    <mat-label>Phone Number</mat-label>
+                                                    <input matInput type="tel" placeholder="Phone Number"
+                                                        #MobileNo="ngModel" [(ngModel)]="formdata.MobileNo"
+                                                        name="MobileNo" [pattern]="modelPattern.mobileno">
+                                                    <mat-error *ngIf="MobileNo.hasError('required')">Phone number is
+                                                        required</mat-error>
+                                                    <mat-error *ngIf="MobileNo.hasError('pattern')">Enter valid phone
+                                                        number</mat-error>
+                                                </mat-form-field>
+                                            </div>
+
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="d-flex flex-column flex-sm-row justify-content-sm-between">
+                                                    <button type="button" (click)="signup()"
+                                                        class="btn btn-block btn-yellow"
+                                                        [disabled]="!form.valid">Confirm</button>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </form>
+
+                        </div>
+
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

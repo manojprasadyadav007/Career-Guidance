@@ -1,0 +1,21 @@
+<form class="new-design">
+
+    <div mat-dialog-title>
+        Refund Documents
+        <button class="close text-white" type="button" aria-label="Close" (click)="cancel()"><span
+                aria-hidden="true">×</span></button>
+    </div>
+
+    <div mat-dialog-content>
+
+        <app-display-documents [parentId]="parentId" [parentType]="parentType" [permission]="permission"
+            [showRemark]="showRemark"   (onDocumentUpload)="uploadedDocument($event)">
+        </app-display-documents>
+    </div>
+
+    <div mat-dialog-actions align="center">
+        <button type="button" (click)="cancel()" class="btn btn-sm btn-primary modalclose">Cancel</button>
+        <button type="button" (click)="applyforRefund()" [disabled]="enableRefundDisabled"  class="btn btn-sm btn-primary btn-cust"
+            [disabled]="">Apply for Refund</button>
+    </div>
+</form>

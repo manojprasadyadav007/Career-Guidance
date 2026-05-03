@@ -1,0 +1,65 @@
+<div class="container-fluid new-design">
+
+<!-- Content Row -->
+<div class="row">
+
+<div class="card shadow" >
+    <div class="card-body">
+        <!-- <div class="row">
+            <div class="col-md-4">
+                <mat-form-field>
+                    <mat-label>Intake</mat-label>
+                    <mat-select placeholder="Intake" [(ngModel)]="intakeitem"
+                        (selectionChange)="changeIntake()">
+                        <mat-option>
+                            <ngx-mat-select-search [(ngModel)]="appFilter" [placeholderLabel]="'Search...'"
+                                [noEntriesFoundLabel]="'Not found'" name="appFilter"></ngx-mat-select-search>
+                        </mat-option>
+                        <mat-option [value]="item.IntakeName"
+                            *ngFor="let item of inTakeList | stringFilterBy:appFilter:'IntakeName'">{{item.IntakeName}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+        </div> -->
+        <div class="row ">
+            <div class="col-md-12">
+                <!-- <h4 class="card-title color-333">Marketing Activity</h4> -->
+                <div class="cardtitle">Marketing Activity</div>
+                <ng-container *ngIf="monthWiseChartData?.series?.length > 0">
+                <dx-chart id="chart" style="height: 175px" [dataSource]="monthWiseChartData?.data" palette="Harmony Light">
+                    <dxo-size></dxo-size>         
+                    <dxi-series [valueField]="item" [name]="item"
+                    *ngFor="let item of monthWiseChartData?.series"  
+                    ></dxi-series>
+                              
+                    <!-- <dxo-tooltip [enabled]="true" [customizeTooltip]="customizeTooltip"></dxo-tooltip> -->
+                    <dxo-tooltip [enabled]="true" color="#fff" [font]="{'color': 'black'}" ></dxo-tooltip>
+                    <!-- <div *dxTemplate="let info of 'content'" >
+
+                        <span class="chart-tooltip"> {{info.point.value}}</span>
+                
+                    </div> -->
+                    <dxo-common-series-settings argumentField="ActivityDate" type="bar" [ignoreEmptyPoints]="false">
+                        <dxi-value-axis [allowDecimals]="false" > </dxi-value-axis>
+                    </dxo-common-series-settings>
+                    <dxo-legend verticalAlignment="center" horizontalAlignment="right">
+                    </dxo-legend>
+                    <dxi-value-axis [allowDecimals]="false" > </dxi-value-axis>
+                </dx-chart>
+                </ng-container>
+
+                <ng-container *ngIf="monthWiseChartData?.series?.length <= 0">
+                    <div style="position: absolute;top: 212%;left: 50%;-moz-transform: translateX(-50%) translateY(-50%);-webkit-transform: translateX(-50%) translateY(-50%);
+                    transform: translateX(-50%) translateY(-50%);"> 
+                    <p>No data</p>
+                    </div>
+                </ng-container>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+</div>
+</div>

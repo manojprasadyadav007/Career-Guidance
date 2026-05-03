@@ -1,0 +1,66 @@
+<div class="container-fluid">
+
+  <!-- <div class="row" app-tiles>
+
+  </div> -->
+
+  <div class="row">
+    <div class="col-md-12" app-new-tiles>
+        
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12" >
+      <app-student-application-growth></app-student-application-growth>
+        
+    </div>
+  </div>
+
+
+  <div class="row" *ngIf="currentUser.RoleType ==2">
+    <div class="col-md-12" app-application-intake-chart>
+        
+    </div>
+  </div>
+
+  <div class="row px-3">
+    <div class="col-md-12">
+        <app-market-activity-chart></app-market-activity-chart>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <app-dashboard-task-display></app-dashboard-task-display>
+    </div>
+  </div>
+
+  <div class="row px-3">
+    <div class="col-md-12 ps-child" app-news-ticker>
+
+    </div>
+  </div>
+
+  <!-- <div class="row m-30">
+    <div class="col-12">
+      <app-my-to-do></app-my-to-do>
+    </div>
+  </div> -->
+
+  <div class="row px-3">
+    <div class="container-fluid new-design">
+      <div class="row">
+        <div class="col-md-6 col-sm-12" app-program-wise-application-chart>
+        </div>
+
+        <div class="col-md-6 col-sm-12" app-month-wise-applicatin-chart>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+</div>
+

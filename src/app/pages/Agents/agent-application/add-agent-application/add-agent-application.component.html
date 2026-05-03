@@ -1,0 +1,107 @@
+<div class="main-content">
+  <form #form="ngForm">
+    <div class="card" style="margin-top: 10px;">
+      <div class="card-body">
+        <div class="container-fluid">
+
+          <div class="row">
+            <div *ngIf="currentUser.RoleType != 2" class="col-md-6">
+              <mat-form-field>
+                <mat-label>Institution</mat-label>
+                <mat-select matInput placeholder="Institution" #InstitutionId="ngModel"
+                  [(ngModel)]="formdata.InstitutionId" name="InstitutionId" (selectionChange)="onInstChange()" required
+                  pattern="^[1-9]\d*$" [disabled]="formdata?.ApplicationId>0 || institutionId>0">
+                  <mat-option>
+                    <ngx-mat-select-search [(ngModel)]="instFilter" [placeholderLabel]="'Search...'"
+                      [noEntriesFoundLabel]="'Not found'" name="instFilter"></ngx-mat-select-search>
+                  </mat-option>
+                  <mat-option *ngFor="let institute of institutionList | stringFilterBy:instFilter:'InstName';  trackByProperty: 'InstitutionId' " [value]="institute.InstitutionId">
+                    {{institute.InstName}}</mat-option>
+                </mat-select>
+                <mat-error *ngIf="InstitutionId.hasError('pattern') || InstitutionId.hasError('required')">Institution
+                  required</mat-error>
+              </mat-form-field>
+            </div>
+
+
+            <ng-container *ngIf="formdata && formdata.InstitutionId>0">
+
+              <!-- <div class="col-md-6">
+                <mat-form-field>
+                  <mat-label>Region Of Marketing</mat-label>
+                  <mat-select matInput placeholder="Region Of Marketing" #RegionOfMarketing="ngModel"
+                    [(ngModel)]="formdata.RegionOfMarketing" name="RegionOfMarketing" required pattern="^[1-9]\d*$">
+                    <mat-option>None</mat-option>
+                    <mat-option *ngFor="let institute of countryList " [value]="institute.CountryId">
+                      {{institute.CountryName}}</mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="RegionOfMarketing.hasError('pattern') || RegionOfMarketing.hasError('required')">
+                    Region Of Marketing required</mat-error>
+                </mat-form-field>
+              </div> -->
+
+              <div class="col-md-12" id="contentToConvert">
+                <div class="row">
+                  <div app-msm-form-control *ngFor="let item of formdata.FormValue" [control]="item"
+                    class="{{item.Data.controlClass}}" [form]="form" [autoFillData]="currentAgent">
+
+                  </div>
+                </div>
+                <!-- <app-msm-form-control *ngFor="let item of formdata.FormValue" [control]="item"
+                class="{{item.Data.controlClass}}" [form]="form" >
+                </app-msm-form-control> -->
+              </div>
+              <div class="col-md-3" *ngIf="formdata.FormValue.length >0">
+                <app-file-upload [(file)]="Signature" label="Signature" (fileChange)="onFileChange($event)"  controlName="Signature"
+                  [initialFilePath]="formdata.SignaturePath" dir="agent/application"  uploadIconDisable="{{!(permission>1 && (formdata?.ApplicationStatus==-1 ||  formdata?.ApplicationStatus==2))}}" fileType=".jpg,.png"></app-file-upload>
+              </div>
+
+
+            </ng-container>
+          </div>
+
+        </div>
+      </div>
+      <div class="col-12" *ngIf="currentUser.RoleType===1 && formdata.ApplicationId > 0">
+          <h4><strong>Reference Check Documents:</strong></h4>
+          <app-display-files parentName="Evaluation Form" title="Reference Check Documents" [uploadDir]="uploadDir" [showRemark]="false"
+                    [parentType]="14" [permission]="permission" [parentId]="formdata.ApplicationId">
+          </app-display-files>
+      </div>
+
+
+      <div class="card-footer">
+        <div class="text-right w-100" *ngIf="formdata.FormValue && formdata.FormValue.length>0">
+          <!-- <a class="btn btn-sm btn-danger" href="#{{cancelLink}}">Back</a> -->
+         
+          <button type="submit" (click)="apply(form)" class="btn btn-sm  btn-danger"
+            *ngIf="permission>1 && (formdata?.ApplicationStatus==-1 ||  formdata?.ApplicationStatus==2)" [disabled]="flagdisabled">
+            {{ formdata?.ApplicationId>0 ? 'Update':'Save' }}
+          </button>
+
+          <button type="submit" (click)="apply(form,true)" class="btn btn-sm  btn-danger"
+            *ngIf="permission>1 && (formdata?.ApplicationStatus==-1 ||  formdata?.ApplicationStatus==2)" [disabled]="flagdisabled">
+            {{ formdata?.ApplicationId>0 ? 'Update':'Save' }} &amp; Submit
+          </button>
+
+          <!-- <button (click)="updateStatus(0)" class="btn btn-sm  btn-danger"
+          *ngIf="currentUser.RoleId===2 && formdata?.ApplicationId>0 && (formdata?.ApplicationStatus==-1 || formdata?.ApplicationStatus==2) ">Submit For
+          Review</button> -->
+
+          <button (click)="updateStatus(1)" class="btn btn-sm  btn-info"
+            *ngIf="permission>2 && (currentUser.RoleId===1 || currentUser.RoleId>99) && currentUser.RoleType!=2  && ((formdata?.ApplicationStatus>=0 && formdata.ApplicationStatus<1) || formdata.ApplicationStatus == 3)" [disabled]="flagdisabled">Review
+            In Process</button>
+
+          <button (click)="updateStatus(2)" class="btn btn-sm  btn-danger"
+            *ngIf="permission>2 && (currentUser.RoleId===1 || currentUser.RoleId>99)  && currentUser.RoleType!=2 && ((formdata?.ApplicationStatus>=0  && formdata.ApplicationStatus<2) || formdata.ApplicationStatus == 3)" [disabled]="flagdisabled">Reject</button>
+
+          <button (click)="updateStatus(3)" class="btn btn-sm  btn-success"
+            *ngIf="permission>2 && (currentUser.RoleId===1 || currentUser.RoleId>99)  && currentUser.RoleType!=2 && formdata?.ApplicationStatus>=0  && formdata.ApplicationStatus<2" [disabled]="flagdisabled">Approve</button>
+
+          
+
+        </div>
+      </div>
+    </div>
+  </form>
+</div>

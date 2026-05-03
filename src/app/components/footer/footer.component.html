@@ -1,0 +1,55 @@
+<footer class="footer">
+    <div class="container-fluid justify-content-md-between d-md-flex">
+        <!-- <nav class="pull-left">
+            <ul>
+                <li>
+                    <a href="#">
+                        MSM UNIFY
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        About Us
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        Blog
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        Licenses
+                    </a>
+                </li>
+            </ul>
+        </nav> -->
+
+        <!-- <div class="copyright pull-right" *ngIf="currentUser.RoleType===2">
+
+                <a>
+                    <img src="./assets/img/MyMSM_logo_1.png" alt="logo" style="width: 50px;" />
+                </a>
+        
+            &copy;
+            {{test | date: 'yyyy'}}
+        </div> -->
+
+        <div class="col-12 col-md-6 support-email px-0">
+            <span>Support Email: <b>support@msmunify.com</b></span>
+        </div>
+
+
+        <div class="col-12 col-md-6 version px-0">
+            <span>
+                <a *ngIf="currentUser.RoleType === 2">
+                    <img src="./assets/img/MyMSM_logo_1.png" alt="logo" style="width: 50px;" />
+                </a>
+            
+                &copy; {{test | date: 'yyyy'}} v1.0.30</span>
+        </div>
+
+          
+
+    </div>
+</footer>

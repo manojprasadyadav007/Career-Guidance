@@ -1,0 +1,22 @@
+<mat-form-field>
+  <mat-label>{{placeholder}}</mat-label>
+  <input matInput placeholder="{{placeholder}}" type="text" [matDatepicker]="intekDatepicker"
+    [ngModel]="value" (ngModelChange)="value=$event; valueChange.emit($event)" [min]="minDate" [max]="maxDate"
+    name="{{name}}" #MyDatePicker="ngModel" required="{{required}}" [appRegisterFormControlModel]="form"
+    [registerModel]="MyDatePicker" [disabled]="disabled" readonly>
+  <mat-datepicker #intekDatepicker></mat-datepicker>
+  <mat-datepicker-toggle matSuffix [for]="intekDatepicker"></mat-datepicker-toggle>
+
+  <mat-hint *ngIf="hint">
+    {{hint}}
+  </mat-hint>
+   <!-- <mat-error > 
+    <span *ngIf="MyDatePicker.touched && MyDatePicker.invalid">Enter valid Date </span>
+   </mat-error> -->
+   
+  <!-- <mat-error  *ngIf="MyDatePicker.dirty && MyDatePicker.invalid"> Enter valid Date </mat-error>
+  <mat-error *ngIf="MyDatePicker.hasError('required')&& !MyDatePicker.dirty">{{placeholder}} is required</mat-error>
+  <mat-error *ngIf="MyDatePicker.hasError('min') || MyDatePicker.hasError('max')">Invalid Date</mat-error> -->
+
+  <mat-error *ngIf="MyDatePicker.invalid">Enter valid {{placeholder | lowercase}}</mat-error>
+</mat-form-field> 

@@ -1,0 +1,34 @@
+<div class="main-content">
+    <div class="card">
+        <div class="card-body">
+             
+                    <div class="row">
+                        <div class="col-md-12">
+                            <mat-form-field>
+                                <mat-label>Institution</mat-label>
+                                <mat-select matInput placeholder="Institution" [(ngModel)]="institionId"
+                                    #institionIdvar="ngModel" 
+                                    name="institionId">
+                                    <mat-option>
+                                        <ngx-mat-select-search [(ngModel)]="instFilter" [placeholderLabel]="'Search...'"
+                                          [noEntriesFoundLabel]="'Not found'" name="instFilter"></ngx-mat-select-search>
+                                      </mat-option>
+                                    <mat-option [value]="item.InstitutionId" *ngFor="let item of instList | stringFilterBy:instFilter:'InstName';  trackByProperty: 'InstitutionId'">{{item.InstName}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-12" [hidden]="institionId===0">
+                            <app-file-upload label="Upload Print File (*.rpx)" label="Application Form" controlName="appForm" [(file)]="printFile"></app-file-upload>
+                            <button mat-raised-button (click)="uploadFile()" [disabled]="!printFile" >Upload</button>
+                        </div>
+                        <div class="col-12" [hidden]="institionId===0">
+                            <app-file-upload label="Upload CC Print File (*.rpx)" label="CC Form" controlName="ccForm" [(file)]="printCCFile"></app-file-upload>
+                            <button mat-raised-button (click)="uploadCCFile()" [disabled]="!printCCFile" >Upload</button>
+                            <button mat-raised-button (click)="deleteCCFile()" >delete from server</button>
+                        </div>
+                    </div>
+               
+        </div>
+    </div>
+</div>

@@ -1,0 +1,27 @@
+<div class="main-content new-design">
+
+<div class="card">
+    <div class="card-body table-responsive">
+        <h4 class="card-title">Recent Programs</h4>
+                <table class="table  table-hover">
+                    <thead class="text-danger">
+                        <th>Program</th>
+                        <th>Institution</th>
+                        <th>Status</th>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of data">
+                            <td>
+                                <a href="#/member/institutions/programs/edit-program/0/{{item.ProgramId}}">
+                                    {{item.ProgramName}}
+                                </a>
+                            </td>
+                            <td>{{item.InstName}}</td>
+                            <td>{{item.ProgramStatus}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+    </div>
+</div>
+
+</div>

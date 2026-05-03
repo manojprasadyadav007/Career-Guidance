@@ -1,0 +1,17 @@
+
+   <div mat-dialog-title>{{title}}
+      <button class="close text-white" type="button" mat-dialog-close  aria-label="Close"><span aria-hidden="true">×</span></button>
+   </div>
+   <mat-dialog-content>
+      <p class="text-justify" >
+         <mat-icon class="text-danger icon-align">{{icon}}</mat-icon>
+         <span [innerHTML]="content" class="text-justify"></span>
+      </p>
+   </mat-dialog-content>
+   <mat-dialog-actions align="end">
+      <button type="button" mat-raised-button [mat-dialog-close]="true" class="btn btn-sm btn-danger">
+         {{yesLabel}}</button>
+      <span class="spacer"></span>
+      <button type="button" mat-raised-button mat-dialog-close class="btn btn-sm btn-success" cdkFocusInitial
+         [innerText]="noLabel">{{noLabel}} </button>
+   </mat-dialog-actions>

@@ -1,0 +1,179 @@
+<form #form="ngForm" (submit)="onSubmit(form)" class="new-design">
+  <div mat-dialog-title>
+    Intake
+    <button class="close text-white" type="button" [mat-dialog-close]="isAdd" aria-label="Close"><span
+        aria-hidden="true">×</span></button>
+  </div>
+  <div mat-dialog-content>
+
+    <input type="hidden" #ProgramId="ngModel" [(ngModel)]="formdata.ProgramId" name="ProgramId" />
+    <div class="row">
+      <div class="col-md-6">
+        <mat-form-field>
+          <mat-label>Region</mat-label>
+          <mat-select matInput placeholder="Region" #RegionId="ngModel" [(ngModel)]="formdata.RegionId" name="RegionId"
+            required (selectionChange)="fillZone(true)">
+            <mat-option>
+              <ngx-mat-select-search [(ngModel)]="regionFilter" [placeholderLabel]="'Search...'"
+                [noEntriesFoundLabel]="'Not found'" name="regionFilter"></ngx-mat-select-search>
+            </mat-option>
+            <mat-option [value]="0" *ngIf="regionList?.length>0">All</mat-option>
+            <mat-option
+              *ngFor="let item of regionList | stringFilterBy:regionFilter:'CountryName';  trackByProperty: 'CountryId'"
+              [value]="item.CountryId">{{item.CountryName}}</mat-option>
+          </mat-select>
+          <mat-error>Region is required</mat-error>
+        </mat-form-field>
+      </div>
+      <div class="col-md-6">
+
+        <mat-form-field>
+          <mat-label>Campus</mat-label>
+          <mat-select matInput multiple placeholder="Campus" #Campus="ngModel"
+            [(ngModel)]="formdata.Campus" name="Campus">
+            <mat-option>
+              <ngx-mat-select-search [(ngModel)]="campusFilter" [placeholderLabel]="'Search...'"
+                [noEntriesFoundLabel]="'Not found'" name="campusFilter"></ngx-mat-select-search>
+            </mat-option>
+            <mat-option
+              *ngFor="let campus of campusList |  stringFilterBy:campusFilter:'CampusName';  trackByProperty: 'InstCampusId'"
+              [value]="campus.InstCampusId">
+              {{campus.CampusName}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <!-- <div class="col-md" *ngIf="formdata.RegionId>0">
+        <mat-form-field>
+          <mat-label>Zone</mat-label>
+          <mat-select matInput placeholder="Zone" #ZoneId="ngModel" [(ngModel)]="formdata.ZoneId" name="ZoneId"
+            required>
+            <mat-option>
+              <ngx-mat-select-search [(ngModel)]="zoneFilter" [placeholderLabel]="'Search...'"
+                [noEntriesFoundLabel]="'Not found'" name="zoneFilter"></ngx-mat-select-search>
+            </mat-option>
+            <mat-option [value]="0" *ngIf="zoneList?.length>0">All</mat-option>
+            <mat-option *ngFor="let item of zoneList | stringFilterBy:zoneFilter:'ZoneName';  trackByProperty: 'ZoneId'"
+              [value]="item.ZoneId">{{item.ZoneName}}</mat-option>
+          </mat-select>
+          <mat-error *ngIf="ZoneId.hasError('required')">Zone is required</mat-error>
+        </mat-form-field>
+      </div> -->
+    </div>
+    <div class="row">
+      <div class="col-md-6">
+
+        <mat-form-field>
+          <mat-label>Name</mat-label>
+          <input matInput placeholder="Name" type="text" pattern="^[A-Za-z]{3}\-\d{4}$" #IntakeName="ngModel"
+            [(ngModel)]="formdata.IntakeName" name="IntakeName" required>
+          <mat-error *ngIf="IntakeName.hasError('required')">Name is required</mat-error>
+          <mat-error *ngIf="IntakeName.hasError('pattern')">Follow this formate sep-2001</mat-error>
+        </mat-form-field>
+      </div>
+      <div class="col-md-6">
+
+        <app-date-picker [(value)]="formdata.IntekDate" placeholder="Intake Date" name="IntekDate" required="true"
+          [form]="form">
+
+        </app-date-picker>
+
+
+      </div>
+      <div class="col-md-3">
+        <app-date-picker [(value)]="formdata.OnshoreSubmissionDeadline" placeholder="OnShore Deadline"
+          name="OnshoreSubmissionDeadline" [form]="form" [maxDate]="formdata.IntekDate" [required]="onShoreDateReqd">
+        </app-date-picker>
+      </div>
+      <div class="col-md-3">
+        <app-date-picker [(value)]="formdata.SubmissionDeadline" placeholder="OffShore Deadline"
+          name="SubmissionDeadline" [form]="form" [maxDate]="formdata.IntekDate" [required]="offShoreDateReqd">
+        </app-date-picker>
+
+      </div>
+
+
+
+      <div class="col-md-3">
+        <mat-form-field>
+          <mat-label>Capacity</mat-label>
+          <input type="text" matInput placeholder="Capacity"  #Capacity="ngModel"
+            [(ngModel)]="formdata.Capacity" name="Capacity" [MinValue]="0" min="0" [MaxValue]="10000"
+            appAcceptOnlyNumber>
+          <mat-error *ngIf="Capacity.hasError( 'MinValue')">Enter valid Capacity (0-10,000)</mat-error>
+          <mat-error *ngIf="Capacity.hasError( 'MaxValue')">Enter valid Capacity (0-10,000)</mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="col-md-3">
+        <mat-form-field>
+          <mat-label>Offer Letter TAT (Days)</mat-label>
+          <input matInput placeholder="Offer Letter TAT (Days)" type="text" #OfferLetterTAT="ngModel" 
+            [(ngModel)]="formdata.OfferLetterTAT" name="OfferLetterTAT" dynamicNumberValidation required numbertyp='numberiwithOutDecimals' zeroAllowed="true"   mindecimals='1' maxdecimals='3'>
+          <mat-error *ngIf="OfferLetterTAT.hasError('required')">Offer letter is required</mat-error>
+          <mat-error *ngIf="OfferLetterTAT.hasError( 'invalid') && !OfferLetterTAT.hasError('required')">Enter valid TAT days (0-999)</mat-error>
+        </mat-form-field>
+      </div>
+
+
+      <div class="col-md-3">
+        <mat-form-field>
+          <mat-label>LOA TAT (Days)</mat-label>
+          <input matInput placeholder="LOA TAT (Days)" type="text" #LOA_TAT="ngModel" [(ngModel)]="formdata.LOA_TAT"
+            name="LOA_TAT" required dynamicNumberValidation  numbertyp='numberiwithOutDecimals' mindigits='1' zeroAllowed="false"   mindecimals='1' maxdecimals='3'>
+          <mat-error *ngIf="LOA_TAT.hasError('required')">LOA is required</mat-error>
+          <mat-error *ngIf="LOA_TAT.hasError( 'invalid') && !LOA_TAT.hasError('required')">Enter valid LOA TAT days (1-999)</mat-error>
+        </mat-form-field>
+        
+      </div>
+
+      <div class="col-md-3">
+        <mat-form-field>
+          <mat-label>Fee Receive TAT (Days)</mat-label>
+          <input matInput placeholder="Fee Receive TAT (Days)" type="text" #FeeReceiveTAT="ngModel"
+            [(ngModel)]="formdata.FeeReceiveTAT" name="FeeReceiveTAT" dynamicNumberValidation required numbertyp='numberiwithOutDecimals' mindigits='1' zeroAllowed="false"   mindecimals='1' maxdecimals='3'
+             >
+          <mat-error *ngIf="FeeReceiveTAT.hasError('required')">Fee receive is required</mat-error>
+          <mat-error *ngIf="FeeReceiveTAT.hasError( 'invalid') && !FeeReceiveTAT.hasError('required')">Enter valid TAT days (1-999)</mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="col-md-3">
+        <mat-form-field>
+          <mat-label>Status</mat-label>
+          <mat-select matInput placeholder="Status" #IntekStatus="ngModel" [(ngModel)]="formdata.IntekStatus"
+            name="IntekStatus" required pattern="^[1-9]\d*$">
+            <mat-option>
+              <ngx-mat-select-search [(ngModel)]="statusFilter" [placeholderLabel]="'Search...'"
+                [noEntriesFoundLabel]="'Not found'" name="statusFilter"></ngx-mat-select-search>
+            </mat-option>
+            <mat-option
+              *ngFor="let item of selectList | stringFilterBy:statusFilter:'StatusName';  trackByProperty: 'StatusId'"
+              [value]="item.StatusId">{{item.StatusName}}</mat-option>
+          </mat-select>
+          <mat-error>Status is required</mat-error>
+        </mat-form-field>
+      </div>
+      <div class="col-md-3  checkbox-radios p-4">
+        <mat-checkbox [(ngModel)]="formdata.ConditionalApplication" name="ConditionalApplication"
+          #ConditionalApplication="ngModel">Conditional Application</mat-checkbox>
+      </div>
+      <div class="col-md-3  checkbox-radios p-4" style="margin-top: -20px;">
+        <mat-checkbox [(ngModel)]="formdata.OnShore" name="OnShore" (change)="onShoreChange($event)" [disabled]="formdata.UsedOnShore" #OnShore="ngModel">OnShore</mat-checkbox>
+      </div>
+      <div class="col-md-3  checkbox-radios p-4" style="margin-top: -20px;">
+        <mat-checkbox [(ngModel)]="formdata.OffShore" name="OffShore" (change)="offShoreChange($event)" [disabled]="formdata.UsedOffShore" #OffShore="ngModel">OffShore</mat-checkbox>
+      </div>
+      <mat-error *ngIf="requiredShoreType">Atleast one shore type is required</mat-error>      
+    </div>
+
+  </div>
+
+  <div mat-dialog-actions align="center">
+
+    <button type="button" [mat-dialog-close]="isAdd" class="btn  btn-sm btn-primary modalclose">Close</button>
+
+    <button type="submit" class="btn  btn-sm btn-primary btn-cust" [disabled]="flagdisabled"
+      *ngIf="permission>1">{{btnLable}}</button>
+  </div>
+</form>

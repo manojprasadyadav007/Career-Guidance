@@ -1,0 +1,27 @@
+<div class="card shadow h-100">
+  
+    <div class="card-body table-responsive">
+        <h4 class="card-title" style="display: contents;">Program Updates </h4>
+        <a style="float: right;" href="#/member/dashboard/program-updates"><mat-icon>open_in_new</mat-icon></a>
+                <table class="table  table-hover">
+                    <thead class="text-danger">
+                        <th>Program</th>
+                        <th>Institution</th>
+                        <th>Title</th>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of data">
+                            <td>
+                                <a class="link" (click)="openEvent(item)">
+                                    {{item.ProgramName}}
+                                </a>
+                            </td>
+                            <td>
+                                <p> {{item.InstitutionName}}</p>
+                            </td>
+                            <td><p>{{item.EventTitle}}</p></td>
+                        </tr>
+                    </tbody>
+                </table>
+    </div>
+</div>

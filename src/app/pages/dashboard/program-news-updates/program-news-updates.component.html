@@ -1,0 +1,65 @@
+<div class="main-content new-design">
+    <div class="card">
+        <div class="card-body">
+        <div class="container-fluid new-design">
+            <!--filter-->
+            <div class="row">
+                <div class="col-md-12  mx-auto">
+                    <form #form="ngForm">
+                        <div class="row">
+                            <div class="col-md-5">
+                                    <div class="form-group inputbox">
+                                        <mat-form-field>
+                                            <mat-label>Program Search Filter</mat-label>
+                                                <input type="text" matInput placeholder="Program Search Filter" 
+                                                [(ngModel)]="searchData" #param1="ngModel" name="ProgramName"
+                                                [matAutocomplete]="autoParam1" (keyup)="filterParam1(param1.value)" (focus)="filterParam1(param1.value)">
+                                           </mat-form-field>
+                                            <mat-autocomplete #autoParam1="matAutocomplete">
+                                                    <mat-option *ngFor="let option of data;trackByProperty:'ProgramId'" [value]="option.ProgramName">
+                                                    {{option.ProgramName}}
+                                                    </mat-option>
+                                           </mat-autocomplete>
+                                    </div>
+                            </div>
+                                    <!-- <div class="col-md-2">
+                                        <button type="submit" class="btn btn-danger btn-one btn-anim w-100" style=" padding: 6%;" >
+                                        <i class="fa fa-search"></i> search</button>
+                                    </div> -->
+                        </div>
+                  </form>
+                </div>
+            </div>
+            <!--filter ending-->
+            <div class="row no-gutters align-items-center mt10">
+                <div class="col-12">
+                    <div class="intcard" >
+                            <h4  >Program Updates</h4>
+                        <div class="row">
+
+                                <div class="col-4" *ngFor="let item of data  | paginate: { itemsPerPage: 10, currentPage: pageIndex }"  >
+                                    <div class="intprograms check-eligibitlity"   (click)="openEvent(item)">
+                                        <a>  
+                                            <h5>{{item.ProgramName}}</h5>
+                                                <div class="mb-2">
+                                                    <div class="intdetails" [innerHTML]="item.EventTitle" > </div>
+                                                </div>
+                                        </a>
+                                    </div>
+                                </div>
+                                    <div class="col-12">
+                                        <div class="d-flex justify-content-center">
+                                            <pagination-controls autoHide="true" responsive="true" (pageChange)="pageIndex = $event"></pagination-controls>
+                                        </div>
+                                  </div>
+                                  <div *ngIf="data.length==0" style="margin:auto;color: #E92429; font-weight: 500;font-size: 16px;">
+                                    No Data Found
+                                    </div>    
+                            </div>
+                     </div>
+                </div>
+           </div>
+    </div>
+ </div>
+</div>
+</div>

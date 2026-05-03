@@ -1,0 +1,51 @@
+<div class="main-content">
+    <div class="container-fluid" *ngIf="currentUser.RoleId===2 && currentUser.AccountVerificationStatus!=1 && (currentUser.BusinessCertFound == 0  || profilestatus===false)">
+        <div class="row">
+            <div class="col-12">
+                <p class="alert alert-danger">Please complete the profile and upload business certificate.</p>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid" *ngIf="(currentUser.RoleId===2 && businessCertificateStatus == 'uploaded' && profilestatus && currentUser.AccountVerificationStatus ==0)">
+        <div class="row">
+            <div class="col-12">
+                <p class="alert alert-danger" >Thank you for completing profile, we will verify the account within 24 hours, meanwhile you can fill Evaluation Form of the institutions.
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid" *ngIf="(currentUser.RoleId===2 && businessCertificateStatus == 'rejected' && profilestatus && currentUser.AccountVerificationStatus ==0)">
+        <div class="row">
+            <div class="col-12">
+                <p class="alert alert-danger" >Your business certificate is rejected, Please upload it again.
+                </p>
+            </div>
+        </div>
+    </div>
+    <!-- <div class="container-fluid" *ngIf="businessCertificateStatus.toLowerCase() === 'approved'">
+        <div class="row">
+            <div class="col-12">
+                <p class="alert alert-danger">Agent is Approved
+                </p>
+            </div>
+        </div> 
+    </div>-->
+
+    <app-add-agents *ngIf="currentUser.RoleId===2 && currentUser.isPrimary===1" permission="2"
+        id="{{currentUser.RefId}}" isProfile="1">
+
+    </app-add-agents>
+
+    <div *ngIf="currentUser.RoleId===2  && currentUser.isPrimary!=1">
+        <app-user-profile></app-user-profile>
+    </div>
+
+    <app-display-student *ngIf="currentUser.RoleId===3" permission="2" [id]="currentUser.RefId" isProfile="1">
+
+    </app-display-student>
+
+    <div *ngIf="currentUser.RoleId===1 || currentUser.RoleId>99">
+        <app-user-profile></app-user-profile>
+    </div>
+
+</div>

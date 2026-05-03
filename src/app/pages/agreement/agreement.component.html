@@ -1,0 +1,111 @@
+<div class="main-content new-design">
+
+<div class="card">
+  <div class="card-body">
+
+    <dx-data-grid [dataSource]="dataList" [showBorders]="true" [allowColumnResizing]="true" [showColumnLines]="true"
+      [showRowLines]="true" [rowAlternationEnabled]="true" [columnAutoWidth]="true" [noDataText]="gridMessage"
+      (onToolbarPreparing)="onToolbarPreparing($event)" [allowColumnReordering]="true"
+      (onRowClick)="permission>1 ?  edit($event.data.AgreementId) :  onActionShow($event.data)" (onExporting)="activitylog()">
+
+      <dxo-paging [enabled]="true" [pageSize]="10"></dxo-paging>
+      <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 25,50,100]" [showInfo]="true">
+      </dxo-pager>
+      <dxo-filter-panel [visible]="true"></dxo-filter-panel>
+
+      <dxo-filter-row [visible]="showFilterRow"></dxo-filter-row>
+
+      <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
+
+      <dxo-export [enabled]="excel_permisson > 0" fileName="{{this.parentName}} Agreement"></dxo-export>
+
+      <dxo-column-chooser [enabled]="true" mode="select" [allowSearch]="true">
+      </dxo-column-chooser>
+
+      <dxi-column *ngFor="let item of columns" [dataField]="item.dataField"  [caption]="item.title | sentenceCase"
+        [dataType]="item.type" [format]="item.format">
+      </dxi-column>
+      <dxi-column *ngIf="this.parentType===9 && this.currentUser.RoleType!=2" caption="Description"  cellTemplate="desCellTemplate">
+
+      </dxi-column>
+
+      <dxi-column  caption="Activity" [minWidth]="50"  cellTemplate="activityCellTemplate">
+
+      </dxi-column>
+
+        <dxi-column   [visible]="permission > 1"  caption="Action" [allowExporting]="false" [fixed]="true" fixedPosition="right" [minWidth]="50" cellTemplate="actionCellTemplate">
+
+        </dxi-column> 
+
+      <div *dxTemplate="let d of 'desCellTemplate'">
+        <span [innerHTML]="d.data.AgreementDescription" class="test text-wrap"> </span>
+      </div>
+      
+      <div *dxTemplate="let d of 'activityCellTemplate'">
+        <a class="link" (click)="openNotification(d.data.RequestId)">{{d.data.LastActivity}} </a>
+
+      </div>
+
+
+      <div *dxTemplate="let d of 'actionCellTemplate'">
+        <mat-menu #instMenu="matMenu">
+          <span class="menuempty">
+              <span class="ref"></span>
+          </span>
+
+        <a  mat-menu-item style="color:black;"  href="{{filepath+d.data.AgreementPath}}" target="_blank" data-toggle="tooltip" title="View">
+          <span class="material-icons icon-position">
+            remove_red_eye
+            </span>View
+        </a>
+        <!-- <button type="button" (click)="edit(d.data.AgreementId)" mat-raised-button
+        class="btn btn-primary btn-link" *ngIf="permission>1">
+        <i class="material-icons">edit</i>
+      </button> -->
+
+        <button type="button" (click)="$event.stopPropagation();  onSubmit(d.data.RequestId)" mat-menu-item  
+          *ngIf="permission>1 && d.data.RequestId && d.data.RequestStatus==='draft'">
+          <span class="material-icons icon-position">
+            check_circle_outline
+            </span>Submit
+        </button>
+
+        <button  type="button"  mat-menu-item 
+          (click)="$event.stopPropagation(); delete(d.data.AgreementId,d.data.RequestId)"
+          *ngIf="permission>2 && (!d.data.RequestStatus || d.data.RequestStatus!='completed')" data-toggle="tooltip" title="Delete">
+          <span class="material-icons icon-position">
+            close
+            </span>Delete
+        </button>
+      </mat-menu>
+      <button mat-icon-button  [matMenuTriggerFor]="instMenu"
+      (click)="$event.stopPropagation()">
+          <mat-icon class="more_dropdown">keyboard_arrow_down</mat-icon>
+      </button>
+      </div>
+
+      <div *dxTemplate="let d of 'toolbarButton'">
+        <button class="text-danger" (click)="add()" mat-icon-button *ngIf="permission>1" data-toggle="tooltip" title="New">
+          <mat-icon>add</mat-icon>
+        </button>
+
+        <button class="text-danger" (click)="showFilterRow=!showFilterRow" mat-icon-button data-toggle="tooltip" title="Apply Filter">
+          <mat-icon>filter_list</mat-icon>
+        </button>
+
+      
+      </div>
+
+    </dx-data-grid>
+  
+  </div>
+</div>
+
+</div>
+
+<!-- Script For Tooltip -->
+<script>
+  $(document).ready(function () {
+    $('[data-toggle="tooltip"]').tooltip();
+  });
+</script>

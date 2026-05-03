@@ -1,0 +1,129 @@
+.inputbox .form-control {
+    display: block;
+    width: 100%;
+    height: 51px;
+    padding: 0.5rem .75rem;
+	font-size: 1rem;
+    font-weight: 400;
+    line-height: 2.5;
+    color:#6c757d;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem 0px 0px 0.25rem;
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+	box-shadow: 0px 5px 10px rgba(0,0,0,0.4);
+    border: solid 1px #d2d2d2;
+    background-image: none;
+    /* padding: 0 15px 0px 80px; */
+}
+
+.select-box{
+	display: block;
+    width: 100%;
+    height: 51px;
+    padding: 0.5rem .75rem;
+	font-size: 1rem;
+    font-weight: 400;
+    line-height: 2.5;
+    color:#6c757d;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+	box-shadow: 0px 5px 10px rgba(0,0,0,0.4);
+    border: solid 1px #d2d2d2;
+}
+.btn-srch
+{
+    width: 100%;
+    border-radius: 0px 0.25rem 0.25rem 0px;
+    height: 50px;
+}
+.second-content li{
+    display: inline-flex;
+   padding-right: 24px;
+   width: 50%;
+}
+.img-responsive{
+	display: block;
+    max-width: 100%;
+    height: auto;
+}
+.font-icon {
+    margin-right: 15px;
+     float: left;
+     width: 30px;
+     height: 30px;
+ }
+ .heading-style-4 
+ {
+     line-height: 40px;
+ }
+
+ .card {
+    margin-top: 0px;
+    margin-bottom: 1px;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+}
+
+.card-link{
+	color:#fff;
+	text-transform: capitalize;
+    letter-spacing: 0.65px;
+    font-size: 19px;
+}
+.card-header {
+    background-color: #5b5b5b;
+}
+.fa_plus {
+    float: right;
+    margin-top: 3px;
+    color: #fff;
+}
+/* th {
+  display: table-cell;
+  vertical-align: inherit;
+  font-weight: bold;
+  text-align: center;
+}
+.table thead th {
+    vertical-align: bottom;
+    border-bottom: 2px solid #dee2e6;
+    background-color: #5b5b5b;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 500;
+    text-transform: capitalize;
+    letter-spacing: 0.75px;
+}
+.table td {
+    padding: .75rem;
+    vertical-align: top;
+    border-top:1px solid #b6b6b6;
+    text-transform: capitalize;
+    letter-spacing: 0.45px;
+}
+.table-bordered td, .table-bordered th {
+    border: 1px solid #b6b6b6;
+} */
+.table-footer{
+	background-color: #a1a1a1;
+    color: #fff;
+    text-align: right;
+    letter-spacing: 0.45px;
+}
+.page-section3{
+    padding: 37px 0;
+    background: rgba(0, 0, 0, 0) url('/assets/img/inst/fourth_bg.png') no-repeat 0 0 / cover;
+    background-position: top;
+    position: relative;
+    top: -98px;
+}
+
+.closebtn {
+    border: none;
+    background-color: transparent;
+}

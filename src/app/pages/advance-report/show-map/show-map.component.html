@@ -1,0 +1,62 @@
+<div class="main-content new-design">
+    <div class="card">
+        <div class="card-body">
+            <form #form="ngForm">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <mat-form-field>
+                                <mat-label>User</mat-label>
+                                <mat-select matInput placeholder="Select User" #UserId="ngModel"
+                                  [(ngModel)]="formdata.UserId" name="UserId" required>
+                                  <mat-option>
+                                    <ngx-mat-select-search [(ngModel)]="userFilter" [placeholderLabel]="'Search...'"
+                                      [noEntriesFoundLabel]="'Not found'" name="userFilter"></ngx-mat-select-search>
+                                  </mat-option>
+                                  <mat-option value="0">None</mat-option>
+                                  <mat-option *ngFor="let item of userList | stringFilterBy:userFilter:'EmailId';  trackByProperty: 'UserId' " [value]="item.UserId">
+                                    {{item.DisplayName+'/'+item.EmailId}}
+                                  </mat-option>
+                                </mat-select>
+                                <mat-error *ngIf="UserId.hasError('pattern')">select User</mat-error>
+                              </mat-form-field> 
+                        </div>
+                        <div class="col-md-3">
+
+                            <app-date-picker [(value)]="formdata.fromdate" placeholder="From" name="fromdate"
+                                required="true" [maxDate]="formdata.todate" [form]="form">
+
+                            </app-date-picker>
+                        </div>
+                        <div class="col-md-3">
+                            <app-date-picker [(value)]="formdata.todate" placeholder="To" name="todate"
+                                required="true" [minDate]="formdata.fromdate" [form]="form">
+
+                            </app-date-picker>
+                        </div>
+                        <div class="col-md-2">
+                            <button type="button" mat-raised-button class="btn btn-sm btn-danger" style="margin-top: 10px;" (click)="showMap()" [disabled]="!form.valid">Show</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+           
+        </div>
+        <div class="card-body">
+            <agm-map #map style="height:60vh;" [latitude]="location.latitude" [longitude]="location.longitude" [zoom]="location.zoom" >
+                <agm-polyline  [strokeColor]="'#2196f3'">
+                    <ng-container *ngFor="let i of locationData">
+                    <agm-polyline-point  [latitude]="i.lat" [longitude]="i.lng">
+                    </agm-polyline-point>
+                </ng-container>
+                </agm-polyline>
+                <agm-marker class="mapMarker" *ngIf="startPoint"   [latitude]="startPoint.lat" [longitude]="startPoint.lng"  label="Start">
+                </agm-marker>
+                <agm-marker class="mapMarker"  *ngIf="endPoint"    [latitude]="endPoint.lat" [longitude]="endPoint.lng"  label="End">
+                </agm-marker>
+            </agm-map>
+        </div>
+    </div>
+</div>
+
+

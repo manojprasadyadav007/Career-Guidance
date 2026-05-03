@@ -1,0 +1,39 @@
+<div class="main-content new-design">
+    <div class="card">
+        <div class="card-body">
+         <form #form="ngForm" >
+             <div class="row">
+                        <div class="col-md-12">
+                            <div class="mb-2" >
+                               <input type="file"  #myfileInput placeholder="Select Document" 
+                               (change)="fileChange($event)"  ngModel
+                               name="DocumentFile" required accept=".xlsx,.csv" >
+                               <!-- <mat-error *ngIf="sizeerror">{{sizeerror}}</mat-error> -->
+                               <br/>
+                            </div>
+                          </div>
+                          <div class="col-md-6" *ngFor="let fields of formdata ;  let i = index">
+                            <mat-form-field>
+                                <mat-label>{{formdata[i].columnName}}</mat-label>
+                                <mat-select   id="fields.columnName" matInput placeholder="fields.columnName" #name="ngModel" [(ngModel)]="formdata[i].header"
+                                   name="name{{i}}" (selectionChange)="columnChange($event , fields)" required >
+                                   <mat-option >select item</mat-option> 
+                                   <mat-option *ngFor="let item of columnsListOption" [value]="item">{{item}}</mat-option>
+                                </mat-select>
+                                <mat-error *ngIf="name.hasError('required')">Select header Name
+                                </mat-error>
+                             </mat-form-field>
+                          </div>
+                 </div>
+            
+                   
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <button type="submit"  (click)="save(form)" *ngIf="showSavebtn"  class="btn btn-sm btn-danger" [disabled]="flagDisabled">save</button>
+                    <button type="button"  (click)="redirect()"   class="btn btn-sm btn-danger">Back</button>
+                </div>
+            </div>
+             </form>
+        </div>
+    </div>
+ </div>          

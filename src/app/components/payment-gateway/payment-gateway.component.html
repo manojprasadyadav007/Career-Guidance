@@ -1,0 +1,12 @@
+<button id="payButtonStripeLegacy" (click)="checkoutStripeLegacy($event)" class="btn btn-danger">
+    Buy for {{amount / 100 }}.00 with Legacy Stripe
+</button>
+<div *ngIf="legacyMessage !== ''">{{legacyMessage}}</div>
+
+
+
+
+<button id="payButton" (click)="pay($event)" class="btn btn-primary">
+    Pay now with Flywire
+</button>
+    

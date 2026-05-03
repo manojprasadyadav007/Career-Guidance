@@ -1,0 +1,75 @@
+$crumbs-back:#fff;
+$text-color:#fff;
+$step-background:#f44336;
+$step-active-background:#0091ea;
+$step-complete-background:#4caf50;
+
+mat-expansion-panel-header.mat-expanded #crumbs {
+    display: none;
+}
+
+.form_ds{
+display: contents;
+}
+
+#crumbs {
+	text-align: left;
+	background-color:$crumbs-back;
+ul {
+		list-style: none;
+		display: inline-table; margin: 0px; padding: 0px;
+		li {
+			display: inline;
+			span {
+			display: block;
+			float: left;
+			height: 25px;
+			background:$step-background;
+        
+			text-align: center;
+			padding:15px 10px 25px 40px;
+			position: relative;
+			margin: 5px 10px 5px 0; 
+				line-height:10px;
+			
+			font-size: 15px;
+			text-decoration: none;
+			color: $text-color;
+        
+			&:after {
+				content: "";  
+				border-top: 20px solid transparent;
+	 			border-bottom: 20px solid transparent;
+	  			border-left: 20px solid $step-background;
+				position: absolute; 
+        right: -20px;
+        top: 0;
+				z-index: 1;
+			}
+			&:before {
+				content: "";  
+				border-top: 20px solid transparent;
+	  			border-bottom: 20px solid transparent;
+	  			border-left: 20px solid $crumbs-back;
+				position: absolute; 
+        left: 0; 
+        top: 0;
+			}
+		}
+			span.complete {
+			background: $step-complete-background;
+			&:after {
+	  			border-left: 20px solid $step-complete-background;
+			}
+		}
+			span.active {
+			background: $step-active-background;
+			&:after {
+	  			border-left: 20px solid $step-active-background;
+			}
+		}
+		}
+	}
+}
+		
+		

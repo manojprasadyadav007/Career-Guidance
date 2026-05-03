@@ -1,0 +1,130 @@
+<div [ngClass]="{'main-content' : currentUser.RoleType === 2}">
+    <div class="card">
+        <div class="card-body">
+            <div class="container-fluid" cdkDropListGroup>
+                <div class="row">
+                    <div class="col-md-6">
+                        <mat-form-field>
+                            <mat-label>Region</mat-label>
+                            <mat-select matInput placeholder="Region" #CountryId="ngModel" (selectionChange)="get()"
+                                [(ngModel)]="countryId" name="countryId">
+                                <mat-option>
+                                    <ngx-mat-select-search [(ngModel)]="regionFilter" [placeholderLabel]="'Search...'"
+                                        [noEntriesFoundLabel]="'Not found'" name="regionFilter"></ngx-mat-select-search>
+                                </mat-option>
+                                <mat-option [value]="0" *ngIf="countryList?.length>0">All</mat-option>
+                                <mat-option
+                                    *ngFor="let country of countryList | stringFilterBy:regionFilter:'CountryName';  trackByProperty: 'CountryId' "
+                                    [value]="country.CountryId">
+                                    {{country.CountryName}}</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-6 text-right">
+                        <button *ngIf="permission>1" [hidden]="countryId===undefined
+                        || (currentUser.RoleType!==1 && currentUser.RoleType !==2)" (click)="update()" mat-raised-button class="btn btn-danger"
+                            [disabled]="flagdisabled">Update</button>
+                    </div>
+
+
+                </div>
+
+                <div class="row" [hidden]="countryId===undefined">
+                    <div class="col-sm-3" *ngIf="(currentUser.RoleType===1 || currentUser.RoleType === 2) && permission > 1">
+                        <div class="card">
+                            <div class="card-header in-flex">
+                                <h4 class="col-8 pull-left card-title">Steps</h4>
+
+                                <div class="col-4 pull-right card-action text-center p-0">
+                                    <button mat-icon-button class="btn btn-link btn-info add m-0 steps-edtbtn"
+                                        (click)="addStatus()" *ngIf="permission>3" data-toggle="tooltip" title="Edit">
+                                        <mat-icon>edit</mat-icon>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="card-body card-body-flow">
+                                <div class="flow-container" style="max-height:calc(50vh); overflow-y: scroll;">
+                                    <div cdkDropList #step="cdkDropList" [cdkDropListData]="statusList"
+                                        (cdkDropListDropped)="drop($event)" class="flow-list">
+                                        <div *ngFor="let item of statusList" cdkDrag class="flow-box">
+                                            {{item.text}}
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div [class.col-sm-9]="(currentUser.RoleType===1 || currentUser.RoleType === 2) && permission > 1"
+                        [class.col-12]="!((currentUser.RoleType=== 1 ||currentUser.RoleType === 2)  && permission > 1)">
+
+                        <div class="table-responsive">
+                            <table class="table">
+                                <tr>
+                                    <ng-container *ngFor="let flowItem of flowListData;let i=index">
+                                        <td class="py-0" style="width: 250px; max-width: 250px;  ">
+                                            <div class="card" style="width: 250px; max-width: 250px;">
+                                                <div class="card-header in-flex">
+                                                    <h4 class="col-8 card-title pull-left">
+                                                        <span *ngIf="currentUser.RoleType != 1 && currentUser.RoleType != 2"> {{flowItem.FlowTitle}}
+                                                        </span>
+                                                        <app-click-to-edit [(value)]="flowItem.FlowTitle"
+                                                            *ngIf="(currentUser.RoleType === 1 || currentUser.RoleType === 2) && permission > 1"
+                                                            label="title" placeholder="Enter Title"></app-click-to-edit>
+                                                    </h4>
+                                                    <div class="col-4 pull-right card-action text-center"
+                                                        style="display: contents;"
+                                                        *ngIf="(currentUser.RoleType === 1 || currentUser.RoleType === 2 ) && permission > 1">
+                                                        <button *ngIf="flowListData.length>1" mat-icon-button
+                                                            class="btn btn-link btn-danger cust-btn steps-edtbtn"
+                                                            (click)="removeFlow(i)" data-toggle="tooltip" title="Delete" >
+                                                            <mat-icon>close</mat-icon>
+                                                        </button>
+                                                        <button mat-icon-button
+                                                            class="btn btn-link btn-info add cust-btn steps-edtbtn"
+                                                            (click)="addFlow()" data-toggle="tooltip" title="Add">
+                                                            <mat-icon>add</mat-icon>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                                <div class="card-body card-body-flow">
+
+                                                    <div class="flow-container"
+                                                        style="max-height:calc(50vh); overflow-y: scroll;">
+                                                        <div cdkDropList id="flowItem.name"
+                                                            [cdkDropListData]="flowItem.data"
+                                                            (cdkDropListDropped)="drop($event)"
+                                                            class="flow-list border border-primary">
+                                                            <div *ngFor="let item of flowItem.data; let j=index"
+                                                                class="flow-box border border-primary  justify-content-left mat-elevation-z8"
+                                                                cdkDrag
+                                                                [cdkDragDisabled]="(currentUser.RoleType !== 1 && currentUser.RoleType !== 2) || permission < 2">
+                                                                <span class="text-info">{{j+1}}.</span>
+                                                                <span>
+                                                                    {{item.text}}
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
+
+                                    </ng-container>
+                                </tr>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<!-- Script For Tooltip -->
+<script>
+    $(document).ready(function () {
+      $('[data-toggle="tooltip"]').tooltip();
+    });
+  </script>

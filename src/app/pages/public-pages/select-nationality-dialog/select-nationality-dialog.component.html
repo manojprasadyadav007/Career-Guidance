@@ -1,0 +1,22 @@
+<form #form="ngForm">
+    <div mat-dialog-title>
+        Select Your Nationality
+        <button class="close text-white" type="button" [mat-dialog-close]="value"  aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div mat-dialog-content>
+        <mat-form-field>
+            <mat-label>Nationality</mat-label>
+            <mat-select [(ngModel)]="value" #nationlity="ngModel" name="nationlity" required
+            place-holder="Nationality" >
+            <mat-option>
+                <ngx-mat-select-search [(ngModel)]="nationFilter" [placeholderLabel]="'Search...'"
+                  [noEntriesFoundLabel]="'Not found'" name="nationFilter"></ngx-mat-select-search>
+              </mat-option>
+                  <mat-option *ngFor="let item of countryList | stringFilterBy:nationFilter:'CountryName';  trackByProperty: 'CountryId'" [value]="item.CountryId">{{item.CountryName}}</mat-option>  
+            </mat-select>
+        </mat-form-field>
+    </div>
+    <div mat-dialog-actions align="end">
+        <button mat-raised-button class="btn btn-danger btn-sm" [mat-dialog-close]="value" [disabled]="form.invalid">OK</button>
+    </div>
+</form>

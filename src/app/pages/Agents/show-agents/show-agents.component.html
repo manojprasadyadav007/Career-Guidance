@@ -1,0 +1,205 @@
+<div class="main-content new-design">
+    <div class="container-fluid" *ngIf="permission>0">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                   
+                    <div class="card-body">
+
+                        <div class="col-12 col-sm-12 col-md-8 d-sm-flex searchdiv px-0" style="z-index: 1;">
+                            <div class="col-12 col-sm-6 col-md-5">
+                              <mat-form-field class="selectopt" id="selectopt1">
+                                <!-- <mat-label>Select an option</mat-label> -->
+                                <mat-select placeholder="Type" [(ngModel)]="EventType" (selectionChange)="changeOption($event.value)">
+                                  <!-- <mat-option disabled> Select Type </mat-option> -->
+                                  <mat-option value="All" style="height: 2rem;font-size: 14px;">All</mat-option>
+                                  <mat-option value="Recently Modified" style="height: 2rem;font-size: 14px;">Recently modified</mat-option>
+                                  <mat-option value="Last Modified" style="height: 2rem;font-size: 14px;">Last 10 modified</mat-option>
+                                </mat-select>
+                              </mat-form-field>
+                            </div>
+                            <div class="col-12 col-sm-6 col-md-5">
+                              <mat-form-field class="search-field">
+                                <!-- <mat-label>Keyword</mat-label> -->
+                                <input matInput name="keyword" (blur)="onBlurMethod()" (keyup.enter)="searchByEnter()" placeholder="Search Keyword" [(ngModel)]="keyword" aria-label="Keyword"/>
+                                <mat-error *ngIf="keyworderror">{{ keyworderror }}</mat-error>
+                                <!-- <mat-hint>search by keyword</mat-hint> -->
+                                <!-- <button matSuffix type="button" class="btn btn-danger btn-sm" mat-raised-button="" (click)="searchByKeyword()">Search</button> -->
+                              <a (click)="searchByKeyword()" data-toggle="tooltip" title="Search by Keyword"><span class="material-icons">
+                               search </span></a>
+                              </mat-form-field>
+                              <span class="text-danger" *ngIf="keyworderror">Please enter keyword</span>
+                            </div>
+                        </div>
+
+                        <dx-data-grid [dataSource]="dataList" [showBorders]="true" [allowColumnResizing]="true"
+                        [showColumnLines]="true" [showRowLines]="true" [rowAlternationEnabled]="true"
+                        [noDataText]="gridMessage" [columnAutoWidth]="true" (onToolbarPreparing)="onToolbarPreparing($event)"
+                        [allowColumnReordering]="true" (onRowClick)="edit($event.data.AgentId)" id="agent-partner" class="agent-partner" (onExporting)="activitylog()">
+                        <dxo-filter-panel [visible]="true"></dxo-filter-panel>
+                        <dxo-state-storing [enabled]="columns?.length>0" type="localStorage" storageKey="agent"></dxo-state-storing>
+                        <dxo-paging [enabled]="true" [pageSize]="10"></dxo-paging>
+                        <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 25,50,100]"
+                            [showInfo]="true">
+                        </dxo-pager>
+                        <dxo-filter-row [visible]="showFilterRow"></dxo-filter-row>
+
+                        <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
+
+                        <dxo-export [enabled]="excel_permisson > 0" fileName="Agents"></dxo-export>
+
+                        <dxo-column-chooser [enabled]="true" mode="select" [allowSearch]="true">
+                        </dxo-column-chooser>
+
+                        <!-- <dxo-scrolling mode="virtual"></dxo-scrolling> -->
+
+                        <dxi-column *ngFor="let item of columns " [dataField]="item.dataField" [minWidth]="100"
+                            [caption]="item.title | sentenceCase" [dataType]="item.type" [format]="item.format">
+                        </dxi-column>
+
+                        <dxi-column caption="Action" [allowExporting]="false" [width]="75" [minWidth]="75" [fixed]="true" fixedPosition="right"  cellTemplate="actionCellTemplate">
+                        </dxi-column>
+
+                        <div *dxTemplate="let d of 'actionCellTemplate'">
+
+                            <mat-menu #instMenu="matMenu">
+
+                                <!-- <button mat-menu-item (click)="edit(d.data.AgentId)">
+                                    <span style="display: inline-flex;">
+                                        <i class="material-icons" style="line-height: inherit">edit</i>
+                                        Edit
+                                    </span>
+                                </button> -->
+
+                                <button mat-menu-item *ngIf="can_delete"
+                                    (click)="delete(d.data.AgentId)">
+                                        <span class="material-icons icon-position">
+                                            close
+                                            </span>Delete
+                                    <!-- <span style="display: inline-flex;"> -->
+                                        <!-- <mat-icon>close</mat-icon> -->
+                                        <!-- <i class="material-icons" style="line-height: inherit">close</i> -->
+                                        
+                                    <!-- </span> -->
+                                </button>
+
+                                <button mat-menu-item (click)="showCommission(d.data.AgentId)"
+                                    *ngIf="can_view_commission">
+                                    <span class="material-icons icon-position">
+                                        monetization_on
+                                        </span>
+                                    <!-- <mat-icon> monetization_on</mat-icon> -->
+                                        Commission
+                                </button>
+
+                                <button mat-menu-item [matMenuTriggerFor]="subMenu"
+                                    *ngIf="can_change_status">
+                                    <span class="material-icons icon-position">
+                                        flag</span>Status
+                                </button>
+
+                            </mat-menu>
+
+                            <mat-menu #subMenu="matMenu">
+                                <!-- <button mat-menu-item (click)="statusUpdate(d.data.AgentId,0)"
+                                    *ngIf="d.data.AgentStatus!=0">
+                                    <span class="material-icons icon-position">
+                                        highlight_off
+                                        </span> Reject
+                                </button> -->
+
+
+                                <button mat-menu-item (click)="statusUpdate(d.data.AgentId,3)"
+                                    *ngIf="d.data.AgentStatus!=3">
+                                    <span class="material-icons icon-position">
+                                        indeterminate_check_box
+                                        </span>Blacklist
+                                    <!-- <span style="display: inline-flex;">
+                                        <i class="material-icons" style="line-height: inherit">block</i>
+                                        Blacklist
+                                    </span> -->
+                                </button>
+
+
+                                <!-- <button mat-menu-item (click)="statusUpdate(d.data.AgentId,4)"
+                                    *ngIf="d.data.AgentStatus!=4">
+                                    <span class="material-icons icon-position">
+                                        cancel
+                                        </span>Block -->
+                                    <!-- <span style="display: inline-flex;">
+                                        <i class="material-icons" style="line-height: inherit">block</i>
+                                        Block
+                                    </span> -->
+                                <!-- </button> -->
+
+
+                                <button mat-menu-item (click)="statusUpdate(d.data.AgentId,1)"
+                                    *ngIf="d.data.AgentStatus!=1">
+                                    <span class="material-icons icon-position">
+                                        check_circle_outline
+                                        </span>Approve
+                                    <!-- <span style="display: inline-flex;"> -->
+                                        <!-- <i class="material-icons" style="line-height: inherit">done</i> -->
+                                        
+                                    <!-- </span> -->
+                                </button>
+
+                                <!-- <button mat-menu-item (click)="statusUpdate(d.data.AgentId,-2)"
+                                    *ngIf="d.data.AgentStatus!=-2">
+                                    <span class="material-icons icon-position">
+                                        slow_motion_video
+                                        </span>In process -->
+                                    <!-- <span style="display: inline-flex;">
+                                        <i class="material-icons" style="line-height: inherit">info</i>
+                                        In process
+                                    </span> -->
+                                <!-- </button> -->
+
+                                <!-- <button mat-menu-item (click)="statusUpdate(d.data.AgentId,-1)"
+                                    *ngIf="d.data.AgentStatus!=-1">
+                                    <span class="material-icons icon-position">
+                                        pending
+                                        </span>Pending -->
+                                    <!-- <span style="display: inline-flex;">
+                                        <i class="material-icons" style="line-height: inherit">info</i>
+                                        Pending
+                                    </span> -->
+                                <!-- </button> -->
+                            </mat-menu>
+
+
+
+                            <button mat-icon-button [matMenuTriggerFor]="instMenu"
+                            (click)="$event.stopPropagation()">
+                                <span class="material-icons more_dropdown">
+                                    keyboard_arrow_down
+                                </span>
+                            </button>
+                        </div>
+
+                        <div *dxTemplate="let data of 'advanceButtonTemp'">
+                            <button mat-icon-button class="text-danger" routerLink="/member/agents/add-agent" *ngIf="can_add" data-toggle="tooltip" title="New">
+                                <mat-icon>add</mat-icon>
+                            </button>
+                            <button class="text-danger" (click)="showFilterRow=!showFilterRow" mat-icon-button data-toggle="tooltip" title="Apply Filter">
+                                <mat-icon>filter_list</mat-icon>
+                            </button>
+
+                        </div>
+                        <dxo-grouping expandMode="rowClick"></dxo-grouping>
+                    </dx-data-grid>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- Script For Tooltip -->
+<script>
+    $(document).ready(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+</script>

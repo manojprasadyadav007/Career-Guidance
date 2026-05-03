@@ -1,0 +1,20 @@
+<form #form="ngForm" (submit)="onSubmit(formdata.Message)" class="new-design">
+    <div mat-dialog-title>
+        {{title}}
+        <button class="close text-white" type="button" mat-dialog-close  aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div mat-dialog-content>
+        <mat-form-field>
+            <textarea matInput [(ngModel)]="formdata.Message" name="Reason" #Message="ngModel" placeholder="Reason" rows="10"
+            required [pattern]="modelPattern.alphaNumericWithSpecialCharacters">
+
+            </textarea>
+            <mat-error *ngIf="Message.hasError('required')">Enter Reason</mat-error>
+            <mat-error *ngIf="Message.hasError('pattern')">Enter valid Reason</mat-error>
+        </mat-form-field>
+    </div>
+    <div mat-dialog-actions align="center">
+        <button type="button" class="btn btn-sm btn-primary modalclose" mat-dialog-close>{{noLabel}}</button>
+        <button type="submit" class="btn btn-sm btn-primary btn-cust" [disabled]="form.invalid">{{yesLabel}}</button>
+    </div>
+</form>

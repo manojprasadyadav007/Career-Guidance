@@ -1,0 +1,89 @@
+<form #form="ngForm" (submit)="onSubmit(form)" class="new-design">
+  <div mat-dialog-title>
+    Campus
+    <button class="close text-white" type="button" mat-dialog-close aria-label="Close"><span
+        aria-hidden="true">×</span></button>
+  </div>
+  <div mat-dialog-content>
+
+    <div class="row">
+
+      <div class="col-md-12">
+        <mat-form-field>
+          <mat-label>Campus Name</mat-label>
+          <input matInput placeholder="Campus Name" type="text" #CampusName="ngModel" [(ngModel)]="formdata.CampusName"
+            name="CampusName" required [pattern]="modelPattern.campusName">
+            <mat-error *ngIf="CampusName.hasError('pattern') || CampusName.hasError('required')">Enter valid campus name</mat-error>
+        </mat-form-field>
+
+      </div>
+      <div class="col-md-12">
+        <mat-form-field>
+          <mat-label>City</mat-label>
+          <input matInput placeholder="City Name" type="text" #City="ngModel" [(ngModel)]="formdata.City" name="City"
+            required [pattern]="modelPattern.alphaNumericWithSpaceNew">
+          <mat-error *ngIf="City.hasError('pattern') || City.hasError('required')">Enter valid city name</mat-error>
+
+        </mat-form-field>
+
+      </div>
+      <div class="col-md-12">
+        <mat-form-field>
+          <mat-label>Country</mat-label>
+          <mat-select placeholder="Country" #Country="ngModel" [(ngModel)]="formdata.CountryId" name="Country"
+            (selectionChange)="fillProvince(formdata.CountryId,true)" required>
+            <mat-option>
+              <ngx-mat-select-search [(ngModel)]="countryFilter" [placeholderLabel]="'Search...'"
+                [noEntriesFoundLabel]="'Not found'" name="contyFilter"></ngx-mat-select-search>
+            </mat-option>
+            <mat-option>None</mat-option>
+            <mat-option
+              *ngFor="let country of countryList | stringFilterBy:countryFilter:'CountryName';  trackByProperty: 'CountryId' "
+              [value]="country.CountryId">
+              {{country.CountryName}}</mat-option>
+          </mat-select>
+          <mat-error *ngIf="Country.hasError('pattern') || Country.hasError('required')">Country is required
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="col-md-12">
+        <mat-form-field>
+          <mat-label>Province</mat-label>
+          <mat-select placeholder="Province" #Region="ngModel" [(ngModel)]="formdata.Region" name="Region" required>
+            <mat-option>
+              <ngx-mat-select-search [(ngModel)]="provinceFilter" [placeholderLabel]="'Search...'"
+                [noEntriesFoundLabel]="'Not found'" name="provinceFilter"></ngx-mat-select-search>
+            </mat-option>
+            <mat-option>None</mat-option>
+            <mat-option
+              *ngFor="let province of provinceList | stringFilterBy:provinceFilter:'ProvinceName';  trackByProperty: 'ProvinceId' "
+              [value]="province.ProvinceId">
+              {{province.ProvinceName}}</mat-option>
+          </mat-select>
+
+          <mat-error *ngIf="Region.hasError('pattern') || Region.hasError('required')">Enter valid province</mat-error>
+
+        </mat-form-field>
+      </div>
+
+      <div class="col-md-12">
+        <mat-form-field>
+          <mat-label>Google Maps Link</mat-label>
+          <textarea matInput placeholder="Google Maps Link" type="text" #GoogleMapLink="ngModel"
+            [(ngModel)]="formdata.GoogleMapLink" name="GoogleMapLink" required [pattern]="modelPattern.url"></textarea>
+          <mat-error *ngIf="GoogleMapLink.hasError('pattern') || GoogleMapLink.hasError('required')">Enter valid url</mat-error>
+
+        </mat-form-field>
+
+      </div>
+    </div>
+
+
+  </div>
+  <div mat-dialog-actions align="center">
+    <button type="button" mat-dialog-close class="btn btn-primary btn-sm modalclose">Close</button>
+    <button type="submit" [disabled]="!form.valid || flagdisabled"
+      class="btn btn-primary btn-sm btn-cust btn-cust">{{ btnLabel }}</button>
+  </div>
+</form>

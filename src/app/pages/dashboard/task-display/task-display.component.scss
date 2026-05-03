@@ -1,0 +1,30 @@
+.customDesignDxGrid
+{
+    border: none;
+    padding: 0px !important;
+    margin: 0px !important;
+
+    ::ng-deep .dx-datagrid
+    {
+        padding: 0px !important;
+
+        ::ng-deep .dx-data-row
+        {
+            padding: 0px !important;
+            ::ng-deep td{
+                padding: 0px !important;
+                line-height: normal !important;
+            }
+        }
+
+        ::ng-deep .dx-row{
+            padding: 0px !important;
+            line-height: normal !important;
+            ::ng-deep td{
+                padding: 0px !important;
+                line-height: normal !important;
+            }
+        }
+
+    }
+}

@@ -1,0 +1,114 @@
+
+
+ <div class="main-content">
+  <div class="card" >
+    <div class="card-body">
+        <div class="col-12 col-sm-12 col-md-8 d-sm-flex searchdiv px-0" style="z-index: 1;">
+            <div class="col-12 col-sm-6 col-md-5">
+              <mat-form-field class="selectopt" id="selectopt1">
+                <!-- <mat-label>Select an option</mat-label> -->
+                <mat-select placeholder="Type" [(ngModel)]="EventType" (selectionChange)="changeOption($event.value)">
+                  <!-- <mat-option disabled> Select Type </mat-option> -->
+                  <mat-option value="All" style="height: 2rem;font-size: 14px;">All</mat-option>
+                  <mat-option value="Recently Modified" style="height: 2rem;font-size: 14px;">Recently Modified</mat-option>
+                  <mat-option value="Last Modified" style="height: 2rem;font-size: 14px;">Last 10 modified</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div class="col-12 col-sm-6 col-md-5">
+              <mat-form-field class="search-field">
+                <!-- <mat-label>Keyword</mat-label> -->
+                <input matInput name="keyword" (blur)="onBlurMethod()" placeholder="Search Keyword" (keyup.enter)="searchByEnter()" [(ngModel)]="keyword" aria-label="Keyword"/>
+               
+                              <!-- <mat-hint>search by keyword</mat-hint> -->
+                <!-- <button matSuffix type="button" class="btn btn-danger btn-sm" mat-raised-button="" (click)="searchByKeyword()">Search</button> -->
+              <a (click)="searchByKeyword()" data-toggle="tooltip" title="Search by Keyword"><span class="material-icons">
+               search </span></a>
+              </mat-form-field>
+              <span *ngIf="keyworderror" class="text-danger">Please enter keyword</span>
+            </div>
+        </div>
+      <dx-data-grid [dataSource]="dataList" [showBorders]="true" [allowColumnResizing]="true" [showColumnLines]="true"
+        [showRowLines]="true" [rowAlternationEnabled]="true" [noDataText]="gridMessage" [columnAutoWidth]="true"
+        (onToolbarPreparing)="onToolbarPreparing($event)" [allowColumnReordering]="true"  (onCellPrepared)="onCellPrepared($event)"
+        (onExporting)="activitylog()">
+        <dxo-filter-panel [visible]="true"></dxo-filter-panel>
+        <dxo-paging [enabled]="true" [pageSize]="10"></dxo-paging>
+        <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 25,50,100]" [showInfo]="true">
+        </dxo-pager>
+
+        <dxo-filter-row [visible]="showFilterRow"></dxo-filter-row>
+
+        <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
+
+        <dxo-export [enabled]="excel_permisson > 0" fileName="Refund"></dxo-export>
+
+        <dxo-column-chooser [enabled]="true" mode="select" [allowSearch]="true">
+        </dxo-column-chooser>
+
+                <!-- <dxo-scrolling mode="virtual"></dxo-scrolling> -->
+
+        <dxi-column *ngFor="let item of columns" [dataField]="item.data"  [caption]="item.title | sentenceCase"
+        [dataType]="item.type" [format]="item.format">  
+      </dxi-column>
+
+        <dxi-column caption="Action" [allowExporting]="false" [fixed]="true" fixedPosition="right" [minWidth]="50" cellTemplate="actionCellTemplate"  >
+        </dxi-column>
+
+            <div *dxTemplate="let d of 'actionCellTemplate'">
+                            <mat-menu #appMenu="matMenu">
+                              <!-- <button mat-menu-item  class="text-danger" (click)="$event.stopPropagation(); onDelete(d.data)"  
+                              *ngIf="permission>1">
+                                  <span class="material-icons icon-position">
+                                      close
+                                  </span>Delete
+                              </button> -->
+                              <button *ngIf="permission > 1" mat-menu-item (click)="viewDocuments(d.data.ApplicationId)">
+                                  <span class="material-icons icon-position">
+                                      visibility
+                                  </span>View Documents
+                              </button>
+
+                              <ng-container
+                              *ngIf="permission>1">
+                              <button type="button" mat-menu-item class="text-success "  *ngIf="d.data.RefundStatus != 1"
+                                  (click)="$event.stopPropagation(); refundStatus(d.data.ApplicationId, 1)"
+                                data-toggle="tooltip" title="Approve">
+                                  <span class="material-icons  icon-position">
+                                      check_circle
+                                  </span>Approve
+                              </button> 
+      
+                              <button type="button" mat-menu-item class="text-danger"  *ngIf="d.data.RefundStatus !=0"
+                                  (click)="$event.stopPropagation(); refundStatus(d.data.ApplicationId, 0)"
+                                 data-toggle="tooltip" title="Reject">
+                                  <span class="material-icons icon-position">
+                                      cancel
+                                  </span>Reject
+                              </button>
+                          </ng-container>
+                          </mat-menu>
+                          <button mat-icon-button [matMenuTriggerFor]="appMenu" (click)="$event.stopPropagation()">
+                              <span class="material-icons more_dropdown">
+                                  keyboard_arrow_down
+                              </span>
+                          </button>
+             </div>
+
+        <div *dxTemplate="let data of 'advanceButtonTemp'">
+
+            <button class="text-danger" (click)="showFilterRow=!showFilterRow" mat-icon-button data-toggle="tooltip" title="Apply Filter">
+                <mat-icon>filter_list</mat-icon>
+            </button>
+        </div>
+
+
+      </dx-data-grid>
+    </div>
+  </div>
+</div>
+<script>
+    $(document).ready(function () {
+      $('[data-toggle="tooltip"]').tooltip();
+    });
+  </script>

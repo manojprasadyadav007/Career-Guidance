@@ -1,0 +1,27 @@
+<div class="w-100 text-center">
+    <legend>Avatar</legend>
+    <div class="fileinput text-center" [class.fileinput-new]="defaultImage?.length <= 0"
+        [class.fileinput-exists]="defaultImage?.length > 0" data-provides="fileinput">
+        <div class="fileinput-new thumbnail img-circle">
+            <img [src]="defaultImage" alt="" onerror="this.src='../../../assets/img/faces/user1.png'">
+
+            <!-- <img src="../../../assets/img/faces/user1.png" alt="Profile Photo"> -->
+        </div>
+        <div class="fileinput-preview fileinput-exists thumbnail img-circle">
+            <img [src]="defaultImage" alt="" onerror="this.src='../../../assets/img/faces/user1.png'">
+        </div>
+        <div class="">
+            <span class="btn btn-round btn-rose btn-file mx-1">
+                <span class="fileinput-new">Add</span>
+                <span class="fileinput-exists">Change</span>
+                <input type="file" name="..." (change)="onFileChange($event)" />
+            </span>
+            <!-- <br /> -->
+            <a href="#pablo" (click)="removePicture()" class="btn btn-rose btn-round fileinput-exists mx-1"
+                data-dismiss="fileinput">
+                <!-- <i class="fa fa-times"></i>  -->Remove
+            </a>
+            <mat-error *ngIf="sizeerror">{{sizeerror}}</mat-error>
+        </div>
+    </div>
+</div>

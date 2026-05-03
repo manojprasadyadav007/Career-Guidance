@@ -1,0 +1,117 @@
+<div class="main-content">
+    <div class="card" *ngIf="permission>0">
+        <div class="card-body">
+            <dx-data-grid [dataSource]="dataList" [showBorders]="true" [allowColumnResizing]="true"
+                [showColumnLines]="true" [showRowLines]="true" [rowAlternationEnabled]="true" [noDataText]="gridMessage"
+                [columnAutoWidth]="true" (onToolbarPreparing)="onToolbarPreparing($event)"
+                [allowColumnReordering]="true" (onRowClick)="editUser($event.data.UserId)" (onExporting)="activitylog()">
+
+                <dxo-filter-panel [visible]="true"></dxo-filter-panel>
+
+                <dxo-paging [enabled]="true" [pageSize]="10"></dxo-paging>
+                <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 25,50,100]" [showInfo]="true">
+                </dxo-pager>
+
+                <dxo-filter-row [visible]="showFilterRow"></dxo-filter-row>
+
+                <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
+
+                <dxo-export [enabled]="excel_permisson > 0" fileName="{{this.parentName}} Users"></dxo-export>
+
+                <dxo-column-chooser [enabled]="true" mode="select" [allowSearch]="true">
+                </dxo-column-chooser>
+
+                <!-- <dxo-scrolling mode="virtual"></dxo-scrolling> -->
+
+                <dxi-column *ngFor="let item of columns" [dataField]="item.dataField" [minWidth]="100"
+                    [caption]="item.title | sentenceCase" [dataType]="item.type" [format]="item.format">
+                </dxi-column>
+
+                <dxi-column caption="Status" [minWidth]="50" cellTemplate="statusCellTemplate">
+                </dxi-column>
+
+                <dxi-column caption="CC View" [minWidth]="50" cellTemplate="ccViewCellTemplate"
+                    *ngIf="currentUser.RoleId===1">
+                </dxi-column>
+
+                <dxi-column caption="Action" [allowExporting]="false" [minWidth]="50" cellTemplate="actionCellTemplate">
+                </dxi-column>
+
+                <div *dxTemplate="let d of 'actionCellTemplate'">
+
+                    <!-- <button type="button" mat-raised-button class="btn btn-link btn-just-icon btn-info"
+                        (click)="editUser(d.data.UserId)">
+                        <mat-icon>edit</mat-icon>
+                    </button> -->
+
+                    <button type="button" mat-raised-button class="btn btn-link btn-just-icon btn-danger"
+                        (click)="$event.stopPropagation(); ghostLogin(d.data.UserId)" [matTooltip]="'Ghost login'"
+                        *ngIf="(currentUser.UserId!=d.data.UserId) && (ghost_login_permission>0) && !currentUser?.GhostLogin">
+                        <mat-icon>login</mat-icon>
+                    </button>
+
+                    <button type="button" mat-raised-button class="btn btn-link   btn-just-icon btn-primary"
+                        (click)="$event.stopPropagation(); resetPassword(d.data.UserId)" *ngIf="currentUser.RoleId===1"
+                        [matTooltip]="'Reset Password'">
+                        <mat-icon>restore</mat-icon>
+                    </button>
+
+                    <button type="button" mat-raised-button class="btn btn-link btn-just-icon btn-danger"
+                        (click)="$event.stopPropagation(); deleteUser(d.data.UserId)"
+                        *ngIf="permission>2 && d.data.isPrimary!=1" [matTooltip]="'Delete'">
+                        <mat-icon>close</mat-icon>
+                    </button>
+                </div>
+
+                <div *dxTemplate="let d of 'statusCellTemplate'">
+
+                    <button (click)="$event.stopPropagation();changeStatus(d.data.UserId)" mat-raised-button=""
+                        type="button"
+                        ngClass="{{d.data.isActive=='1' ? 'btn btn-success btn-link': 'btn btn-danger btn-link' }}"
+                        class="btn btn-success btn-link" [disabled]="permission<=1" [matTooltip]="'Active/InActive'">
+                        <span class="mat-button-wrapper"><i class="material-icons">
+                                {{ d.data.isActive=="1" ? 'done_outline': 'highlight_off' }}
+                            </i></span>
+                        <div class="mat-button-ripple mat-ripple" matripple=""></div>
+                        <div class="mat-button-focus-overlay"></div>
+                    </button>
+                </div>
+
+
+                <div *dxTemplate="let d of 'ccViewCellTemplate'">
+
+                    <button (click)="$event.stopPropagation();viewUpdate(d.data.UserId,d.data.view)"
+                        mat-raised-button="" type="button"
+                        ngClass="{{d.data.view=='1' ? 'btn btn-success btn-link': 'btn btn-danger btn-link' }}"
+                        class="btn btn-success btn-link" [disabled]="permission<=1" [matTooltip]="'View CC Info'">
+                        <span class="mat-button-wrapper"><i class="material-icons">
+                                {{ d.data.view=="1" ? 'done_outline': 'highlight_off' }}
+                            </i></span>
+                        <div class="mat-button-ripple mat-ripple" matripple=""></div>
+                        <div class="mat-button-focus-overlay"></div>
+                    </button>
+                </div>
+
+                <div *dxTemplate="let d of 'toolbarButton'">
+                    <button class="text-danger" (click)="editUser(0)" *ngIf="permission>1" mat-icon-button
+                        data-toggle="tooltip" title="New">
+                        <mat-icon>add</mat-icon>
+                    </button>
+
+                    <button class="text-danger" (click)="showFilterRow=!showFilterRow" mat-icon-button
+                        data-toggle="tooltip" title="Apply Filter">
+                        <mat-icon>filter_list</mat-icon>
+                    </button>
+                </div>
+
+            </dx-data-grid>
+        </div>
+    </div>
+</div>
+
+<!-- Script For Tooltip -->
+<script>
+    $(document).ready(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+</script>

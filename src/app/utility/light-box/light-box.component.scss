@@ -1,0 +1,20 @@
+.mat-dialo-container{
+    padding: 0px !important;
+}
+.container {
+    position: relative;
+    text-align: center;
+    color: white;
+  }
+.img-background{
+       background-repeat: no-repeat;
+    background-image: url("https://www.w3schools.com/howto/img_snow_wide.jpg");
+ 
+}
+
+.centered {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
