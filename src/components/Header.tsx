@@ -28,6 +28,18 @@ function Header() {
           <li>
             <Link to="/placement-training">Placement Training</Link>
           </li>
+           <li>
+            <Link to="/contact">Contact</Link>
+          </li>
+          <li>
+            <a
+              href="https://docs.google.com/forms/d/e/1FAIpQLSdRWcPMnMv-6rVYfGdXAio9oAhfo6g6tgcgfjez2RUkAAXxIw/viewform?usp=dialog"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Register
+            </a>
+          </li>
           {/* <li>
             <a
               href="https://topmate.io/manoj_yadav14"
@@ -38,9 +50,7 @@ function Header() {
             </a>
           </li> */}
 
-          <li>
-            <Link to="/contact">Contact</Link>
-          </li>
+         
 
         </ul>
       </nav>
